@@ -1,28 +1,26 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-const Header = () => {
+
+// Định nghĩa kiểu cho props
+interface HeaderProps {
+  title: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Header</Text>
-      </View>
-    </SafeAreaView>
+    <View style={styles.headerRoot}>
+      <Text style={styles.headerTitle}>{title}</Text>
+    </View>
   );
 };
 
 export default Header;
+
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 0,
-  },
-  headerContainer: {
-    paddingTop: 20, // Khoảng cách từ đỉnh
-    paddingBottom: 10,
-    paddingHorizontal: 16,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
+  headerRoot: {},
+  headerTitle: {
+    textAlign: "center",
+    fontSize: 26,
+    fontWeight: "700",
   },
 });

@@ -1,31 +1,29 @@
-// app/auth/Login.tsx
-import Header from "@/components/HeaderAuthentication";
-import LoginForm from "@/components/Login";
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import RegisterForm from "@/components/RegisterComponents";
 import SignUpWith from "@/components/SignUpWith";
 import { Colors } from "@/constants/Colors";
-import React from "react";
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import Header from "@/components/HeaderAuthentication";
 
-const Login = () => {
+const Register = () => {
   return (
     <View style={styles.loginPage}>
       <Header />
       <View style={styles.containerBody}>
-        <Text style={styles.headerText}>Login</Text>
-        <LoginForm />
+        <Text style={styles.headerText}>Register</Text>
+        <RegisterForm />
       </View>
       <SignUpWith />
     </View>
   );
 };
 
-export default Login;
+export default Register;
+
 const styles = StyleSheet.create({
   loginPage: {
     backgroundColor: Colors.white,
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
     alignItems: "center",
   },
   containerBody: { flexDirection: "column", gap: 32 },

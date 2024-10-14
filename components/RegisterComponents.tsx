@@ -1,38 +1,31 @@
-// LoginForm.tsx
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { Formik } from "formik";
-import * as Yup from "yup";
-import CustomInput from "@/components/CustomInput"; // Đường dẫn đến CustomInput
-import CustomButton from "@/components/CustomButton"; // Đường dẫn đến CustomButton
+import { RegisterSchema } from "@/validations";
+import CustomButton from "./CustomButton";
+import CustomInput from "./CustomInput";
+import { Link } from "expo-router";
 import { Colors } from "@/constants/Colors";
-import { LoginSchema } from "@/validations";
-import { Link, Redirect, router } from "expo-router";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import useAuth from "@/hooks/useAuth";
 
-type RootStackParamList = {
-  index: undefined;
-  Form: undefined;
-};
-type FormScreenProp = NativeStackNavigationProp<RootStackParamList, "Form">;
-
-const LoginForm: React.FC = ({}) => {
-  const { user, token, isLoading, error, login, logout } = useAuth();
-
-  const navigation = useNavigation<FormScreenProp>();
+const RegisterForm: React.FC = () => {
   return (
     <Formik
-      style={styles.container}
-      initialValues={{ email: "", password: "" }}
-      validationSchema={LoginSchema}
+      initialValues={{ username: "", email: "", password: "", confirmPassword: "" }}
+      validationSchema={RegisterSchema}
       onSubmit={(values) => {
-        login(values.email, values.password);
+        console.log(values);
       }}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <View style={styles.containerButton}>
+          <CustomInput
+            title="Full Name"
+            placeholder="Full Name"
+            value={values.email}
+            onChangeText={handleChange("Full Name")}
+            onBlur={() => handleBlur("Full Name")}
+            error={touched.email && errors.email ? errors.email : undefined}
+          />
           <CustomInput
             title="E-mail"
             placeholder="Email"
@@ -51,21 +44,24 @@ const LoginForm: React.FC = ({}) => {
             error={touched.password && errors.password ? errors.password : undefined}
             secureTextEntry
           />
+          <CustomInput
+            title="Password"
+            placeholder="Password"
+            value={values.password}
+            onChangeText={handleChange("password")}
+            onBlur={() => handleBlur("password")} // Đảm bảo hàm onBlur không nhận đối số
+            error={touched.password && errors.password ? errors.password : undefined}
+            secureTextEntry
+          />
 
-          <View style={styles.bottomAuthor}>
-            <Link style={styles.linkText} href={"/auth/Register"}>
-              Forgot pasword?
-            </Link>
-          </View>
           <View style={styles.alignButton}>
             <CustomButton title="LOGIN" onPress={handleSubmit as any} />
           </View>
-
           <View style={styles.bottomAuthor}>
             <Text style={styles.askText}>
               Don't have an account?{" "}
-              <Link style={styles.linkText} href={"/auth/Register"}>
-                Sign up
+              <Link style={styles.linkText} href={"/auth/Login"}>
+                Login
               </Link>
             </Text>
           </View>
@@ -75,8 +71,9 @@ const LoginForm: React.FC = ({}) => {
   );
 };
 
+export default RegisterForm;
+
 const styles = StyleSheet.create({
-  container: {},
   containerButton: {},
   headerText: {
     fontSize: 24,
@@ -102,5 +99,3 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
-
-export default LoginForm;
