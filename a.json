@@ -1,0 +1,22 @@
+[
+  {
+    "dailyNutritionTrackingID": "27209206-7da1-431f-88f3-b48953fa328c",
+    "mealType": "SNACK",
+    "recipeList": [""]
+  },
+  {
+    "dailyNutritionTrackingID": "5dc2a413-cc16-4bb9-9459-4ec304efe184",
+    "mealType": "LUNCH",
+    "recipeList": [""]
+  },
+  {
+    "dailyNutritionTrackingID": "7b200022-a06e-4c83-a7fb-7bd5e1ef6a4e",
+    "mealType": "DINNER",
+    "recipeList": [""]
+  },
+  {
+    "dailyNutritionTrackingID": "a7d14ccb-97f1-40a6-ae9c-5b9ffb85fe14",
+    "mealType": "BREAKFAST",
+    "recipeList": [""]
+  }
+]

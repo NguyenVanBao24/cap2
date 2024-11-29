@@ -9,7 +9,6 @@ import { StyleSheet } from "react-native";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { Colors } from "@/constants/Colors";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -17,7 +16,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/Roboto-Regular.ttf"),
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
   useEffect(() => {
@@ -32,36 +31,21 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <ThemeProvider
-        value={{
-          ...DefaultTheme,
-          colors: {
-            ...DefaultTheme.colors,
-            background: "#fff",
-          },
-        }}
-      >
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            presentation: "modal",
-            animation: "slide_from_bottom",
-          }}
-        >
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="auth/" />
-          <Stack.Screen name="search/" />
-          <Stack.Screen name="(onboarding)/" />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
+      <SafeAreaView style={styles.safeArea}>
+        <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 }
-
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: Colors.primary, // Đặt màu nền Safe Area là trắng
+    backgroundColor: "#fff", // Thay màu nền Safe Area ở đây
   },
 });
