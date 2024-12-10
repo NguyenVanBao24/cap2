@@ -23,7 +23,7 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
   radius = 50,
   strokeWidth = 10,
   color = "#fff",
-  strokeColor = "#E7E7E7",
+  strokeColor = "#E1E1E1",
   TextSize = 22,
   TextColorUp = "#000",
   TextColorDown = Colors.gray,
@@ -87,18 +87,24 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
               </Text>
             </>
           ) : (
-            <Text
-              style={[
-                styles.valueText,
-                { fontSize: TextSize, color: TextColorDown, fontWeight: "600" },
-              ]}
+            <View
+              style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}
             >
-              {totalValue}
-              {" \n"}
-              Kcal
-              {" \n"}
-              left
-            </Text>
+              <Text
+                style={[
+                  styles.valueText,
+                  { fontSize: TextSize, color: TextColorDown, fontWeight: "600" },
+                ]}
+              >
+                {totalValue - currentValue > 0
+                  ? totalValue - currentValue
+                  : currentValue - totalValue}
+              </Text>
+              <Text style={{ color: TextColorDown, fontWeight: "500" }}>Kcal</Text>
+              <Text style={{ color: TextColorDown, fontWeight: "500" }}>
+                {totalValue - currentValue > 0 ? "left" : "over"}
+              </Text>
+            </View>
           )}
         </View>
       </View>

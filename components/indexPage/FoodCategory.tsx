@@ -99,8 +99,8 @@ const FoodCategory: React.FC<FoodCategoryProps> = ({
 const styles = StyleSheet.create({
   scrollContainer: {
     alignItems: "center",
-    paddingHorizontal: Css.paddingHoriAllPage,
-    padding: 1,
+    margin: 2,
+    paddingHorizontal: Css.paddingHoriAllPageSmall,
   },
   categoryButton: {
     flexDirection: "column",
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 4,
     marginHorizontal: 4,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
     borderRadius: 12,
     backgroundColor: Colors.white,
     shadowColor: "#000",
@@ -118,9 +118,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   selectedCategory: {
-    backgroundColor: Colors.white,
-    shadowColor: Colors.primary,
-    borderColor: Colors.primary,
+    backgroundColor: Colors.primary_2,
     borderWidth: 1,
     elevation: 2,
   },
@@ -140,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   categoryTextSelected: {
-    color: Colors.primary,
+    color: Colors.white,
     fontWeight: "600",
     fontSize: 12,
   },

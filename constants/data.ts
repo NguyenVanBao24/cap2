@@ -102,20 +102,28 @@ export const meal = [
 
 export const hard = [
   {
+    imageIcon: {
+      uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688028/cap_2/iconHard/nyejq6ks8ajimqm5u1cf.png",
+    },
+    type: "hard",
     label: "easy",
     image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663244/1_mlvwqb.png" },
   },
   {
-    label: "fewIngredient",
+    imageIcon: {
+      uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688021/cap_2/iconHard/awcktrzseigqlmsbjs0t.png",
+    },
+    type: "hard",
+    label: "medium",
     image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663240/3_ypgu8v.png" },
   },
   {
-    label: "onTheGo",
+    imageIcon: {
+      uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688022/cap_2/iconHard/gcsfxtm84hiid4zxnpcp.png",
+    },
+    type: "hard",
+    label: "hard",
     image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663244/2_msearg.png" },
-  },
-  {
-    label: "baking",
-    image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663321/4_i0zpl2.png" },
   },
 ];
 

@@ -1,14 +1,15 @@
 import React, { useState, useRef, useCallback } from "react";
-import { Animated, Dimensions, PanResponder, StyleSheet, View, Text } from "react-native";
+import { Animated, Dimensions, PanResponder, StyleSheet, View, Text, FlatList } from "react-native";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import { Colors } from "@/constants/Colors";
-import DailyTracking from "./DailyTracking";
+import DailyTracking from "../../components/DailyTracking";
 import { useFocusEffect } from "expo-router";
 import { getuserID } from "@/store/tokenHelper";
 import { format } from "date-fns";
 import { getTrackingByUserIDDate } from "@/services/tracking";
 import { getNutritionCalculation } from "@/services/chose";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Loading from "@/components/Loading";
 const { height: screenHeight } = Dimensions.get("window");
 
 const SNAP_POINTS = [screenHeight * 0.4, screenHeight * 0.2, 0]; // 60%, 80%, 100%
@@ -43,21 +44,14 @@ export interface Meal {
 }
 
 const HomeScreen = () => {
-  const [isCalendarVisible, setCalendarVisible] = useState(false);
-  const [headerText, setHeaderText] = useState("Today");
   const [nutritionData, setNutritionData] = useState<NutritionTrackingResponse | null>(null);
   const [nutritionCalculation, setNutritionCalculation] = useState<any | null>(null);
-  const [noDataMessage, setNoDataMessage] = useState<string>("");
-  const [recipeList, setRecipeList] = useState<Recipe>();
-  const [selectedTab, setSelectedTab] = useState<"BREAKFAST" | "LUNCH" | "DINNER" | "SNACK">(
-    "BREAKFAST"
-  );
+
   const [loading, setLoading] = useState<boolean>(true);
   const currentDate = format(new Date(), "yyyy-MM-dd");
 
   const [selectedDate, setSelectedDate] = useState<string>(currentDate);
   const userID = getuserID();
-  console.log(nutritionData, "nutritionCalculationnutritionCalculationnutritionCalculation");
   useFocusEffect(
     useCallback(() => {
       const fetchTrackingData = async () => {
@@ -167,6 +161,10 @@ const HomeScreen = () => {
       },
     })
   ).current;
+
+  if (loading) {
+    return <Loading backgroundColor={Colors.primary_2} />;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
@@ -190,6 +188,9 @@ const HomeScreen = () => {
               <Text style={styles.textHeaderDown}>Burned</Text>
             </View>
           </View>
+
+          <View style={styles.upbody}>{/* <FlatList data={}/> */}</View>
+
           <View style={styles.body}>
             <Text style={styles.headerDashboard}>Macronutrients</Text>
             <View style={styles.underline}></View>
@@ -241,7 +242,7 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.primary },
+  container: { flex: 1, backgroundColor: Colors.primary_2 },
   containerMeal: {
     flex: 1,
   },
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
     top: 0,
     height: screenHeight * 0.6,
     width: "100%",
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primary_2,
     borderTopColor: "#fff",
   },
   header: {
@@ -263,6 +264,9 @@ const styles = StyleSheet.create({
   containerTextHeader: { flexDirection: "column", alignItems: "center", marginTop: 20 },
   textHeaderUp: { color: Colors.white, fontWeight: "600", fontSize: 15 },
   textHeaderDown: { color: "#180161", fontWeight: "600", fontSize: 15 },
+
+  upbody: {},
+
   body: {
     marginHorizontal: 10,
     paddingVertical: 20,

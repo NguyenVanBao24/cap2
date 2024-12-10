@@ -42,6 +42,8 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderWidth: 1,
     borderColor: Colors.grayBackGround,
+    marginHorizontal: Css.paddingHoriAllPage,
+    marginBottom: Css.marginItemSmall,
   },
   titleWrapper: {
     flex: 1,

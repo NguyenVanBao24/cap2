@@ -76,12 +76,11 @@ const DailyTracking: React.FC = () => {
 
   const [selectedDate, setSelectedDate] = useState<string>(currentDate);
   const userID = getuserID();
-
   useFocusEffect(
     useCallback(() => {
       const fetchTrackingData = async () => {
         try {
-          setLoading(true); // Bắt đầu tải
+          setLoading(true);
           if (userID) {
             const response = await getTrackingByUserIDDate(userID, selectedDate);
             setNutritionData(response?.data);
@@ -93,17 +92,16 @@ const DailyTracking: React.FC = () => {
           setNoDataMessage("No data available for today.");
           console.log("Error fetching tracking data:", error);
         } finally {
-          setLoading(false); // Dừng tải
+          setLoading(false);
         }
       };
 
       fetchTrackingData();
 
-      // Cleanup function nếu cần (tuỳ thuộc vào yêu cầu)
       return () => {
-        setNutritionData(null); // Reset dữ liệu khi tab bị unfocus (tuỳ ý)
+        setNutritionData(null);
       };
-    }, [selectedDate]) // `selectedDate` là dependency
+    }, [selectedDate])
   );
 
   const handleCalendarToggle = () => {
@@ -165,7 +163,7 @@ const DailyTracking: React.FC = () => {
   ).current;
 
   if (loading) {
-    return <Loading />;
+    return <Loading backgroundColor={Colors.primary_2} />;
   }
   return (
     <View style={styles.safeArea}>
@@ -181,7 +179,7 @@ const DailyTracking: React.FC = () => {
             markedDates={{
               [selectedDate]: {
                 selected: true,
-                selectedColor: Colors.primary, // Màu cho ngày đã chọn
+                selectedColor: Colors.primary_2, // Màu cho ngày đã chọn
               },
             }}
           />
@@ -226,6 +224,7 @@ const DailyTracking: React.FC = () => {
                     recipeName={recipe.recipeName}
                     recipeID={recipe.recipeID}
                     imageURL={recipe.imageURL}
+                    nutritionId={nutritionData?.data?.meals[0].dailyNutritionTrackingID}
                   />
                 ))}
               </View>

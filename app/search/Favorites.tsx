@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { Colors } from "@/constants/Colors";
-import FavoriteCard from "@/components/FavoriteCard"; // Giả sử bạn đã tạo component FavoriteCard
+import FavoriteCard from "@/components/FavoriteCard";
 import { Css } from "@/constants/Css";
 import { getFavoriteUserId } from "@/services/favorite";
 import { getuserID } from "@/store/tokenHelper";
+import Loading from "@/components/Loading";
 
 const Favorites = () => {
   const [activeTab, setActiveTab] = useState("Recipes");
-  const [results, setResults] = useState<any>([]); // Hoặc gán kiểu dữ liệu cụ thể
+  const [results, setResults] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const userID = getuserID();
@@ -18,7 +19,7 @@ const Favorites = () => {
       setIsLoading(true);
       try {
         const response = await getFavoriteUserId(userID);
-        setResults(response.data); // Giả sử response.data chứa mảng các item yêu thích
+        setResults(response.data);
       } catch (error) {
         console.log("Error fetching data:", error);
       } finally {
@@ -35,6 +36,9 @@ const Favorites = () => {
   const renderFavoriteCard = ({ item }: { item: FavoriteRecipe }) => {
     return <FavoriteCard item={item} />;
   };
+  if (isLoading) {
+    return <Loading backgroundColor={Colors.primary} />;
+  }
 
   return (
     <View style={styles.container}>

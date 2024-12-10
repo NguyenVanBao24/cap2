@@ -7,11 +7,14 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
+  FlatList,
+  ScrollView,
+  SafeAreaView,
+  StatusBar,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
 import { getRecipesServiceById } from "@/services/recipeService";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import {
   getTrackingAll,
@@ -23,12 +26,16 @@ import {
 import { format } from "date-fns";
 import { getuserID } from "@/store/tokenHelper";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { capitalizeFirstLetter, Css, splitInstructions } from "@/constants/Css";
+import PopularCard from "@/components/indexPage/PopularCard";
+import { getAllIngredientService } from "@/services/ingredientService";
+import Loading from "@/components/Loading";
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 const FoodDetailCard = () => {
   const { id } = useLocalSearchParams();
   const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
   const [isFavo, setIsFavo] = useState(true);
-
   const [trackingMeal, setTrackingMeal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +47,7 @@ const FoodDetailCard = () => {
     { label: "Dinner", value: "DINNER" },
     { label: "Snack", value: "SNACK" },
   ];
-
+  console.log(recipe, "recipe123");
   type Meal = {
     mealType: "BREAKFAST" | "LUNCH" | "DINNER"; // Các kiểu bữa ăn
     recipeIdList: string[]; // Danh sách ID công thức
@@ -68,7 +75,6 @@ const FoodDetailCard = () => {
       setLoading(true);
       try {
         const response = await getTrackingByUserIDDate(userID, currentDate);
-        console.log(response?.data?.data, "response?.data?.data");
         setTrackingMeal(response?.data?.data);
       } catch (err) {
         setError("Failed to fetch recipe."); // Ghi lỗi nếu có
@@ -79,7 +85,24 @@ const FoodDetailCard = () => {
     fetchMealTracking();
     fetchRecipe();
   }, [id]);
+  const [scrollY] = useState(new Animated.Value(0)); // Khởi tạo giá trị scroll
 
+  // Lắng nghe giá trị scroll và map opacity
+  const backgroundColor = scrollY.interpolate({
+    inputRange: [0, 200], // Scroll từ 0 đến 200
+    outputRange: ["red", "white"], // Từ đỏ đến trắng
+    extrapolate: "clamp", // Giới hạn giá trị trong khoảng
+  });
+
+  let arrayItems = [
+    recipe?.data.nutritionalQuality,
+    recipe?.data?.mealType[0],
+    recipe?.data?.mealType[1],
+    recipe?.data?.mealType[2],
+    recipe?.data?.mealType[3],
+    recipe?.data.difficultyLevel,
+  ];
+  console.log(arrayItems);
   const handleBack = () => {
     router.back();
   };
@@ -89,10 +112,8 @@ const FoodDetailCard = () => {
     setIsFavo(!isFavo);
     postFavoriteUserId(userID, id);
   };
-  // Hàm để hiển thị/ẩn danh sách
   const toggleList = () => {
     if (isListVisible) {
-      // Nếu danh sách đang hiển thị, ẩn nó đi
       Animated.timing(animation, {
         toValue: 0,
         duration: 300,
@@ -142,87 +163,148 @@ const FoodDetailCard = () => {
       console.log(`Failed to fetch data for ${itemValue}`, err);
     }
   };
-
   const [filteredData, setFilteredData] = useState([]);
-  console.log(filteredData, "11111111111111");
+
   useEffect(() => {
     setFilteredData(trackingMeal.meals);
   }, [trackingMeal]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const ingredientsResponse = await getAllIngredientService();
+
+        setIngredient(ingredientsResponse.data);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <Loading backgroundColor={Colors.primary} />;
+  }
+
   return (
-    <SafeAreaView
+    <View
       style={{
         backgroundColor: Colors.white,
         flex: 1,
       }}
     >
+      <StatusBar hidden={true} />
       <View style={styles.container}>
         <TouchableOpacity
           onPress={handleBack}
           style={{
             position: "absolute",
             zIndex: 1,
-            width: screenWidth,
-            height: 50,
             flexDirection: "row",
             alignItems: "center",
+            flex: 1,
+            width: "100%",
           }}
         >
           <Ionicons name="arrow-back" style={{ paddingHorizontal: 20 }} size={24} />
         </TouchableOpacity>
-        <View>
-          <View>
+
+        {/* main */}
+        <ScrollView style={styles.body}>
+          <View style={styles.imageHeader}>
             <View style={styles.header}>
               <Image source={{ uri: `${recipe?.data.imageURL}` }} style={styles.image} />
             </View>
+          </View>
+
+          <View style={styles.bodyContent}>
             <Text style={styles.title}>{recipe?.data.recipeName}</Text>
-          </View>
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "space-around",
+              }}
+            >
+              <View style={styles.nutrition}>
+                <View style={{ height: 40, marginBottom: 8 }}>
+                  <Image
+                    source={require("@/assets/images/caloriIcon.png")}
+                    style={{ height: 48, width: 48, resizeMode: "contain" }}
+                  />
+                </View>
+                <Text style={[styles.nutrient, { color: Colors.textInput }]}>
+                  {recipe?.data.totalCalories} Kcal
+                </Text>
+              </View>
 
-          {/* Nutritional Information */}
-          <View style={styles.nutrition}>
-            <Text style={[styles.nutrient, { color: Colors.textInput }]}>
-              {recipe?.data.totalCalories}
-              {"\n"}Calories
-            </Text>
-            <Text style={[styles.nutrient, { color: Colors.textInput }]}>
-              {recipe?.data.totalCarbs}
-              {"\n"}Carbs (g)
-            </Text>
-            <Text style={[styles.nutrient, { color: Colors.textInput }]}>
-              {recipe?.data.totalProtein}
-              {"\n"}Protein (g)
-            </Text>
-            <Text style={[styles.nutrient, { color: Colors.textInput }]}>
-              {recipe?.data.totalFat}
-              {"\n"}Fat (g)
-            </Text>
-          </View>
+              <View style={styles.nutrition}>
+                <View style={{ height: 40, marginBottom: 8 }}>
+                  <Image
+                    source={require("@/assets/images/timeIcon.png")}
+                    style={{ height: 40, width: 40, resizeMode: "cover" }}
+                  />
+                </View>
+                <Text style={[styles.nutrient, { color: Colors.textInput }]}>
+                  {recipe?.data.prepTime} | {recipe?.data.cookTime} min
+                </Text>
+              </View>
 
-          <View style={styles.containerDes}>
-            <Text style={styles.des}>{recipe?.data.description}</Text>
-          </View>
+              <View style={styles.nutrition}>
+                <View style={{ height: 40, marginBottom: 8 }}>
+                  <Image
+                    source={require("@/assets/images/cookIcon.png")}
+                    style={{ height: 40, width: 40, resizeMode: "contain" }}
+                  />
+                </View>
+                <Text style={[styles.nutrient, { color: Colors.textInput }]}>
+                  {recipe?.data.difficultyLevel}
+                </Text>
+              </View>
+            </View>
 
-          {/* Nutritional Breakdown */}
-          <View style={styles.breakdown}>
-            <Text style={styles.recipes}>Sugars: 5 g</Text>
-            <Text style={styles.recipes}>Fiber: 3 g</Text>
-            <Text style={styles.recipes}>Sodium: 200 mg</Text>
-            <Text style={styles.recipes}>Cholesterol: 15 mg</Text>
-            <Text style={styles.recipes}>Vitamin C: 20 mg</Text>
-            <Text style={styles.recipes}>Calcium: 30 mg</Text>
-          </View>
-        </View>
+            <View style={styles.containerDes}>
+              <Text style={styles.des}>{recipe?.data.description}</Text>
+            </View>
+            <View style={styles.itemNavigate}>
+              {arrayItems?.map(
+                (item) => item != null && <Text style={styles.itemInfor}>{item}</Text>
+              )}
+            </View>
 
-        {/* Calorie Burning Options */}
+            <View style={styles.cookingInstructions}>
+              <Text style={styles.cookingInstructionsText}>
+                {recipe?.data.cookingInstructions ?? ""}
+              </Text>
+            </View>
 
-        <View style={styles.calorieBurn}>
-          <Text style={styles.calorieText}>How to burn {recipe?.data.totalCalories} calories</Text>
-          <View style={styles.activity}>
-            <Text>🏃‍♂️ 50 min</Text>
-            <Text>🚴‍♀️ 38 min</Text>
-            <Text>🏋️‍♂️ 15 min</Text>
+            <View style={styles.ingredientListContainer}>
+              <FlatList
+                contentContainerStyle={styles.listContainer}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={recipe?.data?.ingredientList}
+                keyExtractor={(item) => item.ingredientId}
+                renderItem={({ item }) => (
+                  <PopularCard
+                    numberElement={2}
+                    name={item.ingredientName}
+                    unit={item.unit}
+                    deliveryTime="15-20 mins"
+                    imageUri={item.imageURL}
+                    id={item.ingredientId}
+                  />
+                )}
+              />
+            </View>
           </View>
-        </View>
+        </ScrollView>
+
+        {/* last */}
         {isListVisible && (
           <Animated.View
             style={[
@@ -233,55 +315,53 @@ const FoodDetailCard = () => {
                   {
                     translateY: animation.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [200, 0], // Di chuyển từ dưới lên
+                      outputRange: [400, 0], // Di chuyển từ dưới lên
                     }),
                   },
                 ],
               },
             ]}
           >
-            {dropdownItems.map((item, index) => (
+            {recipe?.data?.mealType?.map((item, index) => (
               <TouchableOpacity
                 key={index}
                 onPress={() => {
                   const matchedData =
                     filteredData?.length > 0 &&
-                    filteredData.find((dropdownItem) => item.value == dropdownItem?.mealType);
-                  console.log(item.value, "sssss");
+                    filteredData.find((dropdownItem) => item == dropdownItem?.mealType);
+                  // console.log(item.value, "sssss");
                   if (matchedData) {
-                    console.log(matchedData.dailyNutritionTrackingID, "ddddd");
                     const dailyNutritionTrackingID = matchedData.dailyNutritionTrackingID;
-                    console.log(matchedData.dailyNutritionTrackingID, "eeeee");
-
                     handlePostMeal1(
                       [recipe?.data.recipe_ID],
-                      item.value,
+                      item,
                       currentDate,
                       userID,
                       dailyNutritionTrackingID
                     );
                   } else {
-                    handlePostMeal([recipe?.data.recipe_ID], item.value, currentDate, userID);
+                    handlePostMeal([recipe?.data.recipe_ID], item, currentDate, userID);
                   }
                 }}
                 style={{ borderColor: Colors.primary }}
               >
-                <Text style={styles.dropdownItem}>{item.label}</Text>
+                <Text style={styles.dropdownItem}>{item}</Text>
               </TouchableOpacity>
             ))}
           </Animated.View>
         )}
-        {/* Add to Diary Button */}
+
         <View style={styles.addButtonContainer}>
           <TouchableOpacity onPress={toggleList} style={styles.addButton}>
             <FontAwesome5 name="plus" size={24} color={Colors.primary} />
           </TouchableOpacity>
         </View>
       </View>
+
       <TouchableOpacity onPress={handleFavorite} style={styles.favoriteIcon}>
-        <Ionicons name={!isFavo ? "heart" : "heart-outline"} size={24} color={Colors.primary} />
+        <FontAwesome5 name="star" size={16} color={!isFavo ? Colors.black : Colors.white} />
       </TouchableOpacity>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -291,17 +371,18 @@ const styles = StyleSheet.create({
   favoriteIcon: {
     padding: 6,
     position: "absolute",
-    top: 10,
+    top: 42,
     right: 10,
+    backgroundColor: "#ddd",
+    borderRadius: "50%",
   },
+  ingredientListContainer: {},
+  listContainer: { paddingHorizontal: Css.paddingHoriAllPage, gap: Css.paddingHoriAllPage },
   container: {
-    paddingHorizontal: 20,
-    backgroundColor: "#fff",
     flexDirection: "column",
     justifyContent: "space-between",
     flex: 1,
-    paddingBottom: 20,
-    position: "relative", // Để các phần tử tuyệt đối hoạt động chính xác
+    position: "relative",
   },
   backButton: {
     position: "absolute",
@@ -321,7 +402,7 @@ const styles = StyleSheet.create({
     gap: 2,
     position: "absolute",
     right: 20,
-    bottom: 70,
+    bottom: 20,
   },
   addButton: {
     height: 60,
@@ -337,10 +418,8 @@ const styles = StyleSheet.create({
   dropdown: {
     position: "absolute",
     right: 20,
-    bottom: 140,
+    bottom: 80,
     backgroundColor: Colors.white,
-    borderWidth: 1,
-    borderRadius: 10,
     padding: 10,
     zIndex: 2,
   },
@@ -348,23 +427,25 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: 16,
     fontWeight: "500",
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.gray,
     textAlign: "right",
   },
-
+  body: {
+    flex: 1,
+    paddingHorizontal: Css.paddingHoriAllPageSmall,
+  },
+  bodyContent: {},
+  imageHeader: {},
   header: {
     alignItems: "center",
   },
   image: {
     width: screenWidth,
-    height: 250,
+    height: screenHeight * 0.36,
+    resizeMode: "cover",
   },
-
   nutrition: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
+    flexDirection: "column",
+    alignItems: "center",
     marginVertical: 10,
   },
   nutrient: {
@@ -386,14 +467,23 @@ const styles = StyleSheet.create({
     width: 200,
   },
   breakdown: {
-    flexDirection: "row", //
+    flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
   },
   containerDes: {
     paddingVertical: 10,
   },
-  des: { fontSize: 14, fontWeight: "500" },
+  itemNavigate: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    justifyContent: "center",
+  },
+  cookingInstructions: {},
+  cookingInstructionsText: { fontSize: 14 },
+  itemInfor: { padding: 8, fontSize: 12, backgroundColor: "#ddd", borderRadius: 16 },
+  des: { fontSize: 16, fontWeight: "400", lineHeight: 20 },
   recipes: {
     backgroundColor: Colors.grayBackGround,
     paddingHorizontal: 8,

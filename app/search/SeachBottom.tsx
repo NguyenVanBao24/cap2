@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,6 @@ import {
   FlatList,
   TouchableOpacity,
   Keyboard,
-  Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -26,20 +25,19 @@ const SearchBottomSheet = () => {
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef(null);
 
-  // Auto-focus the input field when the modal opens
   useFocusEffect(
     useCallback(() => {
       inputRef.current?.focus();
       return () => Keyboard.dismiss();
     }, [])
   );
-
+  const queryNo = 1;
   const searchApi = async (searchQuery: string) => {
     setIsLoading(true);
     const ingredients = [searchQuery];
 
     try {
-      const response = await getSearchIngredientService(ingredients);
+      const response = await getSearchIngredientService(ingredients, queryNo);
       setResults(response.data);
     } catch (error) {
       console.log("Error fetching data:", error);

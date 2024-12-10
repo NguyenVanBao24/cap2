@@ -39,3 +39,34 @@ export const shadowStyle = {
   shadowRadius: 3,
   elevation: 3,
 };
+
+// export const capitalizeFirstLetter = (str: string | null) =>
+//   str ? str[0].toUpperCase() + str.slice(1) : "";
+
+// export const splitInstructions = (text: string | null): string => {
+//   if (!text) return "";
+
+//   return text
+//     .split(/(\d+\.\s)/) // Tách theo số thứ tự dạng "1. ", "2. ", ...
+//     .filter((item) => item.trim() !== "") // Loại bỏ các chuỗi rỗng hoặc chỉ chứa khoảng trắng
+//     .reduce<string[]>((result, item, index, arr) => {
+//       if (/\d+\.\s/.test(item) && arr[index + 1]) {
+//         result.push(item.trim() + arr[index + 1].trim()); // Kết hợp số thứ tự và nội dung
+//       }
+//       return result;
+//     }, [])
+//     .join("\n"); // Nối các phần tử thành chuỗi, mỗi phần tử trên một dòng
+// };
+export const splitInstructions = (text: string | null): string[] => {
+  if (!text) return [];
+
+  return text
+    .split(/(\d+\.\s)/) // Tách theo số thứ tự dạng "1. ", "2. ", ...
+    .filter((item) => item.trim() !== "") // Loại bỏ chuỗi rỗng hoặc chỉ chứa khoảng trắng
+    .reduce<string[]>((result, item, index, arr) => {
+      if (/\d+\.\s/.test(item) && arr[index + 1]) {
+        result.push(item.trim() + arr[index + 1].trim()); // Ghép số thứ tự với nội dung
+      }
+      return result;
+    }, []);
+};

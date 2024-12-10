@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Colors } from "@/constants/Colors";
-
-const Loading = () => {
+interface LoadingProps {
+  backgroundColor: string; // Xác định kiểu của backgroundColor
+}
+const Loading: React.FC<LoadingProps> = ({ backgroundColor }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: backgroundColor }]}>
       <Text style={styles.text}>Loading</Text>
     </View>
   );
@@ -19,7 +21,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: Colors.primary,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 100,

@@ -1,7 +1,7 @@
 // CavoloNeroSalad.tsx
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { getRecipesServiceById } from "@/services/recipeService";
 import { deleteFavoriteUserId, postFavoriteUserId } from "@/services/favorite";
@@ -57,12 +57,7 @@ const CavoloNeroSalad: React.FC<CavoloNeroSaladProps> = ({ item }) => {
         </Text>
       </View>
       <TouchableOpacity onPress={handleFavorite}>
-        <Ionicons
-          name={isFavo ? "heart" : "heart-outline"}
-          size={24}
-          color={Colors.primary}
-          style={styles.icon}
-        />
+        <AntDesign name={isFavo ? "star" : "staro"} size={24} color="black" />
       </TouchableOpacity>
     </View>
   );

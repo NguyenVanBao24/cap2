@@ -15,11 +15,9 @@ export const useChoseState = create<ChoseState>((set) => ({
   DietType: null,
   chose: async (): Promise<any> => {
     try {
-      const [nutritionPlanRes, activityFactorRes, dietTypeRes] = await Promise.all([
-        getNutritionPlan(),
-        getActivityFactor(),
-        getDietType(),
-      ]);
+      const nutritionPlanRes = await getNutritionPlan();
+      const activityFactorRes = await getActivityFactor();
+      const dietTypeRes = await getDietType();
 
       set({
         NutritionPlan: nutritionPlanRes.data,

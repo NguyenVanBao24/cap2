@@ -45,7 +45,6 @@ export default function RootLayout() {
           screenOptions={{
             headerShown: false,
             presentation: "modal",
-            animation: "slide_from_bottom",
           }}
         >
           <Stack.Screen name="(tabs)" />
@@ -53,7 +52,6 @@ export default function RootLayout() {
           <Stack.Screen name="search/" />
           <Stack.Screen name="(onboarding)/" />
         </Stack>
-        <StatusBar style="auto" />
       </ThemeProvider>
     </SafeAreaProvider>
   );
@@ -62,6 +60,6 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: Colors.primary, // Đặt màu nền Safe Area là trắng
+    backgroundColor: Colors.primary,
   },
 });

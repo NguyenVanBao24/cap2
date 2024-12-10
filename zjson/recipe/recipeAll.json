@@ -1,0 +1,432 @@
+{
+  "code": 1000,
+  "message": "Success",
+  "data": [
+    {
+      "recipe_ID": "2ed46085-8827-41dc-937d-d395b9b7e4e0",
+      "recipeName": "Sashimi cá hồi",
+      "description": "Cá hồi tươi được thái lát mỏng, ăn sống cùng nước tương, wasabi và gừng ngâm. Món này giữ nguyên hương vị béo, ngọt tự nhiên và độ mềm của cá hồi, là một món ăn nhẹ nhàng và tinh tế của ẩm thực Nhật Bản.",
+      "cookingInstructions": "Thit",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 1.0,
+      "totalFat": 4.0,
+      "prepTime": 5.0,
+      "cookTime": 10.0,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": "HARD",
+      "mealType": ["LUNCH", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "70e5d145-e5f1-43b2-bba9-a6f7a34d2e07",
+          "ingredientName": "Thịt Cá Hồi",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "3ac8df4d-a36e-4eb7-88d6-c6282f9d0395",
+      "recipeName": "Cá hồi nướng",
+      "description": "Cá hồi được ướp với các loại gia vị như tiêu, muối, chanh, và thảo mộc, sau đó nướng trong lò hoặc trên bếp nướng. Thịt cá hồi nướng có lớp ngoài giòn và phần thịt bên trong vẫn mềm mọng, giữ nguyên độ ngọt tự nhiên và giàu dinh dưỡng.",
+      "cookingInstructions": "Thit",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 1.0,
+      "totalFat": 4.0,
+      "prepTime": 5.0,
+      "cookTime": 10.0,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": "HARD",
+      "mealType": ["LUNCH", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "70e5d145-e5f1-43b2-bba9-a6f7a34d2e07",
+          "ingredientName": "Thịt Cá Hồi",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "3c20fb54-df3d-4291-afc9-e89f2efd4cd5",
+      "recipeName": "Salad cá hồi",
+      "description": "Cá hồi được áp chảo hoặc nướng, kết hợp cùng rau xanh, cà chua, dưa leo, và các loại hạt. Món salad này vừa giàu protein vừa cung cấp chất xơ và vitamin, thích hợp cho những ai ăn uống lành mạnh và muốn bổ sung năng lượng.",
+      "cookingInstructions": "Thit",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 1.0,
+      "totalFat": 4.0,
+      "prepTime": 5.0,
+      "cookTime": 10.0,
+      "nutritionalQuality": "LOW_PROTEIN",
+      "difficultyLevel": "HARD",
+      "mealType": ["LUNCH", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "70e5d145-e5f1-43b2-bba9-a6f7a34d2e07",
+          "ingredientName": "Thịt Cá Hồi",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "3c5babd1-fa3b-43a4-8c60-a0bf388af340",
+      "recipeName": "Pasta cá hồi sốt kem",
+      "description": "Cá hồi được cắt miếng vừa ăn, xào với kem tươi, bơ, và gia vị rồi trộn cùng pasta. Món này có hương vị béo ngậy của kem, thơm ngọt của cá hồi và sự mềm dai của mì, rất hấp dẫn và đầy đủ dưỡng chất.",
+      "cookingInstructions": "Thit",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 1.0,
+      "totalFat": 4.0,
+      "prepTime": 5.0,
+      "cookTime": 10.0,
+      "nutritionalQuality": "LOW_PROTEIN",
+      "difficultyLevel": "MEDIUM",
+      "mealType": ["LUNCH", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "70e5d145-e5f1-43b2-bba9-a6f7a34d2e07",
+          "ingredientName": "Thịt Cá Hồi",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "3eb70d47-9d75-4d78-86f5-71274f1ad9af",
+      "recipeName": "Cá hồi áp chảo",
+      "description": "Cá hồi áp chảo với một ít dầu ô liu, thường kèm theo các loại rau củ như măng tây, bông cải xanh. Phần da cá giòn tan, thịt cá béo ngậy và mềm mịn, tạo nên một món ăn thanh lịch, giàu omega-3, rất tốt cho sức khỏe.",
+      "cookingInstructions": "Thit",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 1.0,
+      "totalFat": 4.0,
+      "prepTime": 5.0,
+      "cookTime": 10.0,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": "EASY",
+      "mealType": ["LUNCH", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "70e5d145-e5f1-43b2-bba9-a6f7a34d2e07",
+          "ingredientName": "Thịt Cá Hồi",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "58d9c090-e8d3-4475-aced-8b263dbee4e0",
+      "recipeName": "Thịt heo kho tàu",
+      "description": "Thịt heo kho tàu",
+      "cookingInstructions": "Thịt heo kho với trứng và nước dừa, hầm nhỏ lửa trong 2 giờ.",
+      "imageURL": "https://tiki.vn/blog/wp-content/uploads/2023/02/thit-kho-tau-2-.jpg",
+      "totalCalories": 1080.0,
+      "totalProtein": 84.0,
+      "totalCarbs": 15.0,
+      "totalFat": 74.0,
+      "prepTime": 15.0,
+      "cookTime": 30.0,
+      "nutritionalQuality": "BALANCED",
+      "difficultyLevel": "EASY",
+      "mealType": ["LUNCH", "DINNER"],
+      "ingredientList": [
+        {
+          "ingredientId": "e694e24c-2f08-46a5-8751-5bcd2a0c0749",
+          "ingredientName": "Dừa",
+          "quantity": 1,
+          "unit": "trái"
+        },
+        {
+          "ingredientId": "4b84061f-adaf-4e8a-b6f6-6fed256993f7",
+          "ingredientName": "Thịt heo",
+          "quantity": 3,
+          "unit": "gram"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "732e9e6f-c9df-4122-b9f4-acafe8222386",
+      "recipeName": "Cá trê kho tiêu",
+      "description": "Cá trê kho tiêu là món ăn truyền thống với vị đậm đà của nước mắm, ngọt mềm của thịt cá và hương thơm cay nồng của tiêu. Món này rất thích hợp khi ăn cùng cơm nóng, mang lại hương vị đặc trưng và đầy dinh dưỡng.",
+      "cookingInstructions": "1:Sơ chế cá trê: Làm sạch cá trê bằng cách chà muối và giấm để loại bỏ chất nhầy. Rửa sạch và cắt khúc vừa ăn. 2: Sơ chế cá trê: Làm sạch cá trê bằng cách chà muối và giấm để loại bỏ chất nhầy. Rửa sạch và cắt khúc vừa ăn. 3: Làm nước kho: Đun nóng một ít dầu ăn, phi thơm phần tỏi và hành tím còn lại. Sau đó, thêm đường để tạo màu caramen nhẹ. 4: Kho cá: Cho cá đã ướp vào nồi, đảo đều để cá ngấm gia vị. Thêm nước vừa đủ, cho tiêu xay và ớt vào. Đun lửa nhỏ khoảng 20-30 phút cho cá chín mềm và nước kho sánh lại. 5: Hoàn thiện: Thêm hành lá cắt nhỏ và rau thơm lên trên rồi tắt bếp. Thưởng thức cùng cơm nóng.",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 1.0,
+      "totalFat": 4.0,
+      "prepTime": 5.0,
+      "cookTime": 10.0,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": "MEDIUM",
+      "mealType": ["LUNCH", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "23b6911b-4748-4a38-be2c-155718a52c84",
+          "ingredientName": "Thịt Cá Trê",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "756833f5-1e1b-4dd9-b1c2-020ad7bb500d",
+      "recipeName": " Canh chua cá lóc",
+      "description": "Canh chua cá lóc là món ăn phổ biến ở miền Nam Việt Nam, có hương vị chua thanh của me và vị ngọt tự nhiên từ cá lóc. Món này rất thích hợp cho bữa cơm gia đình, mang lại cảm giác nhẹ nhàng và dễ tiêu hóa.",
+      "cookingInstructions": "1:Sơ chế cá lóc: Rửa sạch cá lóc, làm sạch nhớt, cắt khúc vừa ăn. 2: Nấu nước canh: Đun nước sôi, cho me chua vào dằm lấy nước, sau đó lọc bỏ hạt. 3: Nấu canh chua: Khi nước sôi, cho cá vào, đun khoảng 5-7 phút cho cá chín. 4: Thêm rau củ: Thêm cà chua, dứa, giá đỗ và nêm gia vị vừa ăn với nước mắm, đường, muối. 5: Hoàn thiện: Cho rau thơm và ớt vào, tắt bếp. Món canh chua cá lóc ngon nhất khi ăn nóng với cơm trắng.",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 1.0,
+      "totalFat": 4.0,
+      "prepTime": 5.0,
+      "cookTime": 10.0,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": "MEDIUM",
+      "mealType": ["LUNCH", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "13d215bc-346c-48cb-9674-6ffe142cb043",
+          "ingredientName": "Thịt Cá Lóc",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "76d8cd87-09b0-4128-9747-db930bd12218",
+      "recipeName": "ThitHeoQuay31",
+      "description": "ThitHeoQuay",
+      "cookingInstructions": "Thit",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 330.0,
+      "totalProtein": 62.0,
+      "totalCarbs": 0.0,
+      "totalFat": 7.0,
+      "prepTime": null,
+      "cookTime": null,
+      "nutritionalQuality": "LOW_PROTEIN",
+      "difficultyLevel": null,
+      "mealType": ["LUNCH", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "13d215bc-346c-48cb-9674-6ffe142cb043",
+          "ingredientName": "Thịt Cá Lóc",
+          "quantity": 2,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "799f808d-8d89-4ad4-9932-8a83b5bca344",
+      "recipeName": "Thịt heo luộc",
+      "description": "Thịt heo luộc",
+      "cookingInstructions": "Thịt heo luộc trong nước muối và gừng cho đến khi chín.",
+      "imageURL": "https://cdn.tgdd.vn/2021/01/CookProductThumb/contrainau0141020-400x400.jpg",
+      "totalCalories": 726.0,
+      "totalProtein": 81.0,
+      "totalCarbs": 0.0,
+      "totalFat": 41.0,
+      "prepTime": 10.0,
+      "cookTime": 25.0,
+      "nutritionalQuality": "BALANCED",
+      "difficultyLevel": "EASY",
+      "mealType": ["LUNCH", "DINNER", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "c5bee60b-c651-4300-9d2d-44905a7ced5f",
+          "ingredientName": "Muối(salt)",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "308655ba-52c6-4c37-9840-c94b6d9c7bca",
+          "ingredientName": "Gừng (Ginger)",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "4b84061f-adaf-4e8a-b6f6-6fed256993f7",
+          "ingredientName": "Thịt heo",
+          "quantity": 3,
+          "unit": "gram"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "8315cdd8-2cc8-49dc-a166-245d48d5b855",
+      "recipeName": "Thịt heo xào hành tỏi",
+      "description": "Thịt heo xào hành tỏi.",
+      "cookingInstructions": "Thịt heo rửa sạch, thái lát mỏng. Ướp gia vị(hành khô, tỏi, hạt nêm, bột ngọt,tiêu đen) trong 30 phút rồi xào trên lửa lớn đến khi chín.",
+      "imageURL": "https://cdn.tgdd.vn/2021/08/CookProduct/Untitled-2-1200x676-2.jpg",
+      "totalCalories": 726.0,
+      "totalProtein": 81.0,
+      "totalCarbs": 0.0,
+      "totalFat": 41.0,
+      "prepTime": 15.0,
+      "cookTime": 25.0,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": "EASY",
+      "mealType": ["LUNCH", "DINNER", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "0ece7d02-4cf0-483a-a270-0b47f53bfdc0",
+          "ingredientName": "Tỏi (Garlic)",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "4b84061f-adaf-4e8a-b6f6-6fed256993f7",
+          "ingredientName": "Thịt heo",
+          "quantity": 3,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "3223d731-0459-4997-a03f-d87e2204dad2",
+          "ingredientName": "Hạt nêm",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "76dc5331-5e22-410b-bc71-63b473fe8d32",
+          "ingredientName": "Bột ngọt",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "645b2028-5e94-422f-bf32-d1d6e3b2254b",
+          "ingredientName": "Hành khô (Shallots)",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "51d3f0b3-153a-45d3-8967-a0cd270be53d",
+          "ingredientName": "Nước mắm(Fish Sauce)",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "d2527bf7-6ec6-4f1a-86ca-b956a7b0c0a2",
+          "ingredientName": "Tiêu đen (Black pepper)",
+          "quantity": 0,
+          "unit": "gram"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "87b76f9d-dde0-447d-9bb0-ea96560804d2",
+      "recipeName": "Cá Kho 8",
+      "description": null,
+      "cookingInstructions": null,
+      "imageURL": null,
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 0.0,
+      "totalFat": 4.0,
+      "prepTime": null,
+      "cookTime": null,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": null,
+      "mealType": ["BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "13d215bc-346c-48cb-9674-6ffe142cb043",
+          "ingredientName": "Thịt Cá Lóc",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "90cecd31-ccae-40df-94ee-058a24d5bc90",
+      "recipeName": "Tuan Test",
+      "description": "Tuan Test",
+      "cookingInstructions": "Tuan Test",
+      "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1731419227/ptg6yfw3co0t4ycetryi.png",
+      "totalCalories": 1980.0,
+      "totalProtein": 372.0,
+      "totalCarbs": 12.0,
+      "totalFat": 43.0,
+      "prepTime": 12.0,
+      "cookTime": 12.0,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": "EASY",
+      "mealType": ["BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "13d215bc-346c-48cb-9674-6ffe142cb043",
+          "ingredientName": "Thịt Cá Lóc",
+          "quantity": 12,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "af96bfa0-83b2-49bb-894c-58ecc69df825",
+      "recipeName": "Cá Kho 4",
+      "description": "Mô tả",
+      "cookingInstructions": "1, 2, 3",
+      "imageURL": "https://res.cloudinary.com/dwq1whrdj/image/upload/v1729597058/tiendev/cap2/1729597055860_thitca.png.jpg",
+      "totalCalories": 165.0,
+      "totalProtein": 31.0,
+      "totalCarbs": 0.0,
+      "totalFat": 4.0,
+      "prepTime": null,
+      "cookTime": null,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": null,
+      "mealType": ["BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "13d215bc-346c-48cb-9674-6ffe142cb043",
+          "ingredientName": "Thịt Cá Lóc",
+          "quantity": 1,
+          "unit": "Miếng"
+        }
+      ]
+    },
+    {
+      "recipe_ID": "dbcf824f-6f24-4797-8fac-fb4ef798034a",
+      "recipeName": "Thịt heo",
+      "description": "Thịt heo chiên giòn hoặc nướng mềm.",
+      "cookingInstructions": "1. Làm sạch thịt heo, thái lát.2. Ướp với gia vị (muối, tiêu, hành).3. Chiên hoặc nướng trên lửa vừa cho đến khi chín.",
+      "imageURL": "https://faster.vn/img/uploads/2020_10_thit-heo-min.jpg",
+      "totalCalories": 726.0,
+      "totalProtein": 81.0,
+      "totalCarbs": 0.0,
+      "totalFat": 41.0,
+      "prepTime": 15.0,
+      "cookTime": 25.0,
+      "nutritionalQuality": "HIGH_PROTEIN",
+      "difficultyLevel": "EASY",
+      "mealType": ["LUNCH", "DINNER", "BREAKFAST"],
+      "ingredientList": [
+        {
+          "ingredientId": "d2527bf7-6ec6-4f1a-86ca-b956a7b0c0a2",
+          "ingredientName": "Tiêu đen (Black pepper)",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "c5bee60b-c651-4300-9d2d-44905a7ced5f",
+          "ingredientName": "Muối(salt)",
+          "quantity": 0,
+          "unit": "gram"
+        },
+        {
+          "ingredientId": "4b84061f-adaf-4e8a-b6f6-6fed256993f7",
+          "ingredientName": "Thịt heo",
+          "quantity": 3,
+          "unit": "gram"
+        }
+      ]
+    }
+  ]
+}

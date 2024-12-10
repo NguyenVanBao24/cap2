@@ -38,7 +38,6 @@ export const signupService = async (
 export const getUserInformationPlan = async (id: string): Promise<any> => {
   try {
     const response = await axiosConfig.get<any>(`/user/${id}`);
-
     return response.data;
   } catch (error) {
     console.log("Login failed:", error);

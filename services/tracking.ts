@@ -29,7 +29,6 @@ export const getTrackingByUserIDDate = async (userID: string, date: string): Pro
       params: { date },
     });
 
-    console.log(response, "response response response");
     return response;
   } catch (error) {
     console.log("Failed to fetch getTrackingByUserIDDate:", error);
@@ -54,8 +53,19 @@ export const putTrackingByUserIDDate = async (
   requestBody: RecipePlan
 ): Promise<NutritionTrackingResponse> => {
   try {
-    console.log(nutritionId, requestBody, "RecipePlan");
     const response = await axiosConfig.put(`/daily-tracking/${nutritionId}`, requestBody);
+    return response.data;
+  } catch (error) {
+    console.log("Failed to put tracking data:", error);
+    throw error;
+  }
+};
+
+export const deleteTrackingByID = async (
+  nutritionId: string
+): Promise<NutritionTrackingResponse> => {
+  try {
+    const response = await axiosConfig.delete(`/daily-tracking/${nutritionId}`);
     return response.data;
   } catch (error) {
     console.log("Failed to put tracking data:", error);

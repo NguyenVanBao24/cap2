@@ -2,20 +2,22 @@ import axiosConfig from "@/axiosConfig";
 
 export const getFavoriteTrending = async (): Promise<Recipe[]> => {
   try {
+    console.log("first 1");
+
     const response = await axiosConfig.get<FavoriteRecipeResponse>("/favorite/trending");
+    console.log("first 1");
     const favoriteRecipes = response.data.data;
 
     if (favoriteRecipes && favoriteRecipes.length > 0) {
-      // Gọi API /recipe/{recipeID} cho mỗi recipeID
-      const recipePromises = favoriteRecipes.map(async (favorite) => {
+      const recipes: Recipe[] = [];
+
+      for (const favorite of favoriteRecipes) {
         const recipeID = favorite.recipeID;
         const recipeResponse = await axiosConfig.get(`/recipe/${recipeID}`);
-        return recipeResponse.data.data;
-      });
+        recipes.push(recipeResponse.data.data);
+      }
 
-      // Chờ tất cả các API /recipe/{recipeID} hoàn thành
-      const recipes = await Promise.all(recipePromises);
-      console.log(recipes);
+      console.log(recipes, "recipesrecipesrecipes");
       return recipes;
     } else {
       // Trường hợp không có favorite recipes

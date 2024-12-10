@@ -55,10 +55,11 @@ const FindBySearch = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Css.fontTextLarge,
     flexDirection: "row",
     alignItems: "center",
     gap: 16,
+    marginHorizontal: Css.paddingHoriAllPage,
+    marginVertical: Css.marginItemSmall,
   },
   searchContainer: {
     flexDirection: "row",

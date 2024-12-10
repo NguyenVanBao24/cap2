@@ -5,7 +5,7 @@ import { Colors } from "@/constants/Colors";
 import { useAuthStore } from "@/store/authStore";
 import { router } from "expo-router";
 import { Css } from "@/constants/Css";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 const Header = () => {
   const { logout } = useAuthStore();
@@ -41,7 +41,7 @@ const Header = () => {
 
       {/* Favorites Icon */}
       <TouchableOpacity onPress={navigateToFavorites}>
-        <Ionicons name="heart-outline" size={Css.sizeIconLarge} color={Colors.primary} />
+        <AntDesign name="staro" size={24} color="black" />
       </TouchableOpacity>
     </View>
   );

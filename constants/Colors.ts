@@ -20,6 +20,8 @@ export const Colors = {
   },
   gray: "#9796A1",
   primary: "#88C273",
+  primary_2: "#B3C8CF",
+  text: "#2A3335",
   black: "#323643",
   textInput: "#111719",
   white: "#FFFFFF",

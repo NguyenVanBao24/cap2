@@ -4,8 +4,6 @@ import { Platform, View, TouchableOpacity, StyleSheet, Text } from "react-native
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router"; // Import the useRouter hook
 
-import { HapticTab } from "@/components/HapticTab";
-import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { updateUserInformationPlan } from "@/services/authService";
@@ -29,6 +27,7 @@ export default function TabLayout() {
     nutritionPlan,
     dietType,
   } = useUserData();
+
   console.log(
     password,
     email,
@@ -52,19 +51,19 @@ export default function TabLayout() {
 
       setCurrentTab(currentTab - 1);
     } else {
-      const response = await updateUserInformationPlan({
-        id,
-        password,
-        email,
-        fullname,
-        age: parseInt(age),
-        gender,
-        weight,
-        height,
-        activityFactor,
-        nutritionPlan,
-        dietType,
-      });
+      // const response = await updateUserInformationPlan({
+      //   id,
+      //   password,
+      //   email,
+      //   fullname,
+      //   age: parseInt(age),
+      //   gender,
+      //   weight,
+      //   height,
+      //   activityFactor,
+      //   nutritionPlan,
+      //   dietType,
+      // });
       router.back();
     }
   };
@@ -75,19 +74,19 @@ export default function TabLayout() {
       setCurrentTab(currentTab + 1);
     } else if (currentTab < arrRouter.length) {
       try {
-        const response = await updateUserInformationPlan({
-          id,
-          password,
-          email,
-          fullname,
-          age: parseInt(age),
-          gender,
-          weight,
-          height,
-          activityFactor,
-          nutritionPlan,
-          dietType,
-        });
+        // const response = await updateUserInformationPlan({
+        //   id,
+        //   password,
+        //   email,
+        //   fullname,
+        //   age: parseInt(age),
+        //   gender,
+        //   weight,
+        //   height,
+        //   activityFactor,
+        //   nutritionPlan,
+        //   dietType,
+        // });
       } catch (error) {
         console.log("Lỗi ở onbroading _layout: " + error);
       }
@@ -122,11 +121,7 @@ export default function TabLayout() {
         }}
       >
         <Tabs.Screen name="name" />
-        <Tabs.Screen name="gender" />
-        <Tabs.Screen name="dayofbirth" />
-        <Tabs.Screen name="age" />
         <Tabs.Screen name="height" />
-        <Tabs.Screen name="weight" />
         <Tabs.Screen name="nutritionPlan" />
         <Tabs.Screen name="activityFactor" />
         <Tabs.Screen name="dietType" />

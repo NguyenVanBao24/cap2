@@ -7,7 +7,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 const GenderSelection = () => {
   const NutritionPlan = getNutritionPlanValue();
   const setUserData = useUserData((state) => state.setUserData);
-
+  console.log(NutritionPlan);
   const [selectedOption, setSelectedOption] = useState<string | null>(NutritionPlan[0]);
 
   React.useEffect(() => {
@@ -20,10 +20,10 @@ const GenderSelection = () => {
 
   const formatText = (text: string): string => {
     return text
-      .toLowerCase()
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+      ?.toLowerCase()
+      ?.split("_")
+      ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      ?.join(" ");
   };
 
   return (
@@ -34,7 +34,7 @@ const GenderSelection = () => {
         burned calories and required intake more accurately.
       </Text>
       <View style={styles.optionsContainer}>
-        {NutritionPlan.map((option: any) => (
+        {NutritionPlan?.map((option: any) => (
           <TouchableOpacity
             key={option}
             style={[styles.optionButton, selectedOption === option && styles.optionSelected]}

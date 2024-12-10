@@ -16,9 +16,9 @@ import { router, useLocalSearchParams } from "expo-router";
 import { getRecipesByKcalService, getRecipesFilterService } from "@/services/recipeService";
 import HealthyCard from "@/components/indexPage/HealthyCard";
 import { Ionicons } from "@expo/vector-icons";
-import { calorieData, meal } from "@/constants/data";
+import { calorieData, hard, meal } from "@/constants/data";
 
-const categories = [...meal, ...calorieData];
+const categories = [...meal, ...calorieData, ...hard];
 const AllMeal = () => {
   const screenHeight = Dimensions.get("window").height;
   const screenWidth = Dimensions.get("window").width;
@@ -45,14 +45,14 @@ const AllMeal = () => {
         const [minMacro, maxMacro] = label.split("-")?.map(Number);
         response = await getRecipesByKcalService(minMacro, maxMacro);
       } else {
-        throw new Error("Invalid type provided"); // Xử lý lỗi nếu type không hợp lệ
+        throw new Error("Invalid type provided");
       }
 
-      setRecipeData(response.data); // Cập nhật dữ liệu vào state
+      setRecipeData(response.data);
     } catch (error) {
       console.error("Error fetching meal data:", error);
     } finally {
-      setLoading(false); // Ẩn trạng thái đang tải
+      setLoading(false);
     }
   };
 
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   header: {
-    height: 80,
+    height: 82,
   },
   recommendedContainer: {
     paddingHorizontal: 15,

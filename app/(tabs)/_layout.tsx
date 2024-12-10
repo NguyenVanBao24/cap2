@@ -46,7 +46,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="DailyTracking"
         options={{
           tabBarIcon: ({ focused }) => (
@@ -65,7 +65,7 @@ export default function TabLayout() {
             </Text>
           ),
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="DashBoard"
         options={{

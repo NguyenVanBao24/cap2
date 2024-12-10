@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { Css } from "@/constants/Css";
 import { StyleSheet, Text } from "react-native";
 
@@ -9,9 +10,10 @@ export default HeaderElement;
 
 const styles = StyleSheet.create({
   headerItem: {
+    color: Colors.text,
     fontSize: Css.fontTextMedium,
     fontWeight: "500",
-    paddingBottom: 6,
+    paddingVertical: 6,
     paddingHorizontal: Css.paddingHoriAllPage,
   },
 });

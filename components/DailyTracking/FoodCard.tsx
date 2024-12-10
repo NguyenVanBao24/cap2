@@ -5,6 +5,7 @@ import { Colors } from "@/constants/Colors";
 import Entypo from "@expo/vector-icons/Entypo";
 import { router } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { deleteTrackingByID } from "@/services/tracking";
 
 interface FoodCardProps {
   calories: number;
@@ -15,6 +16,7 @@ interface FoodCardProps {
   recipeName: string;
   imageURL: string;
   recipeID: string;
+  nutritionId: string;
 }
 
 const FoodCard: React.FC<FoodCardProps> = ({
@@ -26,9 +28,17 @@ const FoodCard: React.FC<FoodCardProps> = ({
   date,
   imageURL,
   recipeID,
+  nutritionId,
 }) => {
   const handleRecipe = () => {
     router.push(`/search/ingredient/${recipeID}`);
+  };
+
+  const handleRemoveRecipe = async (nutritionId: string) => {
+    try {
+      const response = await deleteTrackingByID(nutritionId);
+      console.log("ok");
+    } catch (error) {}
   };
   return (
     <View style={styles.container}>
@@ -42,7 +52,7 @@ const FoodCard: React.FC<FoodCardProps> = ({
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuButton}>
+        <TouchableOpacity style={styles.menuButton} onPress={() => handleRemoveRecipe(nutritionId)}>
           <FontAwesome name="remove" size={20} color="black" />
         </TouchableOpacity>
       </View>

@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken, getRefreshToken, setTokens } from "@/store/tokenHelper";
 import { useAuthStore } from "@/store/authStore";
 
-const BASE_URL = "https://2342-2405-4802-701b-e2d0-c13a-bd67-2fd-8435.ngrok-free.app";
+const BASE_URL = "https://2378-2405-4802-6093-9b70-a84f-27b3-1e7f-3f19.ngrok-free.app";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
   TextInput,
+  StatusBar,
 } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
@@ -16,8 +17,10 @@ import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getIngredientService } from "@/services/ingredientService";
 import DropDownPicker from "react-native-dropdown-picker";
+import Loading from "@/components/Loading";
 
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 const ingredientDetail = () => {
   const [height, setHeight] = useState("100");
   const [selectedValue, setSelectedValue] = useState("");
@@ -52,14 +55,18 @@ const ingredientDetail = () => {
     { label: "Gram", value: "Gram" },
     { label: "Cup", value: "Cup" },
   ]);
-
+  if (loading) {
+    return <Loading backgroundColor={Colors.primary} />;
+  }
   return (
-    <SafeAreaView
+    <ScrollView
       style={{
         backgroundColor: Colors.white,
         flex: 1,
       }}
     >
+      <StatusBar hidden={true} />
+
       <View style={styles.container}>
         <TouchableOpacity
           onPress={handleBack}
@@ -142,7 +149,7 @@ const ingredientDetail = () => {
           </TouchableOpacity>
         </View> */}
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
@@ -161,7 +168,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: screenWidth,
-    height: 250,
+    height: screenHeight * 0.36,
   },
   title: {
     fontSize: 20,

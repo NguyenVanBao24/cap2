@@ -30,7 +30,6 @@ const Home = () => {
   const [userInformationPlan, setuserInformationPlan] = useState<any>();
   const id = getuserID();
   const { chose } = useChoseState();
-  console.log(userInformationPlan, "userInformationPlan");
   const setUserData = useUserData((state) => state.setUserData);
   useEffect(() => {
     setUserData({
@@ -46,22 +45,55 @@ const Home = () => {
     });
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setLoading(true);
+  //       // const [recipesResponse, ingredientsResponse, trendingResponse, userInformationPlan] =
+  //       //   await Promise.all([
+  //       //     getAllRecipesService(),
+  //       //     getAllIngredientService(),
+  //       //     getFavoriteTrending(),
+  //       //     getUserInformationPlan(id),
+  //       //     chose(),
+  //       //   ]);
+  //       // setRecipes(recipesResponse.data);
+  //       // setIngredient(ingredientsResponse.data);
+  //       // setTrendingRecipe(trendingResponse);
+  //       // setuserInformationPlan(userInformationPlan.data);
+  //       const recipesResponse = await getAllRecipesService();
+  //       const ingredientsResponse = await getAllIngredientService();
+  //       console.log(ingredientsResponse.data, "ingredientsResponse");
+  //       const trendingResponse = await getFavoriteTrending();
+  //       const userInformationPlan = await getUserInformationPlan(id);
+  //       await chose();
+  //       setRecipes(recipesResponse.data);
+  //       setIngredient(ingredientsResponse.data);
+  //       setTrendingRecipe(trendingResponse);
+  //       setuserInformationPlan(userInformationPlan.data);
+  //     } catch (error) {
+  //       console.log("Error fetching data:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const [recipesResponse, ingredientsResponse, trendingResponse, userInformationPlan] =
-          await Promise.all([
-            getAllRecipesService(),
-            getAllIngredientService(),
-            getFavoriteTrending(),
-            getUserInformationPlan(id),
-            chose(),
-          ]);
+        const recipesResponse = await getAllRecipesService();
         setRecipes(recipesResponse.data);
+        const ingredientsResponse = await getAllIngredientService();
         setIngredient(ingredientsResponse.data);
-        setTrendingRecipe(trendingResponse);
+        const userInformationPlan = await getUserInformationPlan(id);
+
         setuserInformationPlan(userInformationPlan.data);
+        const trendingResponse = await getFavoriteTrending();
+        setTrendingRecipe(trendingResponse);
+        chose();
       } catch (error) {
         console.log("Error fetching data:", error);
       } finally {
@@ -71,7 +103,6 @@ const Home = () => {
 
     fetchData();
   }, []);
-
   const gridItemsData = [
     { header: "Calorie Counters", calorieData: calorieData, line: 1 },
     { header: "Meal", calorieData: meal, line: 2 },
@@ -83,7 +114,7 @@ const Home = () => {
   );
 
   if (loading) {
-    return <Loading />;
+    return <Loading backgroundColor={Colors.primary} />;
   }
 
   return (
@@ -97,15 +128,14 @@ const Home = () => {
               <>
                 <FindBySearch />
                 <NavigateDailyTracking />
-                <FoodCategory action="navigate" categories={[...meal, ...calorieData]} />
+                <FoodCategory action="navigate" categories={[...meal, ...calorieData, ...hard]} />
                 <FearuredFoods header={"All Recipes"} recipes={recipes} />
                 <FearuredFoods header={"Trending Food"} recipes={trendingRecipe} />
                 <PopularItems header={"Popular Ingredient"} ingredient={ingredient} />
               </>
             }
             renderItem={renderGridItem}
-            keyExtractor={(item, index) => item.header}
-            ListFooterComponent={<View style={{ height: 120 }} />}
+            keyExtractor={(item, index) => `${item.header}-${index}`}
             contentContainerStyle={styles.containerHome}
             showsVerticalScrollIndicator={false}
           />
@@ -120,10 +150,11 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.white,
   },
+
   containerHome: {
     backgroundColor: Colors.white,
     flexDirection: "column",
-    gap: 18,
   },
 });

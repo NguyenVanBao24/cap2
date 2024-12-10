@@ -13,7 +13,7 @@ const FeaturedFoods: React.FC<FearuredFoodsProps> = ({ header, recipes }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         data={recipes}
-        keyExtractor={(item) => item.recipe_ID}
+        keyExtractor={(item, index) => `${item.recipe_ID}-${index}`}
         renderItem={({ item }) => (
           <HealthyCard
             name={item.recipeName}

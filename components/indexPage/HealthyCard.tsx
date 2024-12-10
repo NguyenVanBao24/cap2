@@ -6,6 +6,7 @@ import { router } from "expo-router";
 import { Css } from "@/constants/Css";
 import { deleteFavoriteUserId, postFavoriteUserId } from "@/services/favorite";
 import { getuserID } from "@/store/tokenHelper";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 interface HealthyCardProps {
   id: string;
@@ -47,25 +48,17 @@ const HealthyCard: React.FC<HealthyCardProps> = ({
       <View style={styles.contentContainer}>
         <View style={styles.header}>
           <Text style={styles.restaurantName}>{name}</Text>
-          <View style={styles.time}>
-            <MaterialIcons name="access-time" size={16} color={Colors.primary} />
-            <Text style={styles.timeText}>{deliveryTime}</Text>
-          </View>
         </View>
         <View style={styles.categoriesContainer}>
-          {categories.map((category, index) => (
-            <View key={index} style={styles.tag}>
-              <Text
-                style={[styles.tagText, { color: categoryColors[index % categoryColors.length] }]}
-              >
-                {category}
-              </Text>
-            </View>
-          ))}
+          <View style={styles.time}>
+            <MaterialIcons name="access-time" size={16} color={Colors.primary} />
+            <Text style={styles.timeText}>{deliveryTime} | </Text>
+          </View>
+          <Text style={styles.timeText}>{categories[0]}</Text>
         </View>
       </View>
       <TouchableOpacity onPress={handleFavorite} style={styles.favoriteIcon}>
-        <Ionicons name={!isFavo ? "heart" : "heart-outline"} size={24} color={Colors.primary} />
+        <FontAwesome5 name="star" size={16} color={!isFavo ? Colors.black : Colors.white} />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -83,7 +76,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: cardHeight,
-    resizeMode: "stretch",
+    resizeMode: "cover",
   },
   contentContainer: {
     padding: 10,
@@ -93,11 +86,11 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    // justifyContent: "center",
   },
   restaurantName: {
     fontSize: Css.fontTextLow,
-    fontWeight: "400",
+    fontWeight: "600",
   },
   time: {
     flexDirection: "row",
@@ -105,30 +98,21 @@ const styles = StyleSheet.create({
   },
   timeText: {
     color: "#888",
+    fontWeight: "500",
     fontSize: Css.fontTextLower,
   },
   categoriesContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: 16,
-    justifyContent: "space-around",
+    marginTop: 6,
   },
   favoriteIcon: {
+    backgroundColor: "#ddd",
+    borderRadius: "50%",
     padding: 6,
     position: "absolute",
     top: 10,
     right: 10,
-  },
-  tag: {
-    flexDirection: "row",
-    justifyContent: "center",
-    borderRadius: 12,
-    backgroundColor: Colors.grayBackGround,
-  },
-  tagText: {
-    fontSize: Css.fontTextLower,
-    color: "#8A8E9B",
-    padding: 6,
   },
 });
 
