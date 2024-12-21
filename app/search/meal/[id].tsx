@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ScrollView,
@@ -8,111 +9,104 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
 import FoodCategory from "@/components/indexPage/FoodCategory";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
-import { getRecipesByKcalService, getRecipesFilterService } from "@/services/recipeService";
+import {
+  getRecipesByHard,
+  getRecipesByKcalService,
+  getRecipesFilterService,
+} from "@/services/recipeService";
 import HealthyCard from "@/components/indexPage/HealthyCard";
 import { Ionicons } from "@expo/vector-icons";
 import { calorieData, hard, meal } from "@/constants/data";
+import HeaderElement from "@/components/indexPage/HeaderElement";
+import { G } from "react-native-svg";
 
-const categories = [...meal, ...calorieData, ...hard];
 const AllMeal = () => {
   const screenHeight = Dimensions.get("window").height;
   const screenWidth = Dimensions.get("window").width;
-
-  const [recipeData, setRecipeData] = useState<Recipe[]>([]);
+  const [recipeData, setRecipeData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [typeOfMeal, setTypeOfMeal] = useState("");
   const { label, type } = useLocalSearchParams();
-
   const [useLocalSearch, setUseLocalSearch] = useState({ label, type });
 
   useEffect(() => {
     if (useLocalSearch.label) fetchMealData(useLocalSearch.label, useLocalSearch.type);
   }, [useLocalSearch.label, useLocalSearch.type]);
 
-  const fetchMealData = async (label: any, type: any) => {
-    setLoading(true); // Hiển thị trạng thái đang tải
+  const categories =
+    useLocalSearch.type == "meal"
+      ? [...meal, ...calorieData, ...hard]
+      : useLocalSearch.type == "Kcal"
+      ? [...calorieData, ...meal, ...hard]
+      : [...hard, ...calorieData, ...meal];
+
+  const fetchMealData = async (label: string, type: string) => {
+    setLoading(true);
     try {
       let response;
-
       if (type == "meal") {
-        response = await getRecipesFilterService(label);
+        response = await getRecipesFilterService(label, 1);
       } else if (type == "Kcal") {
         const [minMacro, maxMacro] = label.split("-")?.map(Number);
         response = await getRecipesByKcalService(minMacro, maxMacro);
+      } else if (type == "hard") {
+        response = await getRecipesByHard(label.toUpperCase(), 1);
       } else {
         throw new Error("Invalid type provided");
       }
-
       setRecipeData(response.data);
     } catch (error) {
-      console.error("Error fetching meal data:", error);
+      console.log("Error fetching meal data:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleCategorySelection = (categoryName: string, type: string) => {
-    setTypeOfMeal(type);
     fetchMealData(categoryName, type);
     setUseLocalSearch({ label: categoryName, type: type });
   };
 
   const recommendedRecipe = recipeData[0];
-
+  recipeData.map((recipe) => {
+    if (recipe.mealType[0] == "BREAKFAST") {
+      console.log(recipe, "---------------------------");
+    }
+  });
   const renderFilterList = (filterName: string) => {
-    const filteredDataByMeal = recipeData.filter((recipe) => {
+    const filteredData = recipeData.filter((recipe) => {
       switch (filterName) {
-        case "LOW_PROTEIN":
-          return recipe.nutritionalQuality == "LOW_PROTEIN";
-        case "HIGHT_PROTEIN":
-          return recipe.nutritionalQuality == "HIGHT_PROTEIN";
-        case "EASY":
+        case "Breakfast":
+          return (
+            recipe.mealType[0] == "BREAKFAST" ||
+            recipe.mealType[1] == "BREAKFAST" ||
+            recipe.mealType[2] == "BREAKFAST"
+          );
+        case "Lunch":
+          return (
+            recipe.mealType[0] == "LUNCH" ||
+            recipe.mealType[1] == "LUNCH" ||
+            recipe.mealType[2] == "LUNCH"
+          );
+        case "Dinner":
+          return (
+            recipe.mealType[0] == "DINNER" ||
+            recipe.mealType[1] == "DINNER" ||
+            recipe.mealType[2] == "DINNER"
+          );
+        case "Low Protein":
+          return recipe.nutritionalQuality[0] == "LOW_PROTEIN";
+        case "High Protein":
+          return recipe.nutritionalQuality[1] == "HIGH_PROTEIN";
+        case "Easy to make":
           return recipe.difficultyLevel == "EASY";
-        case "MEDIUM":
+        case "Medium to make":
           return recipe.difficultyLevel == "MEDIUM";
-        case "HARD":
+        case "Hard to make":
           return recipe.difficultyLevel == "HARD";
-        default:
-          return true;
-      }
-    });
-
-    const filteredDataByKcal = recipeData.filter((recipe) => {
-      switch (filterName) {
-        case "BREAKFAST":
-          return recipe.difficultyLevel == "BREAKFAST";
-        case "DINNER":
-          return recipe.difficultyLevel == "DINNER";
-        case "LUNCH":
-          return recipe.difficultyLevel == "LUNCH";
-        case "EASY":
-          return recipe.difficultyLevel == "EASY";
-        case "MEDIUM":
-          return recipe.difficultyLevel == "MEDIUM";
-        case "HARD":
-          return recipe.difficultyLevel == "HARD";
-        default:
-          return true;
-      }
-    });
-
-    const filteredDataByHard = recipeData.filter((recipe) => {
-      switch (filterName) {
-        case "BREAKFAST":
-          return recipe.difficultyLevel == "BREAKFAST";
-        case "DINNER":
-          return recipe.difficultyLevel == "DINNER";
-        case "LUNCH":
-          return recipe.difficultyLevel == "LUNCH";
-        case "LOW_PROTEIN":
-          return recipe.nutritionalQuality == "LOW_PROTEIN";
-        case "HIGHT_PROTEIN":
-          return recipe.nutritionalQuality == "HIGHT_PROTEIN";
         default:
           return true;
       }
@@ -120,31 +114,27 @@ const AllMeal = () => {
 
     return (
       <View style={styles.filterContainer}>
-        <Text style={styles.filterTitle}>{filterName}</Text>
+        <HeaderElement header={filterName} />
+
         <FlatList
-          data={
-            useLocalSearch.type == "meal"
-              ? filteredDataByMeal
-              : useLocalSearch.type == "Kcal"
-              ? filteredDataByKcal
-              : filteredDataByHard
-          }
+          data={filteredData}
           horizontal
-          keyExtractor={(item) => item.recipe_ID}
+          keyExtractor={(item, index) => `${item.recipe_ID}_${index}`}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.horizontalList}
           renderItem={({ item }) => (
             <HealthyCard
               name={item.recipeName}
               deliveryTime="15-20 mins"
+              cookTime={item.cookTime}
               categories={[
                 `${item.totalCalories} Kcal`,
-                `${item.totalProtein} Protien`,
-                `${item.totalCarbs} Crabs`,
+                `${item.totalProtein} Protein`,
+                `${item.totalCarbs} Carbs`,
                 `${item.totalFat} Fats`,
               ]}
               imageUri={item.imageURL}
-              id={item.recipe_ID}
+              idRecipe={item.recipe_ID}
             />
           )}
         />
@@ -159,20 +149,21 @@ const AllMeal = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <View style={{ height: 40, backgroundColor: Colors.white }}>
+        <View style={{ height: 43, backgroundColor: Colors.white }}>
           <TouchableOpacity
             onPress={handleBack}
             style={{
               position: "absolute",
               zIndex: 1,
-              width: screenWidth,
               height: 50,
               flexDirection: "row",
               alignItems: "center",
             }}
           >
             <Ionicons name="arrow-back" style={{ paddingHorizontal: 20 }} size={24} />
-            <Text style={{ fontSize: 20 }}>{useLocalSearch.label}</Text>
+            <View>
+              <HeaderElement header={useLocalSearch.label.toString()} />
+            </View>
           </TouchableOpacity>
         </View>
         <View style={styles.header}>
@@ -183,57 +174,67 @@ const AllMeal = () => {
             onSelectCategory={handleCategorySelection}
           />
         </View>
-        {loading ? ( // Conditionally render ActivityIndicator when loading is true
+        {loading ? (
           <ActivityIndicator size="large" color={Colors.primary} style={{ marginTop: 20 }} />
         ) : recipeData.length > 0 ? (
           <ScrollView>
             {recommendedRecipe && (
               <View style={styles.recommendedContainer}>
-                <Text style={styles.recommendedText}>Recommended Food Today</Text>
+                <HeaderElement header={"Recommended Food Today"} />
+
                 <HealthyCard
                   numberElement={1}
                   name={recommendedRecipe.recipeName}
+                  cookTime={recommendedRecipe.cookTime}
                   deliveryTime="15-20 mins"
                   categories={[
                     `${recommendedRecipe.totalCalories} Kcal`,
-                    `${recommendedRecipe.totalProtein} Protien`,
-                    `${recommendedRecipe.totalCarbs} Crabs`,
+                    `${recommendedRecipe.totalProtein} Protein`,
+                    `${recommendedRecipe.totalCarbs} Carbs`,
                     `${recommendedRecipe.totalFat} Fats`,
                   ]}
                   imageUri={recommendedRecipe.imageURL}
-                  id={recommendedRecipe.recipe_ID}
+                  idRecipe={recommendedRecipe.recipe_ID}
                 />
               </View>
             )}
 
             <View style={styles.filtersContainer}>
-              {useLocalSearch.type == "meal"
-                ? [
-                    "Low Proteint",
-                    "Hight Proteint",
-                    "Easy to make",
-                    "Medium to make",
-                    "Hard to make",
-                  ].map((filterName) => renderFilterList(filterName))
-                : useLocalSearch.type == "Kcal"
-                ? [
-                    "Breakfast",
-                    "Dinner",
-                    "Lunch",
-                    "Low Proteint",
-                    "Hight Proteint",
-                    "Easy to make",
-                    "Medium to make",
-                    "Hard to make",
-                  ].map((filterName) => renderFilterList(filterName))
-                : [
-                    "Breakfast",
-                    "Dinner",
-                    "Lunch",
-                    "Easy to make",
-                    "Medium to make",
-                    "Hard to make",
-                  ].map((filterName) => renderFilterList(filterName))}
+              {useLocalSearch.type === "meal" &&
+                [
+                  "Low Protein",
+                  "High Protein",
+                  "Easy to make",
+                  "Medium to make",
+                  "Hard to make",
+                ].map((filterName, index) => (
+                  <React.Fragment key={`meal-${index}`}>
+                    {renderFilterList(filterName)}
+                  </React.Fragment>
+                ))}
+              {useLocalSearch.type === "Kcal" &&
+                [
+                  "Breakfast",
+                  "Lunch",
+                  "Dinner",
+                  "Low Protein",
+                  "High Protein",
+                  "Easy to make",
+                  "Medium to make",
+                  "Hard to make",
+                ].map((filterName, index) => (
+                  <React.Fragment key={`kcal-${index}`}>
+                    {renderFilterList(filterName)}
+                  </React.Fragment>
+                ))}
+              {useLocalSearch.type === "hard" &&
+                ["Breakfast", "Dinner", "Lunch", "Low Protein", "High Protein"].map(
+                  (filterName, index) => (
+                    <React.Fragment key={`hard-${index}`}>
+                      {renderFilterList(filterName)}
+                    </React.Fragment>
+                  )
+                )}
             </View>
           </ScrollView>
         ) : (
@@ -262,10 +263,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   header: {
-    height: 82,
+    height: 84,
   },
   recommendedContainer: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 10,
   },
   recommendedText: {
     fontSize: 18,

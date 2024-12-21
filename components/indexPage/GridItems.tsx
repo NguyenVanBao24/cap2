@@ -8,15 +8,21 @@ interface GridItemsProps {
   header: string;
   calorieData: any;
   line: number;
+  homeBoolean?: boolean;
 }
 
-const GridItems: React.FC<GridItemsProps> = memo(({ header, calorieData, line }) => {
+const GridItems: React.FC<GridItemsProps> = memo(({ header, calorieData, line, homeBoolean }) => {
   return (
     <View style={{ flexDirection: "column" }}>
       <HeaderElement header={header} />
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={{ flexDirection: "row", paddingHorizontal: Css.paddingHoriAllPage }}>
-          <CalorieCounterItem header={header} calorieData={calorieData} line={line} />
+          <CalorieCounterItem
+            header={header}
+            calorieData={calorieData}
+            line={line}
+            homeBoolean={homeBoolean}
+          />
         </View>
       </ScrollView>
     </View>

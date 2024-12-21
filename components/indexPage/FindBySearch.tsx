@@ -29,9 +29,12 @@ const FindBySearch = () => {
       </TouchableOpacity>
 
       {/* Filter Button */}
-      <TouchableOpacity style={styles.filterButton} onPress={() => router.push("/search/Camera")}>
+      {/* <TouchableOpacity
+        style={styles.filterButton}
+        onPress={() => router.push("/search/FilterSearch")}
+      >
         <MaterialCommunityIcons name="magnify-scan" size={24} color={Colors.black} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* Modal Example for Bottom Sheet */}
       <Modal
@@ -67,21 +70,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 12,
     flex: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: Colors.grayBackGround,
     shadowColor: Colors.black,
     elevation: 5,
   },
   icon: {
-    marginRight: 12,
+    marginHorizontal: 12,
   },
   input: {
     flex: 1,
     fontSize: Css.fontTextLow,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
     backgroundColor: Colors.white,
     fontWeight: "500",
   },

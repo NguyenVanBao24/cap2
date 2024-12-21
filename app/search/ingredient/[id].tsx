@@ -9,8 +9,8 @@ import {
   Animated,
   FlatList,
   ScrollView,
-  SafeAreaView,
   StatusBar,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams } from "expo-router";
@@ -26,12 +26,40 @@ import {
 import { format } from "date-fns";
 import { getuserID } from "@/store/tokenHelper";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { capitalizeFirstLetter, Css, splitInstructions } from "@/constants/Css";
+import {
+  capitalizeFirstLetter,
+  Css,
+  formatString,
+  splitInstructionsToArray,
+} from "@/constants/Css";
 import PopularCard from "@/components/indexPage/PopularCard";
 import { getAllIngredientService } from "@/services/ingredientService";
 import Loading from "@/components/Loading";
+import ReadMore from "react-native-read-more-text";
+import { Chip } from "react-native-paper";
+import { useFavoriteStore } from "@/store/favorite";
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
+interface DropdownItem {
+  mealType: string;
+  dailyNutritionTrackingID?: string;
+}
+
+type HandlePushMealsParams = {
+  item: string;
+  filteredData: DropdownItem[] | undefined;
+  recipe: { data: { recipe_ID: string } } | undefined;
+  currentDate: string;
+  userID: string;
+  handlePostMeal: (recipeIDs: string[], mealType: string, date: string, userID: string) => void;
+  handlePostMeal1: (
+    recipeIDs: string[],
+    mealType: string,
+    date: string,
+    userID: string,
+    trackingID: string
+  ) => void;
+};
 const FoodDetailCard = () => {
   const { id } = useLocalSearchParams();
   const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
@@ -39,24 +67,61 @@ const FoodDetailCard = () => {
   const [trackingMeal, setTrackingMeal] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const currentDate = format(new Date(), "yyyy-MM-dd");
+  const [activeTab, setActiveTab] = useState("ingredients");
+  const { allUserFavorite, deleteFavorite, postFavorite } = useFavoriteStore();
   const userID = getuserID();
+  const favoriteItem = allUserFavorite?.find((item) => item.recipeID === id);
+
+  const [favoriteState, setFavoriteState] = useState({
+    isFavo: !!favoriteItem,
+    favoriteID: favoriteItem?.favoriteID || null,
+  });
+
+  console.log(favoriteState.favoriteID, "recipe.recipe_ID");
+  const handleFavorite = async () => {
+    setFavoriteState((prevState) => ({
+      ...prevState,
+      isFavo: !prevState.isFavo,
+    }));
+    try {
+      favoriteState.isFavo
+        ? await deleteFavorite(userID, favoriteState.favoriteID)
+        : await postFavorite(userID, recipe?.data.recipe_ID);
+    } catch (error) {
+      console.log("Failer at hEALTHCARD", error);
+    }
+  };
+  const renderTruncatedFooter = (handlePress: () => void) => {
+    return (
+      <TouchableOpacity onPress={handlePress} style={styles.footerContainer}>
+        <Text style={styles.moreText}>Xem thêm</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderRevealedFooter = (handlePress: () => void) => {
+    return (
+      <TouchableOpacity onPress={handlePress} style={styles.footerContainer}>
+        <Text style={styles.moreText}>Ẩn bớt</Text>
+      </TouchableOpacity>
+    );
+  };
+  const currentDate = format(new Date(), "yyyy-MM-dd");
   const dropdownItems = [
     { label: "Breakfast", value: "BREAKFAST" },
     { label: "Lunch", value: "LUNCH" },
     { label: "Dinner", value: "DINNER" },
     { label: "Snack", value: "SNACK" },
   ];
-  console.log(recipe, "recipe123");
   type Meal = {
-    mealType: "BREAKFAST" | "LUNCH" | "DINNER"; // Các kiểu bữa ăn
-    recipeIdList: string[]; // Danh sách ID công thức
+    mealType: "BREAKFAST" | "LUNCH" | "DINNER";
+    recipeIdList: string[];
   };
 
   type ApiRequestBody = {
-    meals: Meal[]; // Danh sách các bữa ăn
-    date: string; // Ngày (YYYY-MM-DD)
-    user_ID: string; // ID người dùng
+    meals: Meal[];
+    date: string;
+    user_ID: string;
   };
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -65,9 +130,9 @@ const FoodDetailCard = () => {
         const fetchedRecipe = await getRecipesServiceById(id as string);
         setRecipe(fetchedRecipe);
       } catch (err) {
-        setError("Failed to fetch recipe."); // Ghi lỗi nếu có
+        setError("Failed to fetch recipe.");
       } finally {
-        setLoading(false); // Kết thúc loading
+        setLoading(false);
       }
     };
 
@@ -87,31 +152,23 @@ const FoodDetailCard = () => {
   }, [id]);
   const [scrollY] = useState(new Animated.Value(0)); // Khởi tạo giá trị scroll
 
-  // Lắng nghe giá trị scroll và map opacity
-  const backgroundColor = scrollY.interpolate({
-    inputRange: [0, 200], // Scroll từ 0 đến 200
-    outputRange: ["red", "white"], // Từ đỏ đến trắng
-    extrapolate: "clamp", // Giới hạn giá trị trong khoảng
-  });
-
   let arrayItems = [
-    recipe?.data.nutritionalQuality,
+    recipe?.data.nutritionalQuality[0],
+    recipe?.data.nutritionalQuality[1],
+    recipe?.data.nutritionalQuality[2],
+    recipe?.data.nutritionalQuality[3],
     recipe?.data?.mealType[0],
     recipe?.data?.mealType[1],
     recipe?.data?.mealType[2],
     recipe?.data?.mealType[3],
     recipe?.data.difficultyLevel,
   ];
-  console.log(arrayItems);
   const handleBack = () => {
     router.back();
   };
-  const [isListVisible, setIsListVisible] = useState(false); // Quản lý trạng thái của danh sách
-  const [animation] = useState(new Animated.Value(0)); // Hiệu ứng hoạt hình
-  const handleFavorite = () => {
-    setIsFavo(!isFavo);
-    postFavoriteUserId(userID, id);
-  };
+  const [isListVisible, setIsListVisible] = useState(false);
+  const [animation] = useState(new Animated.Value(0));
+
   const toggleList = () => {
     if (isListVisible) {
       Animated.timing(animation, {
@@ -127,7 +184,7 @@ const FoodDetailCard = () => {
       }).start();
     }
 
-    setIsListVisible(!isListVisible); // Cập nhật trạng thái hiển thị danh sách
+    setIsListVisible(!isListVisible);
   };
 
   const handlePostMeal = async (
@@ -136,8 +193,6 @@ const FoodDetailCard = () => {
     date: string,
     user_ID: string
   ) => {
-    console.log("handlePostMeal");
-
     const requestBody = { recipeList, mealType, date, user_ID };
     try {
       const response = await postTrackingByUserIDDate(requestBody);
@@ -153,7 +208,6 @@ const FoodDetailCard = () => {
     user_ID: string,
     dailyNutritionTrackingID: string
   ) => {
-    console.log(dailyNutritionTrackingID, "handlePostMeal1");
     try {
       const responseNutrionId = await getTrackingNutritionID(dailyNutritionTrackingID);
       const data = [...responseNutrionId?.data?.data?.recipeList, ...recipeList];
@@ -166,7 +220,7 @@ const FoodDetailCard = () => {
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    setFilteredData(trackingMeal.meals);
+    setFilteredData(trackingMeal?.meals);
   }, [trackingMeal]);
 
   useEffect(() => {
@@ -190,6 +244,35 @@ const FoodDetailCard = () => {
     return <Loading backgroundColor={Colors.primary} />;
   }
 
+  const handlePushMeals = ({
+    item,
+    filteredData,
+    recipe,
+    currentDate,
+    userID,
+    handlePostMeal,
+    handlePostMeal1,
+  }: HandlePushMealsParams): void => {
+    const matchedData =
+      filteredData?.length > 0 &&
+      filteredData?.find((dropdownItem) => item === dropdownItem?.mealType);
+
+    if (matchedData && matchedData.dailyNutritionTrackingID) {
+      const dailyNutritionTrackingID = matchedData.dailyNutritionTrackingID;
+      handlePostMeal1(
+        [recipe?.data.recipe_ID || ""],
+        item,
+        currentDate,
+        userID,
+        dailyNutritionTrackingID
+      );
+    } else {
+      handlePostMeal([recipe?.data.recipe_ID || ""], item, currentDate, userID);
+    }
+    setIsListVisible(!isListVisible);
+  };
+  const instructions = splitInstructionsToArray(recipe?.data.cookingInstructions);
+
   return (
     <View
       style={{
@@ -206,8 +289,7 @@ const FoodDetailCard = () => {
             zIndex: 1,
             flexDirection: "row",
             alignItems: "center",
-            flex: 1,
-            width: "100%",
+            top: Css.paddingHoriIntro,
           }}
         >
           <Ionicons name="arrow-back" style={{ paddingHorizontal: 20 }} size={24} />
@@ -217,12 +299,14 @@ const FoodDetailCard = () => {
         <ScrollView style={styles.body}>
           <View style={styles.imageHeader}>
             <View style={styles.header}>
-              <Image source={{ uri: `${recipe?.data.imageURL}` }} style={styles.image} />
+              <Image source={{ uri: `${recipe?.data?.imageURL}` }} style={styles.image} />
             </View>
           </View>
 
           <View style={styles.bodyContent}>
-            <Text style={styles.title}>{recipe?.data.recipeName}</Text>
+            <Text style={styles.title}>{recipe?.data?.recipeName}</Text>
+
+            {/* list icon */}
             <View
               style={{
                 width: "100%",
@@ -231,77 +315,120 @@ const FoodDetailCard = () => {
               }}
             >
               <View style={styles.nutrition}>
-                <View style={{ height: 40, marginBottom: 8 }}>
+                <View style={{ marginBottom: 8 }}>
                   <Image
                     source={require("@/assets/images/caloriIcon.png")}
-                    style={{ height: 48, width: 48, resizeMode: "contain" }}
+                    style={{ height: 25, width: 25, resizeMode: "contain" }}
                   />
                 </View>
                 <Text style={[styles.nutrient, { color: Colors.textInput }]}>
-                  {recipe?.data.totalCalories} Kcal
+                  {recipe?.data?.totalCalories} Kcal
                 </Text>
               </View>
 
               <View style={styles.nutrition}>
-                <View style={{ height: 40, marginBottom: 8 }}>
+                <View style={{ marginBottom: 8 }}>
                   <Image
                     source={require("@/assets/images/timeIcon.png")}
-                    style={{ height: 40, width: 40, resizeMode: "cover" }}
+                    style={{ height: 25, width: 25, resizeMode: "contain" }}
                   />
                 </View>
                 <Text style={[styles.nutrient, { color: Colors.textInput }]}>
-                  {recipe?.data.prepTime} | {recipe?.data.cookTime} min
+                  {recipe?.data?.prepTime} | {recipe?.data?.cookTime} min
                 </Text>
               </View>
 
               <View style={styles.nutrition}>
-                <View style={{ height: 40, marginBottom: 8 }}>
+                <View style={{ marginBottom: 8 }}>
                   <Image
                     source={require("@/assets/images/cookIcon.png")}
-                    style={{ height: 40, width: 40, resizeMode: "contain" }}
+                    style={{ height: 25, width: 25, resizeMode: "contain" }}
                   />
                 </View>
                 <Text style={[styles.nutrient, { color: Colors.textInput }]}>
-                  {recipe?.data.difficultyLevel}
+                  {recipe?.data?.difficultyLevel}
                 </Text>
               </View>
             </View>
 
+            {/* description */}
             <View style={styles.containerDes}>
-              <Text style={styles.des}>{recipe?.data.description}</Text>
+              <ReadMore
+                numberOfLines={2}
+                renderTruncatedFooter={renderTruncatedFooter}
+                renderRevealedFooter={renderRevealedFooter}
+              >
+                <Text style={styles.des}>{recipe?.data?.description}</Text>
+              </ReadMore>
             </View>
+
+            {/* navigate */}
             <View style={styles.itemNavigate}>
               {arrayItems?.map(
-                (item) => item != null && <Text style={styles.itemInfor}>{item}</Text>
+                (item, index) =>
+                  item != null && (
+                    <Chip key={index} onPress={() => console.log("Pressed")}>
+                      {formatString(item)}
+                    </Chip>
+                  )
               )}
             </View>
 
-            <View style={styles.cookingInstructions}>
-              <Text style={styles.cookingInstructionsText}>
-                {recipe?.data.cookingInstructions ?? ""}
-              </Text>
+            <View style={styles.tabContainer}>
+              <TouchableOpacity
+                style={[styles.tabButton, activeTab === "ingredients" && styles.activeTab]}
+                onPress={() => setActiveTab("ingredients")}
+              >
+                <Text style={[styles.tabText, activeTab === "ingredients" && styles.activeTabText]}>
+                  Ingredients
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.tabButton, activeTab === "instructions" && styles.activeTab]}
+                onPress={() => setActiveTab("instructions")}
+              >
+                <Text
+                  style={[styles.tabText, activeTab === "instructions" && styles.activeTabText]}
+                >
+                  Cooking Instructions
+                </Text>
+              </TouchableOpacity>
             </View>
 
-            <View style={styles.ingredientListContainer}>
-              <FlatList
-                contentContainerStyle={styles.listContainer}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                data={recipe?.data?.ingredientList}
-                keyExtractor={(item) => item.ingredientId}
-                renderItem={({ item }) => (
-                  <PopularCard
-                    numberElement={2}
-                    name={item.ingredientName}
-                    unit={item.unit}
-                    deliveryTime="15-20 mins"
-                    imageUri={item.imageURL}
-                    id={item.ingredientId}
-                  />
-                )}
-              />
-            </View>
+            {activeTab !== "ingredients" ? (
+              <View style={styles.cookingInstructions}>
+                {/* <Text style={styles.title}>Instructions</Text> */}
+                {instructions.map((instruction, index) => (
+                  <Text key={`${instruction}_${index}`} style={styles.step}>
+                    {instruction}
+                  </Text>
+                ))}
+              </View>
+            ) : (
+              <View style={styles.ingredientListContainer}>
+                <FlatList
+                  contentContainerStyle={styles.listContainer}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={recipe?.data?.ingredientList}
+                  keyExtractor={(item, index) => `${item.ingredientId}_${index}`}
+                  renderItem={({ item }) => (
+                    <PopularCard
+                      direction={false}
+                      numberElement={2}
+                      name={item.ingredientName}
+                      unit={item.unit}
+                      calories={item.calories}
+                      deliveryTime="15-20 mins"
+                      imageUri={item.imageURL}
+                      id={item.ingredientId}
+                    />
+                  )}
+                />
+              </View>
+            )}
           </View>
+          <View style={{ height: 20 }}></View>
         </ScrollView>
 
         {/* last */}
@@ -325,25 +452,20 @@ const FoodDetailCard = () => {
             {recipe?.data?.mealType?.map((item, index) => (
               <TouchableOpacity
                 key={index}
-                onPress={() => {
-                  const matchedData =
-                    filteredData?.length > 0 &&
-                    filteredData.find((dropdownItem) => item == dropdownItem?.mealType);
-                  // console.log(item.value, "sssss");
-                  if (matchedData) {
-                    const dailyNutritionTrackingID = matchedData.dailyNutritionTrackingID;
-                    handlePostMeal1(
-                      [recipe?.data.recipe_ID],
-                      item,
-                      currentDate,
-                      userID,
-                      dailyNutritionTrackingID
-                    );
-                  } else {
-                    handlePostMeal([recipe?.data.recipe_ID], item, currentDate, userID);
-                  }
+                onPress={() =>
+                  handlePushMeals({
+                    item,
+                    filteredData,
+                    recipe,
+                    currentDate,
+                    userID,
+                    handlePostMeal,
+                    handlePostMeal1,
+                  })
+                }
+                style={{
+                  borderColor: Colors.primary,
                 }}
-                style={{ borderColor: Colors.primary }}
               >
                 <Text style={styles.dropdownItem}>{item}</Text>
               </TouchableOpacity>
@@ -351,15 +473,21 @@ const FoodDetailCard = () => {
           </Animated.View>
         )}
 
+        {isListVisible && (
+          <TouchableWithoutFeedback onPress={() => setIsListVisible(!isListVisible)}>
+            <View style={styles.overlay} />
+          </TouchableWithoutFeedback>
+        )}
+
         <View style={styles.addButtonContainer}>
           <TouchableOpacity onPress={toggleList} style={styles.addButton}>
-            <FontAwesome5 name="plus" size={24} color={Colors.primary} />
+            <FontAwesome5 name="plus" size={24} color={Colors.white} />
           </TouchableOpacity>
         </View>
       </View>
 
       <TouchableOpacity onPress={handleFavorite} style={styles.favoriteIcon}>
-        <FontAwesome5 name="star" size={16} color={!isFavo ? Colors.black : Colors.white} />
+        <FontAwesome5 name="star" size={16} color={!favoriteState.isFavo ? Colors.white : "red"} />
       </TouchableOpacity>
     </View>
   );
@@ -371,13 +499,23 @@ const styles = StyleSheet.create({
   favoriteIcon: {
     padding: 6,
     position: "absolute",
-    top: 42,
+    top: Css.paddingHoriIntro - 4,
     right: 10,
     backgroundColor: "#ddd",
     borderRadius: "50%",
   },
   ingredientListContainer: {},
-  listContainer: { paddingHorizontal: Css.paddingHoriAllPage, gap: Css.paddingHoriAllPage },
+  listContainer: {
+    flexDirection: "column",
+    gap: 14,
+    fontSize: 16,
+    color: "#333",
+    lineHeight: 22,
+    paddingVertical: 20,
+    borderRadius: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
   container: {
     flexDirection: "column",
     justifyContent: "space-between",
@@ -393,8 +531,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 26,
+    fontWeight: "600",
     marginVertical: 10,
   },
   addButtonContainer: {
@@ -402,26 +540,24 @@ const styles = StyleSheet.create({
     gap: 2,
     position: "absolute",
     right: 20,
-    bottom: 20,
+    bottom: 40,
   },
   addButton: {
     height: 60,
     width: 60,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.primary,
     borderRadius: 30,
     padding: 15,
     alignItems: "center",
-    borderColor: Colors.primary,
-    borderWidth: 1,
     justifyContent: "center",
+    zIndex: 100,
   },
   dropdown: {
     position: "absolute",
     right: 20,
-    bottom: 80,
-    backgroundColor: Colors.white,
+    bottom: 100,
     padding: 10,
-    zIndex: 2,
+    zIndex: 100,
   },
   dropdownItem: {
     paddingVertical: 8,
@@ -431,7 +567,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    paddingHorizontal: Css.paddingHoriAllPageSmall,
+    paddingHorizontal: Css.paddingHoriAllPage,
   },
   bodyContent: {},
   imageHeader: {},
@@ -446,7 +582,6 @@ const styles = StyleSheet.create({
   nutrition: {
     flexDirection: "column",
     alignItems: "center",
-    marginVertical: 10,
   },
   nutrient: {
     textAlign: "center",
@@ -472,18 +607,30 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   containerDes: {
-    paddingVertical: 10,
+    padding: 10,
   },
   itemNavigate: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 6,
     justifyContent: "center",
+    paddingBottom: 16,
   },
   cookingInstructions: {},
-  cookingInstructionsText: { fontSize: 14 },
-  itemInfor: { padding: 8, fontSize: 12, backgroundColor: "#ddd", borderRadius: 16 },
-  des: { fontSize: 16, fontWeight: "400", lineHeight: 20 },
+  cookingInstructionsText: { fontSize: 14, fontWeight: 500 },
+  itemInfor: {
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    backgroundColor: "#ddd",
+    borderRadius: 16,
+  },
+  des: {
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: "justify",
+    color: "#131010",
+  },
   recipes: {
     backgroundColor: Colors.grayBackGround,
     paddingHorizontal: 8,
@@ -515,5 +662,57 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontSize: 18,
     fontWeight: "bold",
+  },
+  overlay: {
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    backgroundColor: "#FFFFFF", // Replace Colors.white
+    zIndex: 99,
+    position: "absolute",
+    opacity: 0.9,
+  },
+  moreText: {
+    marginTop: 5,
+    fontSize: 14,
+    color: "#007BFF",
+    fontWeight: "bold",
+  },
+  tabContainer: {
+    flexDirection: "row",
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  activeTab: {
+    borderBottomWidth: 3,
+    borderColor: "#007BFF",
+  },
+  tabText: {
+    fontSize: 16,
+    color: "#666",
+  },
+  activeTabText: {
+    fontWeight: "bold",
+    color: "#007BFF",
+  },
+  step: {
+    fontSize: 16,
+    color: "#333",
+    lineHeight: 22,
+    paddingVertical: 20,
+    borderRadius: 4,
+    borderBottomWidth: 1, // Thay đổi sang viền ở dưới
+    borderBottomColor: "#ccc", // Màu của viền
+  },
+  footerContainer: {
+    flexDirection: "row", // Arrange text in a row if needed
+    justifyContent: "flex-end", // Align text to the right end
   },
 });

@@ -17,7 +17,7 @@ const NavigateDailyTracking = () => {
       {/* Button Section */}
       <TouchableOpacity
         style={styles.buttonWrapper}
-        onPress={() => router.push("/(tabs)/DailyTracking")}
+        onPress={() => router.push("/(tabs)/DashBoard")}
       >
         <View style={styles.buttonContent}>
           <Text style={styles.buttonText}>View Now</Text>

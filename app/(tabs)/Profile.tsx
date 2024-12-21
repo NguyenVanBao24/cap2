@@ -5,6 +5,8 @@ import { router } from "expo-router";
 import { useAuthStore } from "@/store/authStore";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
+import { useUserData } from "@/store/userStore";
+import { Css, screenWidth } from "@/constants/Css";
 
 interface MenuItemProps {
   icon: string;
@@ -31,34 +33,40 @@ const ProfileScreen: React.FC = () => {
     await logout();
     router.replace("/");
   };
+
+  const handleName = () => {
+    router.push("/(onboarding)/name");
+  };
+
+  const handleLogOut = () => {
+    logout();
+    router.replace("/");
+  };
+
+  const { fullname, dietType } = useUserData();
+  console.log(fullname, dietType, "first");
   return (
     <SafeAreaView style={{ backgroundColor: Colors.white, flex: 1 }}>
       <View style={styles.container}>
         <View style={styles.body}>
           <View style={styles.profileContainer}>
-            <Image
-              source={require("@/assets/images/human.jpg")} // Replace with the correct image URL
-              style={styles.profileImage}
-            />
-            <Text style={styles.name}>Shambhavi Mishra</Text>
-            <Text style={styles.role}>Food Blogger</Text>
+            <Image source={require("@/assets/images/man.png")} style={styles.profileImage} />
+            <Text style={styles.name}>{fullname || "HI"}</Text>
+            <Text style={styles.role}>{dietType || "Set your goal?"}</Text>
           </View>
 
           <View style={styles.menu}>
-            <MenuItem
-              icon="star-outline"
-              text="Edit Profile"
-              onPress={() => {
-                router.push("/(onboarding)/name");
-              }}
-            />
-            <MenuItem icon="settings-outline" text="Settings" onPress={() => {}} />
-            <MenuItem
-              icon="document-text-outline"
-              text="Terms & Privacy Policy"
-              onPress={() => {}}
-            />
-            <MenuItem icon="log-out-outline" text="Log Out" onPress={handleLogout} />
+            <TouchableOpacity onPress={handleName} style={styles.tabIcon}>
+              <Image source={require("@/assets/images/edit.png")} style={styles.profileImageIcon} />
+              <Text style={styles.tabIconText}>Edit Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLogOut} style={styles.tabIcon}>
+              <Image
+                source={require("@/assets/images/tabsIconNav/logout.png")}
+                style={styles.profileImageIcon}
+              />
+              <Text style={styles.tabIconText}>Logout</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -86,6 +94,11 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 70,
   },
+  profileImageIcon: {
+    width: 30,
+    height: 30,
+  },
+  tabIconText: { fontSize: Css.fontTextMedium },
   name: {
     fontSize: 22,
     fontWeight: "bold",
@@ -97,6 +110,15 @@ const styles = StyleSheet.create({
   },
   menu: {
     marginTop: 40,
+  },
+  tabIcon: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 20,
+    paddingHorizontal: 1,
+    borderBottomWidth: 1,
+    marginBottom: 20,
+    borderColor: "#ddd",
   },
   menuItem: {
     flexDirection: "row",

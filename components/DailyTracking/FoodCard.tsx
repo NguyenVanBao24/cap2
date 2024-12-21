@@ -37,7 +37,6 @@ const FoodCard: React.FC<FoodCardProps> = ({
   const handleRemoveRecipe = async (nutritionId: string) => {
     try {
       const response = await deleteTrackingByID(nutritionId);
-      console.log("ok");
     } catch (error) {}
   };
   return (

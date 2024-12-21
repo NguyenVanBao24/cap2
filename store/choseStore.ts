@@ -26,7 +26,6 @@ export const useChoseState = create<ChoseState>((set) => ({
       });
     } catch (error) {
       console.log("chose failed:", error);
-      throw error;
     }
   },
 }));

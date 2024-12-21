@@ -23,16 +23,15 @@ interface LoginValues {
 
 const LoginScreen = () => {
   const router = useRouter();
-  const { login } = useAuthStore(); // Sử dụng hàm login từ Zustand store
+  const { login } = useAuthStore();
 
-  // Chỉ định kiểu cho values
   const handleLogin = async (values: LoginValues) => {
     const { username, password } = values;
-    console.log("123", username, password);
     try {
       const response = await login(username, password);
 
-      if (response.code === 1000) {
+      if (response.message !== "Login failed") {
+        console.log("success---------------");
         router.replace("/(tabs)/Home");
       } else {
         Alert.alert("Login failed", response?.message || "Invalid credentials");

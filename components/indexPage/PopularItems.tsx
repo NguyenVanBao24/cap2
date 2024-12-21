@@ -27,6 +27,7 @@ const PopularItems: React.FC<FearuredFoodsProps> = ({ header, ingredient }) => {
               `${item.carbs} Crabs`,
               `${item.fat} Fats`,
             ]}
+            calories={item.calories}
             imageUri={item.imageURL}
             id={item.ingredient_ID}
           />

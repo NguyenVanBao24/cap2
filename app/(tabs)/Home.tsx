@@ -13,87 +13,59 @@ import GridItems from "@/components/indexPage/GridItems";
 import { Colors } from "@/constants/Colors";
 import { calorieData, meal, hard } from "@/constants/data";
 import { getAllRecipesService } from "@/services/recipeService";
-import { getAllIngredientService } from "@/services/ingredientService";
-import { getFavoriteTrending } from "@/services/favorite";
+import { getAllIngredientService, getIngredientServicePage } from "@/services/ingredientService";
+import { getFavoriteTrending, getFavoriteUserId } from "@/services/favorite";
 import Loading from "@/components/Loading";
 import { useChoseState } from "@/store/choseStore";
 import { getUserInformationPlan } from "@/services/authService";
 import { getuserID } from "@/store/tokenHelper";
 import { useUserData } from "@/store/userStore";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useFavoriteStore } from "@/store/favorite";
+import { isFavorite } from "@/constants/Css";
 
 const Home = () => {
+  const { getFavorite, allUserFavorite } = useFavoriteStore();
+
   const [recipes, setRecipes] = useState<Recipe>();
   const [loading, setLoading] = useState<boolean>(true);
   const [ingredient, setIngredient] = useState<Ingredient>();
   const [trendingRecipe, setTrendingRecipe] = useState();
   const [userInformationPlan, setuserInformationPlan] = useState<any>();
-  const id = getuserID();
+  const userID = getuserID();
   const { chose } = useChoseState();
+
   const setUserData = useUserData((state) => state.setUserData);
+
   useEffect(() => {
     setUserData({
+      fullname: userInformationPlan?.fullname,
       age: userInformationPlan?.age,
-      password: userInformationPlan?.password || null,
-      email: userInformationPlan?.email || null,
-      gender: userInformationPlan?.gender || null,
-      weight: userInformationPlan?.weight || null,
-      height: userInformationPlan?.height || null,
-      activityFactor: userInformationPlan?.weight || null,
-      nutritionPlan: userInformationPlan?.nutritionPlan || null,
-      dietType: userInformationPlan?.dietType || null,
+      email: userInformationPlan?.email,
+      gender: userInformationPlan?.gender,
+      height: userInformationPlan?.height,
+      weight: userInformationPlan?.weight,
+      password: userInformationPlan?.password,
+      activityFactor: userInformationPlan?.activityFactor,
+      nutritionPlan: userInformationPlan?.nutritionPlan,
+      dietType: userInformationPlan?.dietType,
     });
-  }, []);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       // const [recipesResponse, ingredientsResponse, trendingResponse, userInformationPlan] =
-  //       //   await Promise.all([
-  //       //     getAllRecipesService(),
-  //       //     getAllIngredientService(),
-  //       //     getFavoriteTrending(),
-  //       //     getUserInformationPlan(id),
-  //       //     chose(),
-  //       //   ]);
-  //       // setRecipes(recipesResponse.data);
-  //       // setIngredient(ingredientsResponse.data);
-  //       // setTrendingRecipe(trendingResponse);
-  //       // setuserInformationPlan(userInformationPlan.data);
-  //       const recipesResponse = await getAllRecipesService();
-  //       const ingredientsResponse = await getAllIngredientService();
-  //       console.log(ingredientsResponse.data, "ingredientsResponse");
-  //       const trendingResponse = await getFavoriteTrending();
-  //       const userInformationPlan = await getUserInformationPlan(id);
-  //       await chose();
-  //       setRecipes(recipesResponse.data);
-  //       setIngredient(ingredientsResponse.data);
-  //       setTrendingRecipe(trendingResponse);
-  //       setuserInformationPlan(userInformationPlan.data);
-  //     } catch (error) {
-  //       console.log("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+  }, [userInformationPlan]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const recipesResponse = await getAllRecipesService();
         setRecipes(recipesResponse.data);
-        const ingredientsResponse = await getAllIngredientService();
+        const ingredientsResponse = await getIngredientServicePage();
         setIngredient(ingredientsResponse.data);
-        const userInformationPlan = await getUserInformationPlan(id);
-
-        setuserInformationPlan(userInformationPlan.data);
         const trendingResponse = await getFavoriteTrending();
         setTrendingRecipe(trendingResponse);
+        getFavorite(userID);
         chose();
+        const userInformationPlan = await getUserInformationPlan(userID);
+        setuserInformationPlan(userInformationPlan.data);
       } catch (error) {
         console.log("Error fetching data:", error);
       } finally {
@@ -102,7 +74,8 @@ const Home = () => {
     };
 
     fetchData();
-  }, []);
+  }, [userID]);
+
   const gridItemsData = [
     { header: "Calorie Counters", calorieData: calorieData, line: 1 },
     { header: "Meal", calorieData: meal, line: 2 },

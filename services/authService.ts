@@ -9,8 +9,7 @@ export const loginService = async (username: string, password: string): Promise<
     console.log(response);
     return response.data;
   } catch (error) {
-    console.log("Login failed:", error);
-    throw error;
+    console.log("Login failed at authServices:", error);
   }
 };
 export const signupService = async (
@@ -19,7 +18,17 @@ export const signupService = async (
   password: string,
   fullname: string
 ): Promise<SignUpResponse> => {
-  console.log("first", username, email, password, fullname);
+  console.log(
+    "first",
+    "username",
+    username,
+    "email",
+    email,
+    "password",
+    password,
+    "fullname",
+    fullname
+  );
   try {
     const response = await axiosConfig.post<SignUpResponse>("/user", {
       username: username,
@@ -27,23 +36,27 @@ export const signupService = async (
       password: password,
       fullname: fullname,
     });
-
+    console.log(response, "at sign up");
     return response.data;
   } catch (error) {
-    console.log("Login failed:", error);
-    throw error;
+    console.log("Sign up failed at authServices:", error);
   }
 };
 
 export const getUserInformationPlan = async (id: string): Promise<any> => {
   try {
     const response = await axiosConfig.get<any>(`/user/${id}`);
+
     return response.data;
   } catch (error) {
-    console.log("Login failed:", error);
-    throw error;
+    console.log("get User Information Plan failed at authServices:", error);
   }
 };
+
+// export enum SignUpResponse {
+//   NAME = "name",
+
+// }
 
 export const updateUserInformationPlan = async ({
   id,
@@ -82,6 +95,7 @@ export const updateUserInformationPlan = async ({
       activityFactor,
       nutritionPlan,
       dietType,
+      id,
     });
     const response = await axiosConfig.put<any>(`/user/${id}`, {
       password,
@@ -98,7 +112,6 @@ export const updateUserInformationPlan = async ({
 
     return response.data;
   } catch (error) {
-    console.error("Update failed:", error);
-    throw error;
+    console.log("update User Information Plan failed at authServices:", error);
   }
 };

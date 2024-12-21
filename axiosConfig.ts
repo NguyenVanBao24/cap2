@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken, getRefreshToken, setTokens } from "@/store/tokenHelper";
 import { useAuthStore } from "@/store/authStore";
 
-const BASE_URL = "https://2378-2405-4802-6093-9b70-a84f-27b3-1e7f-3f19.ngrok-free.app";
+const BASE_URL = "https://eae2-103-156-46-86.ngrok-free.app";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -27,7 +27,7 @@ const refreshAuthToken = async () => {
     try {
       const response = await axiosInstance.post("/auth/refresh", { refreshToken });
       const { token, refreshToken: newRefreshToken } = response.data;
-      setTokens(token, newRefreshToken); // Cập nhật token
+      setTokens(token, newRefreshToken);
     } catch (error) {
       console.log("Failed to refresh token:", error);
       useAuthStore.getState().logout(); // Đăng xuất nếu không thể refresh
@@ -48,12 +48,10 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       }
 
-      // Nếu có một lỗi khác từ server, bạn có thể log ra hoặc xử lý tùy ý
       console.log("API Error:", error.response.data);
       return Promise.reject(error.response.data); // Trả về lỗi cho phía client
     }
 
-    // Xử lý lỗi khi không có phản hồi từ server (ví dụ: lỗi mạng)
     console.log("Network Error:", error.message);
     return Promise.reject(error); // Trả về lỗi cho phía client
   }

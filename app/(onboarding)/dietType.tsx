@@ -1,11 +1,12 @@
 import { Colors } from "@/constants/Colors";
-import { getDietType } from "@/store/tokenHelper";
+import { getDietType, getDietTypeByUser } from "@/store/tokenHelper";
 import { useUserData } from "@/store/userStore";
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const GenderSelection = () => {
   const DietType = getDietType();
+  const dietType = getDietTypeByUser();
   const formatText = (text: string): string => {
     return text
       .toLowerCase()
@@ -15,7 +16,7 @@ const GenderSelection = () => {
   };
   const setUserData = useUserData((state) => state.setUserData);
 
-  const [selectedOption, setSelectedOption] = useState<string | null>(DietType[0]);
+  const [selectedOption, setSelectedOption] = useState<string | null>(dietType || DietType[0]);
 
   React.useEffect(() => {
     handleSaveData();
@@ -26,15 +27,16 @@ const GenderSelection = () => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>What is your sex?</Text>
+      <Text style={styles.title}>What is your goal?</Text>
       <Text style={styles.description}>
-        This information is used to personalize your experience, for example to calculate your
-        burned calories and required intake more accurately.
+        Your goal helps us create a personalized nutrition plan for you. Whether you're looking to
+        gain weight, lose weight, or maintain your current weight, this information ensures your
+        diet aligns with your aspirations and supports your journey effectively.
       </Text>
       <View style={styles.optionsContainer}>
-        {DietType?.map((option: any) => (
+        {DietType?.map((option: any, index: number) => (
           <TouchableOpacity
-            key={option}
+            key={index}
             style={[styles.optionButton, selectedOption === option && styles.optionSelected]}
             onPress={() => setSelectedOption(option)}
           >

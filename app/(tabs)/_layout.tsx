@@ -46,8 +46,8 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="DailyTracking"
+      <Tabs.Screen
+        name="Diary"
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
@@ -61,17 +61,17 @@ export default function TabLayout() {
           ),
           tabBarLabel: ({ focused }) => (
             <Text style={{ color: focused ? Colors.primary : Colors.gray, fontSize: 12 }}>
-              Tracking
+              Diary
             </Text>
           ),
         }}
-      /> */}
+      />
       <Tabs.Screen
         name="DashBoard"
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("@/assets/images/tabsIconNav/camera.png")}
+              source={require("@/assets/images/tabsIconNav/calorie.png")}
               style={{
                 width: 24,
                 height: 24,
@@ -81,7 +81,7 @@ export default function TabLayout() {
           ),
           tabBarLabel: ({ focused }) => (
             <Text style={{ color: focused ? Colors.primary : Colors.gray, fontSize: 12 }}>
-              Dashboard
+              Daily Tracking
             </Text>
           ),
         }}

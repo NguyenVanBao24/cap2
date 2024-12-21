@@ -1,17 +1,27 @@
 // CavoloNeroSalad.tsx
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { getRecipesServiceById } from "@/services/recipeService";
-import { deleteFavoriteUserId, postFavoriteUserId } from "@/services/favorite";
+import { deleteFavoriteUserId, getFavoriteUserId, postFavoriteUserId } from "@/services/favorite";
 import { getuserID } from "@/store/tokenHelper";
+import { router } from "expo-router";
+import { useFavoriteStore } from "@/store/favorite";
 
 interface CavoloNeroSaladProps {
   item: FavoriteRecipe;
+  iconFavorite?: boolean;
 }
 
-const CavoloNeroSalad: React.FC<CavoloNeroSaladProps> = ({ item }) => {
+const CavoloNeroSalad: React.FC<CavoloNeroSaladProps> = ({ item, iconFavorite = true }) => {
   const [results, setResults] = useState<Recipe>();
   const [isLoading, setIsLoading] = useState(false);
   const [isFavo, setIsFavo] = useState(true);
@@ -20,7 +30,11 @@ const CavoloNeroSalad: React.FC<CavoloNeroSaladProps> = ({ item }) => {
     const favoriteApi = async () => {
       setIsLoading(true);
       try {
-        const response = await getRecipesServiceById(item.recipeID);
+        let response = [];
+        iconFavorite
+          ? (response = await getRecipesServiceById(item.recipeID))
+          : (response = await getFavoriteUserId(item.recipeID));
+
         setResults(response.data);
       } catch (error) {
         console.log("Error fetching data:", error);
@@ -33,33 +47,50 @@ const CavoloNeroSalad: React.FC<CavoloNeroSaladProps> = ({ item }) => {
       favoriteApi();
     }
   }, [item]);
-
+  const { deleteFavorite } = useFavoriteStore();
   const apiFavorite = async () => {
-    await deleteFavoriteUserId(item.favoriteID);
+    try {
+      await deleteFavorite(userID, item.favoriteID);
+    } catch (error) {
+      console.log("Error deleting favorite:", error);
+    }
   };
   const handleFavorite = () => {
     setIsFavo(!isFavo);
     apiFavorite();
   };
+
+  const handleRecipe = (id: string) => {
+    router.push(`/search/ingredient/${id}`);
+  };
+
   return (
-    <View style={styles.container}>
-      <Image
-        source={{
-          uri: results?.imageURL,
-        }}
-        style={styles.image}
-      />
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>{results?.recipeName}</Text>
-        <Text style={styles.calories}>
-          {results?.totalCalories} Kcal |
-          <Text style={styles.calories}>{results?.prepTime} min</Text>
-        </Text>
+    <TouchableWithoutFeedback
+      onPress={() => handleRecipe(iconFavorite ? results?.recipe_ID : item?.recipe_ID)}
+    >
+      <View style={styles.container}>
+        <Image
+          source={{
+            uri: iconFavorite ? results?.imageURL : item?.imageURL,
+          }}
+          style={styles.image}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{iconFavorite ? results?.recipeName : item?.recipeName}</Text>
+          <Text style={styles.calories}>
+            {iconFavorite ? results?.totalCalories : item?.calories} Kcal |
+            <Text style={styles.calories}>
+              {iconFavorite ? results?.prepTime : item?.prepTime} min
+            </Text>
+          </Text>
+        </View>
+        {iconFavorite && (
+          <TouchableOpacity onPress={handleFavorite}>
+            <AntDesign name={isFavo ? "star" : "staro"} size={24} color="black" />
+          </TouchableOpacity>
+        )}
       </View>
-      <TouchableOpacity onPress={handleFavorite}>
-        <AntDesign name={isFavo ? "star" : "staro"} size={24} color="black" />
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -105,3 +136,6 @@ const styles = StyleSheet.create({
 });
 
 export default CavoloNeroSalad;
+function deleteFavorite(favoriteID: string) {
+  throw new Error("Function not implemented.");
+}

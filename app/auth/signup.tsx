@@ -1,5 +1,13 @@
-import React from "react";
-import { View, TextInput, Button, StyleSheet, Text, Alert, Dimensions } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import { Link, useRouter } from "expo-router";
 import { useAuthStore } from "@/store/authStore";
 import { Formik } from "formik";
@@ -7,44 +15,47 @@ import * as Yup from "yup";
 import CustomInput from "@/components/Custom/CustomInput";
 import CustomButton from "@/components/Custom/CustomButton";
 import { Colors } from "@/constants/Colors";
+import axios from "axios";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required("username is required."),
-  email: Yup.string().required("username is required."),
-  fullname: Yup.string().required("username is required."),
+  email: Yup.string().required("email is required."),
+  fullname: Yup.string().required("fullname is required."),
   password: Yup.string()
     .min(6, "Password must be at least 6 characters long.")
     .required("Password is required."),
 });
 
-// Định nghĩa kiểu cho values
 interface SignupProps {
   username: string;
   password: string;
   email: string;
   fullname: string;
 }
-const signup = () => {
-  const router = useRouter();
-  const { signup } = useAuthStore(); // Sử dụng hàm login từ Zustand store
 
-  // Chỉ định kiểu cho values
+const Signup = () => {
+  const router = useRouter();
+  const { signup } = useAuthStore();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const handleLogin = async (values: SignupProps) => {
     const { username, email, password, fullname } = values;
     try {
       const response = await signup(username, email, password, fullname);
 
-      if (response.code === 1000) {
-        router.replace("/(tabs)/Home");
+      console.log(response, "signup");
+      if (response.message == "Create User successfully") {
+        router.replace("/auth/login");
       } else {
-        Alert.alert("Login failed", response?.message || "Invalid credentials");
+        setErrorMessage(response?.message || "Invalid credentials");
       }
     } catch (error) {
       console.log("Login error:", error);
-      Alert.alert("Login failed", "An unexpected error occurred. Please try again.");
+      setErrorMessage("An unexpected error occurred. Please try again.");
     }
   };
-  const screenWidth = Dimensions.get("window").width;
+
+  const closeErrorModal = () => setErrorMessage(null);
 
   return (
     <View style={styles.container}>
@@ -63,9 +74,7 @@ const signup = () => {
               onChangeText={handleChange("email")}
               onBlur={() => handleBlur("email")}
             />
-            {errors.username && touched.username && (
-              <Text style={styles.error}>{errors.username}</Text>
-            )}
+            {errors.email && touched.email && <Text style={styles.error}>{errors.email}</Text>}
 
             <CustomInput
               title="Password"
@@ -73,7 +82,6 @@ const signup = () => {
               value={values.password}
               onChangeText={handleChange("password")}
               onBlur={() => handleBlur("password")}
-              // secureTextEntry
             />
             {errors.password && touched.password && (
               <Text style={styles.error}>{errors.password}</Text>
@@ -86,9 +94,10 @@ const signup = () => {
               onChangeText={handleChange("fullname")}
               onBlur={() => handleBlur("fullname")}
             />
-            {errors.username && touched.username && (
-              <Text style={styles.error}>{errors.username}</Text>
+            {errors.fullname && touched.fullname && (
+              <Text style={styles.error}>{errors.fullname}</Text>
             )}
+
             <CustomInput
               title="Username"
               placeholder="Username"
@@ -105,7 +114,7 @@ const signup = () => {
 
             <View style={styles.bottomAuthor}>
               <Text style={styles.askText}>
-                You have accout?
+                You have an account?
                 <Link style={styles.linkText} href={"/auth/login"}>
                   Login
                 </Link>
@@ -114,18 +123,27 @@ const signup = () => {
           </View>
         )}
       </Formik>
+
+      {errorMessage && (
+        <View style={styles.errorModal}>
+          <Text style={styles.errorText}>{errorMessage}</Text>
+          <TouchableOpacity onPress={closeErrorModal} style={styles.closeButton}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
 
-export default signup;
+export default Signup;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 20, // Thêm khoảng cách bên trong
+    padding: 20,
   },
   title: {
     fontSize: 34,
@@ -133,8 +151,8 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
   formContainer: {
-    width: "100%", // Để chiếm toàn bộ chiều rộng
-    alignItems: "center", // Căn giữa các input
+    width: "100%",
+    alignItems: "center",
   },
   error: {
     color: "red",
@@ -150,9 +168,36 @@ const styles = StyleSheet.create({
   },
   alignButton: {
     justifyContent: "center",
-    width: "100%", // Để nút chiếm toàn bộ chiều rộng
+    width: "100%",
   },
   askText: {
     fontSize: 14,
+  },
+  errorModal: {
+    position: "absolute",
+    top: Dimensions.get("window").height / 2 - 150,
+    left: Dimensions.get("window").width / 2 - 250,
+    width: 500,
+    height: 300,
+    backgroundColor: "blue",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    padding: 20,
+  },
+  errorText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  closeButton: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "blue",
+    fontWeight: "bold",
   },
 });

@@ -7,7 +7,6 @@ export const getTrackingAll = async (): Promise<any> => {
     return response;
   } catch (error) {
     console.log("Failed to fetch getTrackingAll", error);
-    throw error;
   }
 };
 
@@ -19,7 +18,6 @@ export const getTrackingNutritionID = async (nutritionId: string): Promise<any> 
     return response;
   } catch (error) {
     console.log("Failed to fetch getTrackingNutritionID:", error);
-    throw error;
   }
 };
 
@@ -32,7 +30,6 @@ export const getTrackingByUserIDDate = async (userID: string, date: string): Pro
     return response;
   } catch (error) {
     console.log("Failed to fetch getTrackingByUserIDDate:", error);
-    throw error;
   }
 };
 
@@ -44,7 +41,6 @@ export const postTrackingByUserIDDate = async (
     return response.data;
   } catch (error) {
     console.log("Failed to post tracking data:", error);
-    throw error;
   }
 };
 
@@ -57,7 +53,6 @@ export const putTrackingByUserIDDate = async (
     return response.data;
   } catch (error) {
     console.log("Failed to put tracking data:", error);
-    throw error;
   }
 };
 
@@ -69,6 +64,5 @@ export const deleteTrackingByID = async (
     return response.data;
   } catch (error) {
     console.log("Failed to put tracking data:", error);
-    throw error;
   }
 };

@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerHome: {
-    fontSize: Css.fontTextLarge,
+    fontSize: Css.fontTextLargest,
     color: Colors.primary,
     fontWeight: "800",
     fontFamily: "Roboto",

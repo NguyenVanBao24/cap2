@@ -1,3 +1,5 @@
+import { Dimensions } from "react-native";
+
 export const Css = {
   paddingHoriAllPageSmall: 8,
   paddingHoriAllPage: 12,
@@ -29,6 +31,8 @@ export const Css = {
 
   height: 50,
 
+  topIconBack: 30,
+
   borderRadius: 12,
 };
 
@@ -40,33 +44,30 @@ export const shadowStyle = {
   elevation: 3,
 };
 
-// export const capitalizeFirstLetter = (str: string | null) =>
-//   str ? str[0].toUpperCase() + str.slice(1) : "";
+export const capitalizeFirstLetter = (str: string | null) =>
+  str ? str[0].toUpperCase() + str.slice(1) : "";
 
-// export const splitInstructions = (text: string | null): string => {
-//   if (!text) return "";
-
-//   return text
-//     .split(/(\d+\.\s)/) // Tách theo số thứ tự dạng "1. ", "2. ", ...
-//     .filter((item) => item.trim() !== "") // Loại bỏ các chuỗi rỗng hoặc chỉ chứa khoảng trắng
-//     .reduce<string[]>((result, item, index, arr) => {
-//       if (/\d+\.\s/.test(item) && arr[index + 1]) {
-//         result.push(item.trim() + arr[index + 1].trim()); // Kết hợp số thứ tự và nội dung
-//       }
-//       return result;
-//     }, [])
-//     .join("\n"); // Nối các phần tử thành chuỗi, mỗi phần tử trên một dòng
-// };
-export const splitInstructions = (text: string | null): string[] => {
+export const splitInstructionsToArray = (text: string | null): string[] => {
   if (!text) return [];
 
   return text
-    .split(/(\d+\.\s)/) // Tách theo số thứ tự dạng "1. ", "2. ", ...
-    .filter((item) => item.trim() !== "") // Loại bỏ chuỗi rỗng hoặc chỉ chứa khoảng trắng
-    .reduce<string[]>((result, item, index, arr) => {
-      if (/\d+\.\s/.test(item) && arr[index + 1]) {
-        result.push(item.trim() + arr[index + 1].trim()); // Ghép số thứ tự với nội dung
-      }
-      return result;
-    }, []);
+    .split(/(?=\d+\.\s)/)
+    .map((item) => item.trim())
+    .filter((item) => item);
 };
+
+export const formatString = (input: string) => {
+  const parts = input?.split("_");
+
+  const formattedParts = parts.map(
+    (part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+  );
+
+  return formattedParts.join(" ");
+};
+const _ = require("lodash");
+export const isFavorite = (data1: string, data2: string) => {
+  return _.isEqual(data1, data2);
+};
+
+export const screenWidth = Dimensions.get("window").width;

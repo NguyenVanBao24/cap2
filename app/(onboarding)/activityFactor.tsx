@@ -1,11 +1,13 @@
 import { Colors } from "@/constants/Colors";
-import { getActivityFactor } from "@/store/tokenHelper";
+import { getActivityByUser, getActivityFactor } from "@/store/tokenHelper";
 import { useUserData } from "@/store/userStore";
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const GenderSelection = () => {
   const ActivityFactor = getActivityFactor();
+  const activityFactor = getActivityByUser();
+
   const formatText = (text: string): string => {
     return text
       .toLowerCase()
@@ -16,32 +18,38 @@ const GenderSelection = () => {
 
   const setUserData = useUserData((state) => state.setUserData);
 
-  const [selectedOption, setSelectedOption] = useState<string | null>(ActivityFactor[0]);
+  const [activityFactorValue, setActivityFactorValue] = useState<string | null>(
+    activityFactor || ActivityFactor[0]
+  );
 
   React.useEffect(() => {
     handleSaveData();
-  }, [selectedOption]);
+  }, [activityFactorValue]);
 
   const handleSaveData = () => {
-    setUserData({ activityFactor: selectedOption });
+    setUserData({ activityFactor: activityFactorValue });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>What is your sex?</Text>
+      <Text style={styles.title}>What is your activity level?</Text>
       <Text style={styles.description}>
-        This information is used to personalize your experience, for example to calculate your
-        burned calories and required intake more accurately.
+        This information helps us tailor your nutritional recommendations. Your activity level
+        affects your daily calorie needs and nutrient requirements, ensuring that your plan supports
+        your energy expenditure and goals effectively.
       </Text>
       <View style={styles.optionsContainer}>
-        {ActivityFactor?.map((option: any) => (
+        {ActivityFactor?.map((option: any, index: number) => (
           <TouchableOpacity
-            key={option}
-            style={[styles.optionButton, selectedOption === option && styles.optionSelected]}
-            onPress={() => setSelectedOption(option)}
+            key={index}
+            style={[styles.optionButton, activityFactorValue === option && styles.optionSelected]}
+            onPress={() => setActivityFactorValue(option)}
           >
             <Text
-              style={[styles.optionText, selectedOption === option && styles.optionTextSelected]}
+              style={[
+                styles.optionText,
+                activityFactorValue === option && styles.optionTextSelected,
+              ]}
             >
               {formatText(option)}
             </Text>

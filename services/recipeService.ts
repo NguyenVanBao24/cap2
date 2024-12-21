@@ -6,8 +6,7 @@ export const getAllRecipesService = async (): Promise<RecipeResponse> => {
 
     return response.data;
   } catch (error) {
-    console.log("Failed to fetch recipes:", error);
-    throw error;
+    console.log("Failed to getAllRecipesService:", error);
   }
 };
 
@@ -17,8 +16,7 @@ export const getRecipesServiceById = async (recipe_ID: string): Promise<RecipeRe
 
     return response.data;
   } catch (error) {
-    console.log("Failed to fetch recipes:", error);
-    throw error;
+    console.log("Failed to getRecipesServiceById:", error);
   }
 };
 
@@ -27,18 +25,14 @@ export const getRecipesFilterService = async (
   pageNo: number
 ): Promise<RecipeResponse> => {
   try {
-    console.log("response123");
-
     const uppercaseRecipeID = recipe_ID.toUpperCase();
     const response = await axiosConfig.get<RecipeResponse>(
-      `/recipe/filter?mealType=${uppercaseRecipeID}&pageNo=${1}`
+      `/recipe/filter?mealType=${uppercaseRecipeID}&pageNo=${1}&pageSize=50`
     );
 
-    console.log(response, "response123");
     return response.data;
   } catch (error) {
-    console.log("Failed to fetch recipes:", error);
-    throw error;
+    console.log("Failed to getRecipesFilterService:", error);
   }
 };
 
@@ -48,12 +42,27 @@ export const getRecipesByKcalService = async (
 ): Promise<RecipeResponse> => {
   try {
     const response = await axiosConfig.get<RecipeResponse>(
-      `/recipe/filterByMacroNutrients?macroNutrient=Calories&minMacro=${minMacro}&maxMacro=${maxMacro}&pageNo=1`
+      `/recipe/filterByMacroNutrients?macroNutrient=Calories&minMacro=${minMacro}&maxMacro=${maxMacro}&pageNo=1&pageSize=50`
     );
 
     return response.data;
   } catch (error) {
-    console.log("Failed to fetch recipes:", error);
-    throw error;
+    console.log("Failed to getRecipesByKcalService:", error);
+  }
+};
+
+export const getRecipesByHard = async (
+  difficultyLevel: string,
+  pageNo: number
+): Promise<RecipeResponse> => {
+  try {
+    console.log(difficultyLevel, pageNo, "pageNopageNopageNopageNopageNo");
+    const response = await axiosConfig.get<RecipeResponse>(
+      `/recipe/filter?difficultyLevel=${difficultyLevel}&pageNo=${pageNo}&pageSize=50`
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log("Failed to getRecipesByHard:", error);
   }
 };

@@ -1,48 +1,24 @@
 import { Tabs } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, View, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router"; // Import the useRouter hook
 
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { updateUserInformationPlan } from "@/services/authService";
+import { getUserInformationPlan, updateUserInformationPlan } from "@/services/authService";
 import { useUserData } from "@/store/userStore";
 import { getuserID } from "@/store/tokenHelper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Css } from "@/constants/Css";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const router = useRouter();
 
-  const {
-    password,
-    email,
-    fullname,
-    age,
-    gender,
-    weight,
-    height,
-    activityFactor,
-    nutritionPlan,
-    dietType,
-  } = useUserData();
-
-  console.log(
-    password,
-    email,
-    fullname,
-    age,
-    gender,
-    weight,
-    height,
-    activityFactor,
-    nutritionPlan,
-    dietType,
-    "--------------"
-  );
   const [currentTab, setCurrentTab] = useState(0);
-  const arrRouter = ["name", "height", "nutritionPlan", "activityFactor", "dietType"];
+  const arrRouter = ["name", "height", "activityFactor", "dietType", "nutritionPlan"];
+  // const arrRouter = ["name", "height", "activityFactor", "dietType"];
   // Function to handle navigation
   const handleBackPress = async () => {
     if (currentTab > 0) {
@@ -51,45 +27,67 @@ export default function TabLayout() {
 
       setCurrentTab(currentTab - 1);
     } else {
-      // const response = await updateUserInformationPlan({
-      //   id,
-      //   password,
-      //   email,
-      //   fullname,
-      //   age: parseInt(age),
-      //   gender,
-      //   weight,
-      //   height,
-      //   activityFactor,
-      //   nutritionPlan,
-      //   dietType,
-      // });
       router.back();
     }
   };
-  const id = getuserID();
+  const userID = getuserID();
+  const [userInformationPlan, setuserInformationPlan] = useState<any>();
+
+  const { dietType, nutritionPlan, fullname, email, age, gender, height, weight, activityFactor } =
+    useUserData();
+
+  console.log(
+    dietType,
+    nutritionPlan,
+    fullname,
+    email,
+    age,
+    gender,
+    height,
+    weight,
+    activityFactor
+  );
+
   const handleNextPress = async () => {
     if (currentTab < arrRouter.length - 1) {
       router.push(`/(onboarding)/${arrRouter[currentTab + 1]}`);
       setCurrentTab(currentTab + 1);
     } else if (currentTab < arrRouter.length) {
       try {
-        // const response = await updateUserInformationPlan({
-        //   id,
-        //   password,
-        //   email,
-        //   fullname,
-        //   age: parseInt(age),
-        //   gender,
-        //   weight,
-        //   height,
-        //   activityFactor,
-        //   nutritionPlan,
-        //   dietType,
-        // });
+        const response = await updateUserInformationPlan({
+          id: userID,
+          dietType,
+          nutritionPlan,
+          fullname,
+          email,
+          age,
+          gender,
+          height,
+          weight,
+          activityFactor,
+          password: 123123123,
+        });
+        console.log(response.data, "response.data");
+        console.log(
+          dietType,
+          nutritionPlan,
+          fullname,
+          email,
+          age,
+          gender,
+          height,
+          weight,
+          activityFactor,
+          "000"
+        );
       } catch (error) {
         console.log("Lỗi ở onbroading _layout: " + error);
       }
+      console.log(userID, "userID");
+
+      const userInformationPlan = await getUserInformationPlan(userID);
+      setuserInformationPlan(userInformationPlan.data);
+      console.log("first123");
       router.replace(`/(tabs)/Profile`);
     }
   };
@@ -97,7 +95,7 @@ export default function TabLayout() {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+        <Ionicons name="arrow-back" size={24} color={Colors.primary} />
       </TouchableOpacity>
 
       <View style={styles.header}>
@@ -148,14 +146,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    // paddingHorizontal: 16,
   },
-  backButton: {
-    paddingHorizontal: 8,
-    position: "absolute",
-    top: 50,
-  },
+  backButton: { top: 16, left: 16 },
   progressIndicator: {
     flexDirection: "row",
     alignItems: "center",

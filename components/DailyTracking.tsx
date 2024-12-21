@@ -11,7 +11,7 @@ import {
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Calendar } from "react-native-calendars";
 import Modal from "react-native-modal";
-import { format } from "date-fns";
+import { addDays, format, subDays } from "date-fns";
 import FoodCard from "@/components/DailyTracking/FoodCard";
 import TabMenu from "@/components/DailyTracking/TabMenu";
 import { Colors } from "@/constants/Colors";
@@ -129,7 +129,7 @@ const DailyTracking: React.FC = () => {
         month: "long",
         day: "numeric",
       };
-      setHeaderText(new Date(selectedDate).toLocaleDateString(undefined, options));
+      setHeaderText(selectedDate);
     }
 
     setCalendarVisible(false); // Đóng lịch sau khi chọn
@@ -165,6 +165,19 @@ const DailyTracking: React.FC = () => {
   if (loading) {
     return <Loading backgroundColor={Colors.primary_2} />;
   }
+  const handlePreviousDay = () => {
+    // Giảm 1 ngày
+    const newDate = format(subDays(new Date(selectedDate), 1), "yyyy-MM-dd");
+    setSelectedDate(newDate);
+    setHeaderText(newDate);
+  };
+
+  const handleNextDay = () => {
+    // Tăng 1 ngày
+    const newDate = format(addDays(new Date(selectedDate), 1), "yyyy-MM-dd");
+    setSelectedDate(newDate);
+    setHeaderText(newDate);
+  };
   return (
     <View style={styles.safeArea}>
       <Modal
@@ -187,16 +200,20 @@ const DailyTracking: React.FC = () => {
       </Modal>
 
       <View style={styles.headerTrack}>
-        <View style={styles.caledarHorizontalIcon}>
-          <Entypo name="chevron-left" size={24} color="black" />
-        </View>
+        <TouchableOpacity onPress={handlePreviousDay}>
+          <View style={styles.caledarHorizontalIcon}>
+            <Entypo name="chevron-left" size={24} color="black" />
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleCalendarToggle} style={styles.caledarIcon}>
           <Text style={styles.headerTrackText}>{headerText}</Text>
           <AntDesign name="calendar" size={24} color="black" />
         </TouchableOpacity>
-        <View style={styles.caledarHorizontalIcon}>
-          <Entypo name="chevron-right" size={24} color="black" />
-        </View>
+        <TouchableOpacity onPress={handleNextDay}>
+          <View style={styles.caledarHorizontalIcon}>
+            <Entypo name="chevron-right" size={24} color="black" />
+          </View>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.container}>
@@ -213,9 +230,9 @@ const DailyTracking: React.FC = () => {
           ) : (
             filteredMeals?.map((meal: any, index: any) => (
               <View key={index} style={styles.mealContainer}>
-                {meal.recipeList?.map((recipe: any, index: any) => (
+                {meal.recipeList?.map((recipe: any, index2: any) => (
                   <FoodCard
-                    key={index}
+                    key={index2}
                     calories={recipe.calories}
                     protein={recipe.protein}
                     fat={recipe.fat}
@@ -232,19 +249,6 @@ const DailyTracking: React.FC = () => {
           )}
         </ScrollView>
       </View>
-
-      <Animated.View
-        {...panResponder.panHandlers}
-        style={[
-          styles.draggableContainer,
-          {
-            transform: [{ translateX: position.x }, { translateY: position.y }],
-          },
-        ]}
-      >
-        <Text style={{ fontSize: 60 }}>🔥</Text>
-        <Text>{nutritionData?.data?.calories || 10}</Text>
-      </Animated.View>
     </View>
   );
 };

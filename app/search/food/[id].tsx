@@ -9,15 +9,18 @@ import {
   Dimensions,
   TextInput,
   StatusBar,
+  FlatList,
 } from "react-native";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-
+import ReadMore from "react-native-read-more-text";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getIngredientService } from "@/services/ingredientService";
+import { getIngredientService, getSearchIngredientService } from "@/services/ingredientService";
 import DropDownPicker from "react-native-dropdown-picker";
 import Loading from "@/components/Loading";
+import { Css } from "@/constants/Css";
+import FavoriteCard from "@/components/FavoriteCard";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -28,14 +31,18 @@ const ingredientDetail = () => {
   const [ingredient, setIngredient] = useState<IngredientResponse | null>(null);
   const [loading, setLoading] = useState(true); // Trạng thái loading
   const [error, setError] = useState<string | null>(null); // Trạng thái lỗi
+  const [search, setSearch] = useState(); // Trạng thái loading
 
   useEffect(() => {
     const fetchingredient = async () => {
       setLoading(true); // Bắt đầu loading
       try {
-        const fetchedingredient = await getIngredientService(id as string); // Gọi hàm dịch vụ với ID
+        const fetchedingredient = await getIngredientService(id as string);
+        const searchd = fetchedingredient.data.ingredientName;
 
+        const searchRecipe = await getSearchIngredientService([searchd], 1);
         setIngredient(fetchedingredient); // Lưu công thức vào state
+        setSearch(searchRecipe);
       } catch (err) {
         setError("Failed to fetch ingredient."); // Ghi lỗi nếu có
       } finally {
@@ -58,8 +65,27 @@ const ingredientDetail = () => {
   if (loading) {
     return <Loading backgroundColor={Colors.primary} />;
   }
+
+  const renderFavoriteCard = ({ item }: { item: FavoriteRecipe }) => {
+    return <FavoriteCard item={item} iconFavorite={false} />;
+  };
+  const renderTruncatedFooter = (handlePress: () => void) => {
+    return (
+      <TouchableOpacity onPress={handlePress} style={styles.footerContainer}>
+        <Text style={styles.moreText}>Xem thêm</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderRevealedFooter = (handlePress: () => void) => {
+    return (
+      <TouchableOpacity onPress={handlePress} style={styles.footerContainer}>
+        <Text style={styles.moreText}>Ẩn bớt</Text>
+      </TouchableOpacity>
+    );
+  };
   return (
-    <ScrollView
+    <View
       style={{
         backgroundColor: Colors.white,
         flex: 1,
@@ -75,6 +101,7 @@ const ingredientDetail = () => {
             zIndex: 1,
             width: screenWidth,
             height: 50,
+            top: Css.paddingHoriIntro,
             flexDirection: "row",
             alignItems: "center",
           }}
@@ -110,50 +137,36 @@ const ingredientDetail = () => {
           </View>
 
           <View style={styles.containerDes}>
-            <Text style={styles.des}>{ingredient?.data.ingredientDescription}</Text>
+            <ReadMore
+              numberOfLines={2}
+              renderTruncatedFooter={renderTruncatedFooter}
+              renderRevealedFooter={renderRevealedFooter}
+            >
+              <Text style={styles.des}>{ingredient?.data.ingredientDescription}</Text>
+            </ReadMore>
           </View>
-        </View>
-        <View style={styles.containerDes}>
-          <TextInput
-            style={styles.input}
-            placeholder="Height (cm)"
-            keyboardType="numeric"
-            value={height}
-            onChangeText={setHeight}
+
+          <FlatList
+            data={search.data}
+            renderItem={renderFavoriteCard}
+            keyExtractor={(item, index) => `${item.favoriteID}_${index}`}
+            showsVerticalScrollIndicator={false}
           />
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              alignItems: "center",
-              height: 50,
-              width: "auto",
-            }}
-          >
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Select an option"
-              style={styles.dropdown} // Thêm style mới cho dropdown
-              containerStyle={{ flex: 1 }} //
-            />
-          </View>
         </View>
-        {/* <View>
-          <TouchableOpacity>
-            <AntDesign name="plus" size={24} color="black" />
-          </TouchableOpacity>
-        </View> */}
       </View>
-    </ScrollView>
+      <View style={{ paddingBottom: 20 }}></View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  des: {
+    fontSize: 14,
+    fontWeight: "500",
+    lineHeight: 20,
+    textAlign: "justify",
+    padding: 10,
+  },
   container: {
     paddingHorizontal: 20,
     backgroundColor: "#fff",
@@ -200,12 +213,11 @@ const styles = StyleSheet.create({
     width: 200,
   },
   breakdown: {
-    flexDirection: "row", //
+    flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
   },
 
-  des: { fontSize: 14, fontWeight: "500" },
   ingredients: {
     backgroundColor: Colors.grayBackGround,
     paddingHorizontal: 8,
@@ -265,6 +277,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     height: 50,
+  },
+  step: {
+    fontSize: 16,
+    color: "#333",
+    lineHeight: 22,
+    paddingVertical: 20,
+    borderRadius: 4,
+    borderBottomWidth: 1, // Thay đổi sang viền ở dưới
+    borderBottomColor: "#ccc", // Màu của viền
+  },
+  footerContainer: {
+    flexDirection: "row", // Arrange text in a row if needed
+    justifyContent: "flex-end", // Align text to the right end
+  },
+  moreText: {
+    marginTop: 5,
+    fontSize: 14,
+    color: "#007BFF",
+    fontWeight: "bold",
   },
 });
 

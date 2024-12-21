@@ -79,7 +79,7 @@ export const meal = [
       uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688027/cap_2/iconMeal/cwzzu8r9hbkfh1qiazrr.png",
     },
     type: "meal",
-    label: "Dinner",
+    label: "Lunch",
     image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663235/2_gipvrz.png" },
   },
   {
@@ -87,7 +87,7 @@ export const meal = [
       uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688027/cap_2/iconMeal/h2jovjo2w0zq8sjga6yf.png",
     },
     type: "meal",
-    label: "Lunch",
+    label: "Dinner",
     image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663236/3_yvzyg9.png" },
   },
   {
@@ -95,7 +95,7 @@ export const meal = [
       uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688021/cap_2/iconMeal/dxgoudq755jn0lxodzmw.png",
     },
     type: "meal",
-    label: "snack",
+    label: "Snack",
     image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663235/4_mhjvzx.png" },
   },
 ];
@@ -106,7 +106,7 @@ export const hard = [
       uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688028/cap_2/iconHard/nyejq6ks8ajimqm5u1cf.png",
     },
     type: "hard",
-    label: "easy",
+    label: "Easy",
     image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663244/1_mlvwqb.png" },
   },
   {
@@ -114,16 +114,20 @@ export const hard = [
       uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688021/cap_2/iconHard/awcktrzseigqlmsbjs0t.png",
     },
     type: "hard",
-    label: "medium",
-    image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663240/3_ypgu8v.png" },
+    label: "Medium",
+    image: {
+      uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1734701851/z6150126285664_79d39b2a0a9a83c4067b22db2fb9a0d0_hgjzbw.jpg",
+    },
   },
   {
     imageIcon: {
       uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731688022/cap_2/iconHard/gcsfxtm84hiid4zxnpcp.png",
     },
     type: "hard",
-    label: "hard",
-    image: { uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1731663244/2_msearg.png" },
+    label: "Hard",
+    image: {
+      uri: "https://res.cloudinary.com/dlgru4nzd/image/upload/v1734701851/z6150126279159_b9207482c8fd92f12aad7282abd54ab6_gsqd47.jpg",
+    },
   },
 ];
 
@@ -144,3 +148,5 @@ export const captions = [
   "Easily track your health and progress",
   "Enjoy nutritious meals every day",
 ];
+
+export const colorPlan = ["#ee534e", "#9dcb68", "#e67273", "#ffa825", "#22b6f4"];

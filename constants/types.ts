@@ -84,6 +84,8 @@ interface FearuredFoodsProps {
   header?: string; // Tiêu đề của phần hiển thị
   recipes?: Recipe; // Công thức nấu ăn
   ingredient?: Ingredient; // Nguyên liệu
+  upcase?: boolean;
+  isMore?: boolean;
 }
 
 interface FavoriteRecipe {

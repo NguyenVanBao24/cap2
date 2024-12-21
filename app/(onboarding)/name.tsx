@@ -1,22 +1,16 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserData } from "@/store/userStore"; // Đảm bảo bạn đã import store
+import { useAuthStore } from "@/store/authStore";
 
-const NameScreen = () => {
-  const setUserData = useUserData((state) => state.setUserData);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const NameScreen = ({ setUserData }) => {
+  // const setUserData = useUserData((state) => state.setUserData);
+  const { password } = useAuthStore();
+  const { email, fullname } = useUserData();
 
-  // Lưu dữ liệu khi người dùng nhập thông tin
-  const handleSaveData = () => {
-    setUserData({ fullname: name, email, password });
-  };
-
-  // Gọi hàm lưu dữ liệu khi component cập nhật
-  React.useEffect(() => {
-    handleSaveData();
-  }, [name, email, password]); // Lưu dữ liệu khi bất kỳ trường nào thay đổi
+  const [nameValue, setNameValue] = useState(fullname || "");
+  const [emailValue, setEmailValue] = useState(email || "");
+  const [passwordValue, setPasswordValue] = useState(password || "");
 
   return (
     <View style={styles.content}>
@@ -26,18 +20,18 @@ const NameScreen = () => {
           style={styles.input}
           placeholder="Enter your first name"
           placeholderTextColor="#888"
-          value={name}
-          onChangeText={setName}
+          value={nameValue}
+          onChangeText={setNameValue}
         />
       </View>
       <View style={{ alignItems: "center" }}>
-        <Text style={styles.questionText}>What's your email?</Text>
+        <Text style={styles.questionText}>What's your email address?</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your email"
+          placeholder="Enter your first name"
           placeholderTextColor="#888"
-          value={email}
-          onChangeText={setEmail}
+          value={emailValue}
+          onChangeText={setEmailValue}
         />
       </View>
       <View style={{ alignItems: "center" }}>
@@ -46,9 +40,10 @@ const NameScreen = () => {
           style={styles.input}
           placeholder="Enter your password"
           placeholderTextColor="#888"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
+          value={passwordValue}
+          onChangeText={setPasswordValue}
+          secureTextEntry={true} // Ẩn mật khẩu khi người dùng nhập
+          keyboardType="default" // Đảm bảo không có bàn phím đặc biệt, mặc định là bàn phím văn bản
         />
       </View>
     </View>

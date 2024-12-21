@@ -119,7 +119,7 @@ const SearchBottomSheet = () => {
                 `${item.totalFat} Fats`,
               ]}
               imageUri={item.imageURL}
-              id={item.recipe_ID}
+              idRecipe={item.recipe_ID}
             />
           )}
         />

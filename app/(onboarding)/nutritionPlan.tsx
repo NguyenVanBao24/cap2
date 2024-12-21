@@ -1,16 +1,40 @@
-import { Colors } from "@/constants/Colors";
-import { getNutritionPlanValue } from "@/store/tokenHelper";
+import React, { useEffect, useState } from "react";
+import { View, Text, FlatList, StyleSheet, Dimensions } from "react-native";
+import PlanChoose from "@/components/PlanChoose";
+import { getNutritionPlanByDietType } from "@/services/chose";
+import {
+  getDietTypeByUser,
+  getNutritionPlanByUser,
+  getNutritionPlanValue,
+} from "@/store/tokenHelper";
 import { useUserData } from "@/store/userStore";
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 const GenderSelection = () => {
+  const screenWidth = Dimensions.get("window").width;
   const NutritionPlan = getNutritionPlanValue();
   const setUserData = useUserData((state) => state.setUserData);
-  console.log(NutritionPlan);
-  const [selectedOption, setSelectedOption] = useState<string | null>(NutritionPlan[0]);
 
-  React.useEffect(() => {
+  const dietType = getDietTypeByUser();
+  const nutritionPlan = getNutritionPlanByUser();
+
+  const [loading, setLoading] = useState(true);
+  const [nutritionPlanByDiet, setNutritionPlanByDiet] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(nutritionPlan || NutritionPlan[0]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const trendingResponse = await getNutritionPlanByDietType(dietType);
+        setNutritionPlanByDiet(trendingResponse.data);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [dietType]);
+  useEffect(() => {
     handleSaveData();
   }, [selectedOption]);
 
@@ -18,36 +42,43 @@ const GenderSelection = () => {
     setUserData({ nutritionPlan: selectedOption });
   };
 
-  const formatText = (text: string): string => {
-    return text
-      ?.toLowerCase()
-      ?.split("_")
-      ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      ?.join(" ");
+  const renderGridItem = ({ item, index }) => (
+    <View style={[styles.page, { width: screenWidth }]}>
+      <PlanChoose
+        index={index}
+        imageURL={item.imageURL}
+        nutritionPlanName={item.nutritionPlanName}
+        proteinPercentage={item.proteinPercentage}
+        fatPercentage={item.fatPercentage}
+        carbsPercentage={item.carbsPercentage}
+      />
+      <Text style={styles.description}>{item.description}</Text>
+    </View>
+  );
+
+  // **Xử lý khi cuộn qua phần tử mới**
+  const handleScrollEnd = (event) => {
+    const scrollX = event.nativeEvent.contentOffset.x;
+    const currentIndex = Math.round(scrollX / screenWidth);
+    console.log(nutritionPlanByDiet[currentIndex].nutritionPlanName, "currentIndex");
+    if (nutritionPlanByDiet[currentIndex]) {
+      setSelectedOption(nutritionPlanByDiet[currentIndex].nutritionPlanName);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Chose your plan?</Text>
-      <Text style={styles.description}>
-        This information is used to personalize your experience, for example to calculate your
-        burned calories and required intake more accurately.
-      </Text>
-      <View style={styles.optionsContainer}>
-        {NutritionPlan?.map((option: any) => (
-          <TouchableOpacity
-            key={option}
-            style={[styles.optionButton, selectedOption === option && styles.optionSelected]}
-            onPress={() => setSelectedOption(option)}
-          >
-            <Text
-              style={[styles.optionText, selectedOption === option && styles.optionTextSelected]}
-            >
-              {formatText(option)}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <Text style={styles.title}>Which plan suits you best?</Text>
+      <FlatList
+        data={nutritionPlanByDiet}
+        renderItem={renderGridItem}
+        keyExtractor={(item, index) => `${item.nutritionPlanName}-${index}`}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={handleScrollEnd} // Sự kiện khi cuộn kết thúc
+        contentContainerStyle={styles.flatListContainer}
+      />
     </View>
   );
 };
@@ -56,48 +87,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingHorizontal: 20,
     justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 10,
+    marginVertical: 10,
   },
-  description: {
-    fontSize: 14,
-    color: "#6e6e6e",
-    textAlign: "center",
-    marginBottom: 30,
-  },
-  optionsContainer: {
-    flexDirection: "row",
+  page: {
     justifyContent: "center",
     alignItems: "center",
-    flexWrap: "wrap",
-    gap: 6,
-    flex: 1,
   },
-  optionButton: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    width: "48%",
-    borderWidth: 1,
-    borderColor: Colors.grayBackGround,
-  },
-  optionSelected: {
-    backgroundColor: Colors.primary,
-  },
-  optionText: {
+  description: {
     fontSize: 16,
     color: "#6e6e6e",
     textAlign: "center",
+    marginTop: 10,
+    paddingHorizontal: 20,
   },
-  optionTextSelected: {
-    color: "#fff",
-    fontWeight: "bold",
+  flatListContainer: {
+    flexGrow: 1,
   },
 });
 

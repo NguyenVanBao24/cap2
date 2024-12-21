@@ -33,12 +33,13 @@ const HomeScreen = () => {
     checkFirstTime();
   }, []);
 
-  const handleStartWithMyApp = () => {
-    router.push("/(onboarding)/name");
-  };
-
   const handleLoginWithYourAccount = () => {
     router.push("/auth/login");
+    setFirstTime(true);
+  };
+
+  const handleSignUpnWithYourAccount = () => {
+    router.push("/auth/signup");
     setFirstTime(true);
   };
 
@@ -52,12 +53,12 @@ const HomeScreen = () => {
   return (
     <View style={styles.safeArea}>
       <View style={styles.container}>
-        <View style={{ flexDirection: "column", alignItems: "center", paddingTop: 20 }}>
+        <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text style={styles.subHeader}>Welcome to</Text>
           <Text style={styles.header}>Nutri Cook</Text>
         </View>
 
-        <View style={{ height: "75%", paddingBottom: 60 }}>
+        <View style={{ height: "80%", paddingBottom: 60 }}>
           <ScrollView
             horizontal
             pagingEnabled
@@ -90,18 +91,17 @@ const HomeScreen = () => {
         {firstTime ? (
           <View style={styles.bothButton}>
             <CustomButton
-              onPress={handleStartWithMyApp}
-              title="Start with my app"
-              backgroundColor={Colors.primary}
+              onPress={handleSignUpnWithYourAccount}
+              title="Sign up"
+              backgroundColor={Colors.white}
+              color={Colors.primary}
               borderColor={Colors.primary}
-              color={Colors.white}
             />
             <CustomButton
               onPress={handleLoginWithYourAccount}
               title="Login with your account"
-              backgroundColor={Colors.white}
-              color={Colors.primary}
-              borderColor={Colors.primary}
+              backgroundColor={Colors.primary}
+              color={Colors.white}
             />
           </View>
         ) : (

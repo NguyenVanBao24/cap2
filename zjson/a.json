@@ -1,0 +1,42 @@
+{
+  "cookTime": 30,
+  "cookingInstructions": "1. Rong biển ngâm nước lạnh cho nở, rửa sạch, cắt khúc; nấm mỡ rửa sạch, ngâm dấm và muối loãng trong 10 phút. Vớt nấm ra rửa sạch rồi bổ dọc làm đôi. 2. Hòa tương miso vào nước lạnh, nấu sôi rồi cho rong vào, chờ sôi lại cho nấm vào. 3. Nêm gia vị cho vừa miệng, để canh sôi khoảng 3-5 phút là xong.",
+  "description": "Súp miso Nhật Bản, thanh mát, bổ dưỡng.",
+  "difficultyLevel": "EASY",
+  "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733409389/ayvm0nnkret3lmngsbwo.jpg",
+  "ingredientList": [
+    {
+      "calories": 0,
+      "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733205983/ypdjdbxbmqvduvszwn4f.webp",
+      "ingredientId": "80405e85-7ba7-4a95-aab9-944703097656",
+      "ingredientName": "Nấm mỡ",
+      "quantity": 200,
+      "unit": "gram"
+    },
+    {
+      "calories": 2,
+      "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733409270/upo3tda0ihgr0np2vdmy.jpg",
+      "ingredientId": "81039d32-2bbb-4bd3-920d-5bc435cce9ef",
+      "ingredientName": "Tương miso",
+      "quantity": 100,
+      "unit": "gram"
+    },
+    {
+      "calories": 0,
+      "imageURL": "https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:quality(100)/2023_10_19_638333500124994846_rong-bie-n-0.jpeg",
+      "ingredientId": "659182f2-12e1-45ee-af06-606a566637ee",
+      "ingredientName": "Rong biển",
+      "quantity": 100,
+      "unit": "gram"
+    }
+  ],
+  "mealType": ["LUNCH", "BREAKFAST"],
+  "nutritionalQuality": ["LOW_CALORIE", "VEGAN", "VEGETARIAN"],
+  "prepTime": 5,
+  "recipeName": "Súp miso",
+  "recipe_ID": "4c9d9b13-1a2f-4a1a-abd3-530bd75547de",
+  "totalCalories": 101,
+  "totalCarbs": 10,
+  "totalFat": 10,
+  "totalProtein": 5
+}

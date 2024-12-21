@@ -4,36 +4,39 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { Css } from "@/constants/Css";
 import { router } from "expo-router";
+const screenWidth = Dimensions.get("window").width;
 
 interface PopularCardProps {
   id: string;
   name?: string;
   deliveryTime?: any;
-  categories?: string[];
+  calories?: string;
   imageUri?: string;
   unit?: string;
   description?: string;
-  numberElement?: number; // Change to number type
+  numberElement?: number;
+  quantity?: number;
+  direction?: boolean;
 }
 
 const PopularCard: React.FC<PopularCardProps> = ({
   id,
   name,
   deliveryTime,
-  categories,
+  calories,
   imageUri,
   unit,
-  description,
-  numberElement = 1.1, // Default to 1 element per row if not provided
+  quantity = 100,
+  numberElement = 1.1,
+  direction = true,
 }) => {
   const handleRecipes = () => {
     router.push(`/search/food/${id}`);
   };
 
-  const screenWidth = Dimensions.get("window").width;
   const cardWidth = screenWidth / numberElement;
 
-  return (
+  return direction ? (
     <TouchableOpacity onPress={handleRecipes} style={[styles.cardContainer, { width: cardWidth }]}>
       <View style={styles.imageContainer}>
         <Image
@@ -47,8 +50,27 @@ const PopularCard: React.FC<PopularCardProps> = ({
       <View style={styles.infoContainer}>
         <Text style={styles.foodName}>{name}</Text>
         <View style={styles.ratingContainer}>
-          <Text style={styles.timeText}>10ph | </Text>
-          {categories && <Text style={styles.timeText}>{categories[0]} </Text>}
+          <Text style={styles.timeText}>{`${calories} calories/ ${quantity} ${unit}`}</Text>
+          {calories && <Text style={styles.timeText}>{calories[0]} </Text>}
+        </View>
+      </View>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity onPress={handleRecipes} style={styles.container}>
+      <View style={styles.container}>
+        <View style={styles.imageContainerFlase}>
+          <Image
+            source={{
+              uri: imageUri,
+            }}
+            style={styles.foodImageFalse}
+          />
+          <Text style={styles.foodName}>{name}</Text>
+        </View>
+
+        <View style={styles.infoContainer}>
+          <Text style={styles.timeText}>{`${calories} calories`}</Text>
+          <Text style={styles.timeText}>{`${quantity} ${unit}`}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -56,6 +78,22 @@ const PopularCard: React.FC<PopularCardProps> = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: screenWidth - Css.paddingHoriAllPage * 2,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  imageContainerFlase: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
+  foodImageFalse: {
+    width: 50,
+    height: 50,
+    borderRadius: 12,
+  },
   cardContainer: {
     borderRadius: 16,
     overflow: "hidden",
@@ -75,6 +113,7 @@ const styles = StyleSheet.create({
   foodImage: {
     width: "100%",
     height: "100%",
+    borderRadius: Css.borderRadius,
   },
   favoriteButton: {
     position: "absolute",

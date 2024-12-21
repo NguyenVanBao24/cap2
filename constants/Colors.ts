@@ -21,6 +21,13 @@ export const Colors = {
   gray: "#9796A1",
   primary: "#88C273",
   primary_2: "#B3C8CF",
+
+  primary_plan_1: "#ee534e",
+  primary_plan_2: "#9dcb68",
+  primary_plan_3: "#e67273",
+  primary_plan_4: "#ffa825",
+  primary_plan_5: "#22b6f4",
+
   text: "#2A3335",
   black: "#323643",
   textInput: "#111719",

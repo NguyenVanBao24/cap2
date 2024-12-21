@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View, Text } from "react-native";
 import HealthyCard from "./HealthyCard";
 import { Css } from "@/constants/Css";
 import HeaderElement from "./HeaderElement";
@@ -8,6 +8,7 @@ const FeaturedFoods: React.FC<FearuredFoodsProps> = ({ header, recipes }) => {
   return (
     <View style={{ flexDirection: "column" }}>
       <HeaderElement header={header} />
+
       <FlatList
         contentContainerStyle={styles.listContainer}
         horizontal
@@ -18,6 +19,7 @@ const FeaturedFoods: React.FC<FearuredFoodsProps> = ({ header, recipes }) => {
           <HealthyCard
             name={item.recipeName}
             deliveryTime="15-20 mins"
+            cookTime={item.cookTime}
             categories={[
               `${item.totalCalories} Kcal`,
               `${item.totalProtein} Protein`,
@@ -25,7 +27,7 @@ const FeaturedFoods: React.FC<FearuredFoodsProps> = ({ header, recipes }) => {
               `${item.totalFat} Fats`,
             ]}
             imageUri={item.imageURL}
-            id={item.recipe_ID}
+            idRecipe={item.recipe_ID}
           />
         )}
       />

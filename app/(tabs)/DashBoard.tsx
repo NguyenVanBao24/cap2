@@ -1,5 +1,14 @@
 import React, { useState, useRef, useCallback } from "react";
-import { Animated, Dimensions, PanResponder, StyleSheet, View, Text, FlatList } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  PanResponder,
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  StatusBar,
+} from "react-native";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import { Colors } from "@/constants/Colors";
 import DailyTracking from "../../components/DailyTracking";
@@ -52,6 +61,7 @@ const HomeScreen = () => {
 
   const [selectedDate, setSelectedDate] = useState<string>(currentDate);
   const userID = getuserID();
+
   useFocusEffect(
     useCallback(() => {
       const fetchTrackingData = async () => {
@@ -167,15 +177,17 @@ const HomeScreen = () => {
   }
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar hidden={true} />
+
       <View style={styles.container}>
         <View style={styles.Dashboardheader}>
           <View style={styles.header}>
             <View style={styles.containerTextHeader}>
-              <Text style={styles.textHeaderUp}>{nutritionData?.data?.totalCalories}</Text>
+              <Text style={styles.textHeaderUp}>{nutritionData?.data?.totalCalories ?? 0}</Text>
               <Text style={styles.textHeaderDown}>Eaten</Text>
             </View>
             <CircularProgressBar
-              currentValue={nutritionData?.data?.totalCalories}
+              currentValue={nutritionData?.data?.totalCalories ?? 0}
               totalValue={nutritionCalculation?.caloriesNeeded}
               radius={50}
               strokeWidth={8}

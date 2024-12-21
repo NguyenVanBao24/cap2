@@ -1,5 +1,6 @@
 import { useAuthStore } from "./authStore";
 import { useChoseState } from "./choseStore";
+import { useUserData } from "./userStore";
 
 export const getToken = () => {
   const { token } = useAuthStore.getState();
@@ -9,7 +10,7 @@ export const getToken = () => {
 export const getuserID = () => {
   const { userID } = useAuthStore.getState();
 
-  return userID || "1332d0f1-09ad-4f2b-9163-ade271d88bb2";
+  return userID;
 };
 
 export const getRefreshToken = () => {
@@ -36,4 +37,55 @@ export const getDietType = () => {
   const { DietType } = useChoseState.getState();
 
   return DietType?.data;
+};
+
+export const getFullname = () => {
+  const { fullname } = useUserData.getState();
+
+  return fullname;
+};
+
+export const getEmail = () => {
+  const { email } = useUserData.getState();
+
+  return email;
+};
+
+export const getAge = () => {
+  const { age } = useUserData.getState();
+
+  return age;
+};
+
+export const getGender = () => {
+  const { gender } = useUserData.getState();
+
+  return gender;
+};
+export const getHeight = () => {
+  const { height } = useUserData.getState();
+
+  return height;
+};
+export const getWeight = () => {
+  const { weight } = useUserData.getState();
+  console.log(weight, "weight");
+  return weight;
+};
+
+export const getActivityByUser = () => {
+  const { activityFactor } = useUserData.getState();
+
+  return activityFactor;
+};
+
+export const getDietTypeByUser = () => {
+  const { dietType } = useUserData.getState();
+
+  return dietType;
+};
+export const getNutritionPlanByUser = () => {
+  const { nutritionPlan } = useUserData.getState();
+
+  return nutritionPlan;
 };

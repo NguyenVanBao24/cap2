@@ -18,8 +18,8 @@ interface CircularProgressBarProps {
 }
 
 const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
-  currentValue,
-  totalValue,
+  currentValue = 0,
+  totalValue = 0,
   radius = 50,
   strokeWidth = 10,
   color = "#fff",
@@ -59,8 +59,12 @@ const CircularProgressBar: React.FC<CircularProgressBarProps> = ({
             strokeWidth={strokeWidth}
             fill="none"
             strokeDasharray={circumference}
-            strokeDashoffset={circumference - progress} // Điểm bắt đầu từ 12h
-            strokeLinecap="round" // Thêm thuộc tính này để tạo đầu tròn cho đường tiến trình
+            strokeDashoffset={
+              currentValue <= 0 || currentValue >= totalValue
+                ? 0 // Đảm bảo đầu và đuôi ở vị trí 12 giờ
+                : circumference - progress
+            }
+            strokeLinecap="round" // Tạo đầu tròn cho đường tiến trình
             transform={`rotate(${offset * (180 / Math.PI)}, ${radius + strokeWidth / 2}, ${
               radius + strokeWidth / 2
             })`} // Xoay vòng tròn để bắt đầu từ 12h

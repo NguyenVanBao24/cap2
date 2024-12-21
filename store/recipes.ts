@@ -1,6 +1,9 @@
 import { getAllRecipesService } from "@/services/recipeService";
 import { create } from "zustand";
+import { getuserID } from "./tokenHelper";
+import { getFavoriteUserId } from "@/services/favorite";
 
+const userId = getuserID();
 interface RecipeStore {
   allRecipes: string | null;
 
@@ -9,14 +12,13 @@ interface RecipeStore {
 
 export const useAuthStore = create<RecipeStore>((set) => ({
   allRecipes: null,
-  getRecipe: async (): Promise<RecipeResponse> => {
+  getRecipe: async (): Promise<any> => {
     try {
-      const response = await getAllRecipesService();
+      const response = await getFavoriteUserId(userId);
       set({ allRecipes: response.data });
       return response;
     } catch (error) {
       console.log("Login failed:", error);
-      throw error;
     }
   },
 }));

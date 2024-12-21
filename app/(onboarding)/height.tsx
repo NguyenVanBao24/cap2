@@ -2,21 +2,24 @@ import { StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-nativ
 import React, { useState, useEffect } from "react";
 import { useUserData } from "@/store/userStore";
 import { Colors } from "@/constants/Colors";
+import { getAge, getGender, getHeight, getWeight } from "@/store/tokenHelper";
 
 const NameScreen = () => {
   const setUserData = useUserData((state) => state.setUserData);
 
-  const [ageValue, setageValue] = useState("");
-  const [genderValue, setgenderValue] = useState<boolean>(true);
-  const [heightValue, setHeightValue] = useState("");
-  const [weightValue, setWeightValue] = useState("");
+  const { age, gender, height, weight } = useUserData();
+
+  console.log(age, gender, height, weight, "0");
+  const [ageValue, setAgeValue] = useState(age || 20);
+  const [genderValue, setgenderValue] = useState<boolean>(gender || false);
+  const [heightValue, setHeightValue] = useState(height || 70);
+  const [weightValue, setWeightValue] = useState(weight || 180);
 
   const NutritionPlan = [
     { nameMale: "Male", male: true },
     { nameMale: "Female", male: false },
   ];
 
-  // Automatically update the user data when any input changes
   useEffect(() => {
     setUserData({
       age: parseInt(ageValue),
@@ -34,8 +37,8 @@ const NameScreen = () => {
           style={styles.input}
           placeholder="Enter your age"
           placeholderTextColor="#888"
-          value={ageValue}
-          onChangeText={setageValue}
+          value={ageValue.toString()}
+          onChangeText={(text) => setAgeValue(Number(text))}
         />
       </View>
 
@@ -67,8 +70,8 @@ const NameScreen = () => {
           style={styles.input}
           placeholder="Enter your height"
           placeholderTextColor="#888"
-          value={heightValue}
-          onChangeText={setHeightValue}
+          value={heightValue.toString()}
+          onChangeText={(text) => setHeightValue(Number(text))}
         />
       </View>
 
@@ -78,8 +81,8 @@ const NameScreen = () => {
           style={styles.input}
           placeholder="Enter your weight"
           placeholderTextColor="#888"
-          value={weightValue}
-          onChangeText={setWeightValue}
+          value={weightValue.toString()}
+          onChangeText={(text) => setWeightValue(Number(text))}
         />
       </View>
     </View>

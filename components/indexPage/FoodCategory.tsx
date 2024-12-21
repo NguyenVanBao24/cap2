@@ -31,9 +31,8 @@ const FoodCategory: React.FC<FoodCategoryProps> = ({
 
   useFocusEffect(
     useCallback(() => {
-      // Only reset selectedCategory if it hasn't been set externally (from props)
       if (!selectedCategoryName) {
-        setSelectedCategory(""); // Reset the category only if selectedCategoryName is not passed
+        setSelectedCategory("");
       }
     }, [selectedCategoryName])
   );
@@ -108,8 +107,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 4,
     marginHorizontal: 4,
-    paddingHorizontal: 24,
-    paddingVertical: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
     borderRadius: 12,
     backgroundColor: Colors.white,
     shadowColor: "#000",
@@ -128,8 +127,8 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 10,
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     resizeMode: "contain",
   },
   categoryText: {

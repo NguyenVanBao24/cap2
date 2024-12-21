@@ -1,22 +1,75 @@
 [
   {
-    "dailyNutritionTrackingID": "27209206-7da1-431f-88f3-b48953fa328c",
-    "mealType": "SNACK",
-    "recipeList": [""]
+      "mealType": "BREAKFAST",
+    "recipeList": [
+          {
+              "recipeID": "031a60a1-99ae-479a-bebb-a3583e87d062",
+              "recipeName": "Bò Wagyu Nướng",
+              "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733974157/tsuecppka6avhe27pbki.jpg",
+              "calories": 1206,
+              "protein": 78,
+              "carbs": 53,
+              "fat": 96
+          },
+          {
+              "recipeID": "0e4314ed-0749-42c2-99d7-ef099f292cbf",
+              "recipeName": "Sò điệp nướng mỡ hành",
+              "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733538624/pifkbrgamo7ezisaiqn5.jpg",
+              "calories": 1856,
+              "protein": 222,
+              "carbs": 87,
+              "fat": 65
+          }
+        ]
   },
   {
-    "dailyNutritionTrackingID": "5dc2a413-cc16-4bb9-9459-4ec304efe184",
-    "mealType": "LUNCH",
-    "recipeList": [""]
+      "mealType": "LUNCH",
+      "recipeList": [
+        {
+            "recipeID": "031a60a1-99ae-479a-bebb-a3583e87d062",
+            "recipeName": "Bò Wagyu Nướng",
+            "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733974157/tsuecppka6avhe27pbki.jpg",
+            "calories": 1206,
+            "protein": 78,
+            "carbs": 53,
+            "fat": 96
+        },
+        {
+            "recipeID": "073019b5-371f-4ae6-adf3-ddba36b6f135",
+            "recipeName": "Ghẹ rang me",
+            "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733737146/fzkqz2zwvj2fu7fmfztx.jpg",
+            "calories": 618,
+            "protein": 7,
+            "carbs": 0,
+            "fat": 15
+        }]
   },
   {
-    "dailyNutritionTrackingID": "7b200022-a06e-4c83-a7fb-7bd5e1ef6a4e",
-    "mealType": "DINNER",
-    "recipeList": [""]
+      "mealType": "DINNER",
+      "recipeList": [
+        {
+            "recipeID": "031a60a1-99ae-479a-bebb-a3583e87d062",
+            "recipeName": "Bò Wagyu Nướng",
+            "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733974157/tsuecppka6avhe27pbki.jpg",
+            "calories": 1206,
+            "protein": 78,
+            "carbs": 53,
+            "fat": 96
+        },
+        {
+            "recipeID": "073019b5-371f-4ae6-adf3-ddba36b6f135",
+            "recipeName": "Ghẹ rang me",
+            "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733737146/fzkqz2zwvj2fu7fmfztx.jpg",
+            "calories": 618,
+            "protein": 7,
+            "carbs": 0,
+            "fat": 15
+        }]
   },
   {
-    "dailyNutritionTrackingID": "a7d14ccb-97f1-40a6-ae9c-5b9ffb85fe14",
-    "mealType": "BREAKFAST",
-    "recipeList": [""]
+      "mealType": "SNACK",
+      "recipeList": []
   }
 ]
+
+đây là dữ liệu cúa tôi, hãy đưa ra giao diện

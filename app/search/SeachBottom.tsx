@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { getRecipesServiceById } from "@/services/recipeService";
 import HealthyCard from "@/components/indexPage/HealthyCard";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getFavoriteTrending } from "@/services/favorite";
 
 const SearchBottomSheet = () => {
   const [query, setQuery] = useState("");
@@ -24,7 +25,7 @@ const SearchBottomSheet = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef(null);
-
+  const [trendingRecipe, setTrendingRecipe] = useState();
   useFocusEffect(
     useCallback(() => {
       inputRef.current?.focus();
@@ -32,6 +33,24 @@ const SearchBottomSheet = () => {
     }, [])
   );
   const queryNo = 1;
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const trendingResponse = await getFavoriteTrending();
+        setTrendingRecipe(trendingResponse);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const searchApi = async (searchQuery: string) => {
     setIsLoading(true);
     const ingredients = [searchQuery];
@@ -105,7 +124,7 @@ const SearchBottomSheet = () => {
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
-          {results.length > 0 ? (
+          {results.length > 0 && query != "" ? (
             <FlatList
               style={{ flex: 1 }}
               contentContainerStyle={styles.listContainer}
@@ -116,7 +135,8 @@ const SearchBottomSheet = () => {
                 <HealthyCard
                   numberElement={1}
                   name={item.recipeName}
-                  deliveryTime="15-20 mins"
+                  deliveryTime="15-20"
+                  cookTime={item?.cookTime}
                   categories={[
                     `${item.totalCalories} Kcal`,
                     `${item.totalProtein} Protein`,
@@ -124,11 +144,37 @@ const SearchBottomSheet = () => {
                     `${item.totalFat} Fats`,
                   ]}
                   imageUri={item.imageURL}
-                  id={item.recipe_ID}
+                  idRecipe={item.recipe_ID}
                 />
               )}
             />
-          ) : null}
+          ) : (
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontSize: 20, fontWeight: "500" }}>Trending Food</Text>
+              <FlatList
+                style={{ flex: 1 }}
+                contentContainerStyle={styles.listContainer}
+                showsVerticalScrollIndicator={false}
+                data={trendingRecipe}
+                keyExtractor={(item) => item.recipe_ID}
+                renderItem={({ item }) => (
+                  <HealthyCard
+                    numberElement={1}
+                    name={item.recipeName}
+                    deliveryTime="15-20 mins"
+                    categories={[
+                      `${item.totalCalories} Kcal`,
+                      `${item.totalProtein} Protein`,
+                      `${item.totalCarbs} Carbs`,
+                      `${item.totalFat} Fats`,
+                    ]}
+                    imageUri={item.imageURL}
+                    idRecipe={item.recipe_ID}
+                  />
+                )}
+              />
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>

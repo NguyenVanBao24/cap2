@@ -2,10 +2,7 @@ import axiosConfig from "@/axiosConfig";
 
 export const getFavoriteTrending = async (): Promise<Recipe[]> => {
   try {
-    console.log("first 1");
-
     const response = await axiosConfig.get<FavoriteRecipeResponse>("/favorite/trending");
-    console.log("first 1");
     const favoriteRecipes = response.data.data;
 
     if (favoriteRecipes && favoriteRecipes.length > 0) {
@@ -17,26 +14,21 @@ export const getFavoriteTrending = async (): Promise<Recipe[]> => {
         recipes.push(recipeResponse.data.data);
       }
 
-      console.log(recipes, "recipesrecipesrecipes");
       return recipes;
     } else {
-      // Trường hợp không có favorite recipes
       return [];
     }
   } catch (error) {
-    console.log("Failed to fetch recipes:", error);
-    throw error;
+    console.log("Failed to getFavoriteTrending:", error);
   }
 };
 
 export const getFavoriteUserId = async (userID: string): Promise<FavoriteRecipeResponse> => {
   try {
     const response = await axiosConfig.get<FavoriteRecipeResponse>(`/favorite/user/${userID}`);
-    console.log(response, "response");
     return response.data;
   } catch (error) {
-    console.log("Login failed:", error);
-    throw error;
+    console.log("Failed to getFavoriteUserId:", error);
   }
 };
 
@@ -49,19 +41,20 @@ export const postFavoriteUserId = async (
       userID,
       recipeID,
     });
+
+    console.log(response.data, "from post");
     return response.data;
   } catch (error) {
-    console.log("Login failed:", error);
-    throw error;
+    console.log("Failed to postFavoriteUserId:", error);
   }
 };
 
 export const deleteFavoriteUserId = async (favoriteId: string): Promise<FavoriteRecipeResponse> => {
   try {
     const response = await axiosConfig.delete<FavoriteRecipeResponse>(`/favorite/${favoriteId}`);
+    console.log(response.data, favoriteId, "deleteFavoriteUserId");
     return response.data;
   } catch (error) {
-    console.log("Login failed:", error);
-    throw error;
+    console.log("Failed to deleteFavoriteUserId:", error);
   }
 };
