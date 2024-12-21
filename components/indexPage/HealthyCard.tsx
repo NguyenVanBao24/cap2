@@ -62,9 +62,12 @@ const HealthyCard: React.FC<HealthyCardProps> = ({
       isFavo: !prevState.isFavo,
     }));
     try {
-      favoriteState.isFavo
-        ? await deleteFavorite(userID, favoriteState.favoriteID)
-        : await postFavorite(userID, idRecipe);
+      if (favoriteState.isFavo) {
+        await deleteFavorite(userID, favoriteState.favoriteID);
+      } else {
+        await postFavorite(userID, idRecipe);
+        console.log("first");
+      }
     } catch (error) {
       console.log("Failer at hEALTHCARD", error);
     }

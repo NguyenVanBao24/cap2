@@ -16,7 +16,12 @@ import FoodCard from "@/components/DailyTracking/FoodCard";
 import TabMenu from "@/components/DailyTracking/TabMenu";
 import { Colors } from "@/constants/Colors";
 import { Css } from "@/constants/Css";
-import { getTrackingByUserIDDate } from "@/services/tracking";
+import {
+  deleteTrackingByID,
+  getTrackingByUserIDDate,
+  postTrackingByID,
+  putTrackingByID,
+} from "@/services/tracking";
 import { getuserID } from "@/store/tokenHelper";
 import { useFocusEffect } from "@react-navigation/native";
 import Loading from "@/components/Loading";
@@ -73,7 +78,6 @@ const DailyTracking: React.FC = () => {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const currentDate = format(new Date(), "yyyy-MM-dd");
-
   const [selectedDate, setSelectedDate] = useState<string>(currentDate);
   const userID = getuserID();
   useFocusEffect(
@@ -83,6 +87,7 @@ const DailyTracking: React.FC = () => {
           setLoading(true);
           if (userID) {
             const response = await getTrackingByUserIDDate(userID, selectedDate);
+            console.log(response);
             setNutritionData(response?.data);
             setNoDataMessage("");
           } else {
@@ -137,10 +142,11 @@ const DailyTracking: React.FC = () => {
 
   const filteredMeals = nutritionData
     ? nutritionData?.data?.meals?.filter(
-        (meal) => meal.mealType.toLowerCase() === selectedTab.toLowerCase()
+        (meal) => meal.mealType?.toLowerCase() === selectedTab?.toLowerCase()
       )
     : [];
 
+  console.log(filteredMeals, "filteredMealsfilteredMealsfilteredMeals", selectedTab);
   const [position, setPosition] = useState(new Animated.ValueXY({ x: 20, y: 500 }));
   const panResponder = useRef(
     PanResponder.create({
@@ -177,6 +183,37 @@ const DailyTracking: React.FC = () => {
     const newDate = format(addDays(new Date(selectedDate), 1), "yyyy-MM-dd");
     setSelectedDate(newDate);
     setHeaderText(newDate);
+  };
+
+  const user_ID = getuserID();
+  console.log(filteredMeals, "nutritionIdnutritionIdnutritionId1");
+  console.log(filteredMeals[0]?.recipeList, "nutritionIdnutritionIdnutritionId2");
+
+  const handleRemoveRecipe = async (nutritionId: string, recipeID: string) => {
+    try {
+      const arrayRecipe = filteredMeals[0]?.recipeList
+        ?.filter((item) => item.recipeID != recipeID)
+        .map((item) => {
+          return item.recipeID;
+        });
+
+      const requestBody = {
+        recipeList: arrayRecipe,
+        mealType: selectedTab.toUpperCase(),
+        date: selectedDate,
+        user_ID: user_ID,
+      };
+
+      console.log(requestBody, "arrayRecipearrayRecipearrayRecipe");
+      const response = await putTrackingByID(nutritionId, requestBody);
+
+      // if (response.data === "Nutrition Tracking deleted") {
+      //   setRecipeList((prevList) => prevList?.filter((item) => item.nutritionId !== nutritionId));
+      //   console.log("first");
+      // }
+    } catch (error) {
+      console.error("Error deleting recipe:", error);
+    }
   };
   return (
     <View style={styles.safeArea}>
@@ -219,7 +256,7 @@ const DailyTracking: React.FC = () => {
       <View style={styles.container}>
         <View style={styles.mealCategoryRow}>
           <TabMenu
-            selectedTab={selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1).toLowerCase()}
+            selectedTab={selectedTab.charAt(0).toUpperCase() + selectedTab.slice(1)?.toLowerCase()}
             onTabSelect={setSelectedTab}
           />
         </View>
@@ -242,6 +279,7 @@ const DailyTracking: React.FC = () => {
                     recipeID={recipe.recipeID}
                     imageURL={recipe.imageURL}
                     nutritionId={nutritionData?.data?.meals[0].dailyNutritionTrackingID}
+                    onRemove={handleRemoveRecipe}
                   />
                 ))}
               </View>

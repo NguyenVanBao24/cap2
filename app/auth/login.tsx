@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, Button, StyleSheet, Text, Alert, Dimensions } from "react-native";
+import { View, TextInput, Button, StyleSheet, Text, Alert, Dimensions, Image } from "react-native";
 import { Link, useRouter } from "expo-router";
 import { useAuthStore } from "@/store/authStore";
 import { Formik } from "formik";
@@ -9,10 +9,13 @@ import CustomButton from "@/components/Custom/CustomButton";
 import { Colors } from "@/constants/Colors";
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required("username is required."),
   password: Yup.string()
     .min(6, "Password must be at least 6 characters long.")
     .required("Password is required."),
+  username: Yup.string()
+    .trim()
+    .required("Username is required.")
+    .min(6, "Password must be at least 6 characters long."),
 });
 
 // Định nghĩa kiểu cho values
@@ -30,11 +33,13 @@ const LoginScreen = () => {
     try {
       const response = await login(username, password);
 
-      if (response.message !== "Login failed") {
-        console.log("success---------------");
+      console.log(response, "response.message response.message response.message ");
+      if (response.data.authenticated) {
         router.replace("/(tabs)/Home");
+        console.log("Success---------------");
       } else {
-        Alert.alert("Login failed", response?.message || "Invalid credentials");
+        Alert.alert("Login failed", "Invalid Username or Password");
+        console.log("fail---------------");
       }
     } catch (error) {
       console.log("Login error:", error);
@@ -58,6 +63,24 @@ const LoginScreen = () => {
           // borderBottomRightRadius: 180,
         }}
       ></View> */}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 10,
+          paddingBottom: 20,
+        }}
+      >
+        <View>
+          <Image
+            source={require("@/assets/images/tabsIconNav/iconNutrition.jpg")}
+            style={{ height: 50, width: 60 }}
+          />
+        </View>
+        <Text style={{ fontSize: 50, fontWeight: "700", color: Colors.primary }}>Nutri Cook</Text>
+      </View>
+
       <Text style={styles.title}>Login</Text>
       <Formik
         initialValues={{ username: "", password: "" }}
@@ -83,7 +106,7 @@ const LoginScreen = () => {
               value={values.password}
               onChangeText={handleChange("password")}
               onBlur={() => handleBlur("password")}
-              // secureTextEntry
+              secureTextEntry={true}
             />
             {errors.password && touched.password && (
               <Text style={styles.error}>{errors.password}</Text>
@@ -122,7 +145,7 @@ const styles = StyleSheet.create({
     padding: 20, // Thêm khoảng cách bên trong
   },
   title: {
-    fontSize: 34,
+    fontSize: 50,
     marginBottom: 20,
     fontWeight: "800",
   },

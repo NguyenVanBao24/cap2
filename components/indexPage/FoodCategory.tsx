@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { Css } from "@/constants/Css";
 import { router, useFocusEffect } from "expo-router";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ type Category = { imageIcon: any; label: string; type: string; image: any };
 type FoodCategoryProps = {
   action?: "navigate" | "fetch" | "both";
   selectedCategoryName?: string;
+  selectedCategoryType?: string;
   categories: Category[];
   onSelectCategory?: (categoryName: string, type: string) => void;
 };
@@ -24,47 +25,52 @@ type FoodCategoryProps = {
 const FoodCategory: React.FC<FoodCategoryProps> = ({
   action = "navigate",
   selectedCategoryName,
+  selectedCategoryType,
   categories,
   onSelectCategory,
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>(selectedCategoryName || "");
+  const flatListRef = useRef<FlatList>(null);
 
   useFocusEffect(
     useCallback(() => {
-      if (!selectedCategoryName) {
-        setSelectedCategory("");
+      if (!selectedCategoryType) {
+        // Reset nếu không có type
       }
-    }, [selectedCategoryName])
+    }, [selectedCategoryType])
   );
 
-  // Navigate to meal page with the selected category label
   const navigateToMeal = useCallback((label: string, type: string) => {
-    setSelectedCategory(label);
     router.push({
       pathname: `/search/meal/${label}`,
-      params: { label: label, type: type },
+      params: { label, type },
     });
   }, []);
 
   const handleMeal = (label: string, type: string) => {
     if ((action === "fetch" || action === "both") && onSelectCategory) {
-      onSelectCategory(label, type); // Trigger the callback to notify parent
+      onSelectCategory(label, type);
     }
 
     if (action === "navigate" || action === "both") {
-      navigateToMeal(label, type); // Navigate to the respective meal page
+      navigateToMeal(label, type);
     }
   };
 
   useEffect(() => {
     if (selectedCategoryName) {
-      setSelectedCategory(selectedCategoryName); // Set category when `selectedCategoryName` prop changes
+      const index = categories.findIndex((item) => item.label === selectedCategoryName);
+      if (index !== -1 && flatListRef.current) {
+        flatListRef.current.scrollToIndex({ index, animated: true });
+      }
     }
-  }, [selectedCategoryName]);
+  }, [selectedCategoryName, categories]);
 
   const renderItem: ListRenderItem<Category> = ({ item }) => (
     <TouchableOpacity
-      style={[styles.categoryButton, selectedCategory == item.label && styles.selectedCategory]}
+      style={[
+        styles.categoryButton,
+        selectedCategoryName === item.label && styles.selectedCategory,
+      ]}
       onPress={() => handleMeal(item.label, item.type)}
     >
       <View style={styles.imageContainer}>
@@ -73,7 +79,7 @@ const FoodCategory: React.FC<FoodCategoryProps> = ({
       <Text
         style={[
           styles.categoryText,
-          selectedCategory === item.label && styles.categoryTextSelected,
+          selectedCategoryName === item.label && styles.categoryTextSelected,
         ]}
       >
         {item.label}
@@ -84,12 +90,18 @@ const FoodCategory: React.FC<FoodCategoryProps> = ({
   return (
     <View style={{ flex: 1 }}>
       <FlatList
+        ref={flatListRef}
         data={categories}
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
         renderItem={renderItem}
         keyExtractor={(item) => item.label}
+        getItemLayout={(data, index) => ({
+          length: 100, // Chiều rộng ước tính của mỗi item
+          offset: 100 * index,
+          index,
+        })}
       />
     </View>
   );
@@ -100,6 +112,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 2,
     paddingHorizontal: Css.paddingHoriAllPageSmall,
+    gap: 4,
   },
   categoryButton: {
     flexDirection: "column",

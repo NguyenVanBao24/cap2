@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   FlatList,
   ScrollView,
@@ -21,6 +22,7 @@ import HealthyCard from "@/components/indexPage/HealthyCard";
 import { router } from "expo-router";
 import HeaderElement from "@/components/indexPage/HeaderElement";
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 const Diary = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,10 +31,7 @@ const Diary = () => {
   const { nutritionPlan } = useUserData();
 
   const userId = getuserID();
-  console.log(
-    nutritionPlanByNutritionName,
-    "nutritionPlanByNutritionNamenutritionPlanByNutritionName"
-  );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,12 +63,16 @@ const Diary = () => {
   }
 
   const handleNavigateEdit = () => {
-    router.push("/search/EditPlan");
+    const isFull = 1;
+
+    router.push({
+      pathname: "/(onboarding)/name",
+    });
   };
 
-  recipeByRecipeCalculation?.map((item) => {
-    console.log(item);
-  });
+  const handleNavigatePlanNutrition = () => {
+    router.push("/(onboarding)/name");
+  };
 
   return (
     <SafeAreaView>
@@ -90,17 +93,6 @@ const Diary = () => {
           <Text style={styles.headerHome}>Nutrition Plan</Text>
         </View>
         <View style={styles.contentScroll}>
-          <TouchableOpacity>
-            <View style={styles.shieldScreen}>
-              <Image
-                source={require("@/assets/images/tabsIconNav/shield.png")}
-                style={{
-                  width: 24,
-                  height: 24,
-                }}
-              />
-            </View>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => handleNavigateEdit()}>
             <PlanChoose
               fullScreen={false}
@@ -153,6 +145,30 @@ const Diary = () => {
           </ScrollView>
         </View>
       </ScrollView>
+      {!nutritionPlan && (
+        <TouchableOpacity style={styles.shieldScreen} onPress={handleNavigatePlanNutrition}>
+          <View
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              flex: 1,
+              top: "30%",
+            }}
+          >
+            <Image
+              source={require("@/assets/images/tabsIconNav/shield.png")}
+              style={{
+                width: 70,
+                height: 70,
+                tintColor: "#800000",
+              }}
+            />
+            <Text style={{ paddingHorizontal: 1, color: "#800000", fontSize: 20 }}>
+              Set your Nutrition Plan
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </SafeAreaView>
   );
 };
@@ -163,16 +179,14 @@ const styles = StyleSheet.create({
   container: {},
   headerText: { fontSize: 20, fontWeight: "bold" },
   shieldScreen: {
+    backgroundColor: "#ccc",
     position: "absolute",
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    backgroundColor: "red",
-    zIndex: 100,
-    width: "100%",
-    height: "100%",
-    flex: 1,
+    opacity: 0.6,
+    width: screenWidth,
+    height: screenHeight,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
   contentScroll: {
     width: screenWidth,
@@ -181,7 +195,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerHome: {
-    fontSize: Css.fontTextLargest,
+    // fontSize: Css.fontTextLargest,
+    fontSize: 30,
     color: Colors.primary,
     fontWeight: "800",
     fontFamily: "Roboto",

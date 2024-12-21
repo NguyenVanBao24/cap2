@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -77,7 +79,6 @@ const FoodDetailCard = () => {
     favoriteID: favoriteItem?.favoriteID || null,
   });
 
-  console.log(favoriteState.favoriteID, "recipe.recipe_ID");
   const handleFavorite = async () => {
     setFavoriteState((prevState) => ({
       ...prevState,
@@ -210,13 +211,26 @@ const FoodDetailCard = () => {
   ) => {
     try {
       const responseNutrionId = await getTrackingNutritionID(dailyNutritionTrackingID);
+
+      const check = responseNutrionId?.data?.data?.recipeList?.some((item) => item == recipeList);
+      console.log(check, "cknowledge");
       const data = [...responseNutrionId?.data?.data?.recipeList, ...recipeList];
       const requestBody = { recipeList: data, mealType, date, user_ID };
-      const response = await putTrackingByUserIDDate(dailyNutritionTrackingID, requestBody);
+      check ? setlable(true) : await putTrackingByUserIDDate(dailyNutritionTrackingID, requestBody);
     } catch (err) {
       console.log(`Failed to fetch data for ${itemValue}`, err);
     }
   };
+  // const [lable, setlable] = useState(false);
+
+  // if (lable) {
+  //   return (
+  //     <TouchableWithoutFeedback onPress={() => setIsListVisible(!isListVisible)}>
+  //       <View style={styles.overlay} />
+  //     </TouchableWithoutFeedback>
+  //   );
+  // }
+
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
@@ -259,6 +273,7 @@ const FoodDetailCard = () => {
 
     if (matchedData && matchedData.dailyNutritionTrackingID) {
       const dailyNutritionTrackingID = matchedData.dailyNutritionTrackingID;
+
       handlePostMeal1(
         [recipe?.data.recipe_ID || ""],
         item,
@@ -271,6 +286,7 @@ const FoodDetailCard = () => {
     }
     setIsListVisible(!isListVisible);
   };
+
   const instructions = splitInstructionsToArray(recipe?.data.cookingInstructions);
 
   return (

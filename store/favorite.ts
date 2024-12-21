@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { deleteFavoriteUserId, getFavoriteUserId, postFavoriteUserId } from "@/services/favorite";
 import { create } from "zustand";
 
@@ -26,6 +28,7 @@ export const useFavoriteStore = create<RecipeStore>((set, get) => ({
     try {
       await postFavoriteUserId(userID, recipeID);
       const responseGet = await getFavoriteUserId(userID);
+
       set({ allUserFavorite: responseGet.data });
       return responseGet;
     } catch (error) {
@@ -35,8 +38,8 @@ export const useFavoriteStore = create<RecipeStore>((set, get) => ({
   },
   deleteFavorite: async (userID: string, recipeID: string): Promise<any> => {
     try {
-      console.log(userID, recipeID, "aaaaaaaaaaaaaaaa");
       const re = await deleteFavoriteUserId(recipeID);
+      console.log(re, "deleteFavoriteUserId");
       const responseGet = await getFavoriteUserId(userID);
       set({ allUserFavorite: responseGet.data });
       return responseGet;

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { loginService, signupService } from "@/services/authService";
 import { create } from "zustand";
 

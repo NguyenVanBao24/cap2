@@ -22,8 +22,8 @@ const HeaderElement: React.FC<FearuredFoodsProps> = ({ header, isMore = false })
       }}
     >
       <Text style={styles.headerItem}>
-        {header?.charAt(0).toUpperCase()}
-        {header?.slice(1).toLowerCase()}
+        {header?.charAt(0)?.toUpperCase()}
+        {header?.slice(1)?.toLowerCase()}
       </Text>
       {isMore && (
         <TouchableOpacity onPress={() => handleNavigateAll(label, type)}>

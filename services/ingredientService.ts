@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import axiosConfig from "@/axiosConfig";
 
 export const getIngredientServicePage = async (): Promise<IngredientResponse> => {

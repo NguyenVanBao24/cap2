@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useEffect, useState } from "react";
 import {
   FlatList,
@@ -48,12 +50,16 @@ const AllMeal = () => {
     try {
       let response;
       if (type == "meal") {
-        response = await getRecipesFilterService(label, 1);
+        response = await getRecipesFilterService(label, -1);
       } else if (type == "Kcal") {
-        const [minMacro, maxMacro] = label.split("-")?.map(Number);
-        response = await getRecipesByKcalService(minMacro, maxMacro);
+        if (label == "700+") {
+          response = await getRecipesByKcalService(700, 1000, 1);
+        } else {
+          const [minMacro, maxMacro] = label.split("-")?.map(Number);
+          response = await getRecipesByKcalService(minMacro, maxMacro, 1);
+        }
       } else if (type == "hard") {
-        response = await getRecipesByHard(label.toUpperCase(), 1);
+        response = await getRecipesByHard(label.toUpperCase(), -1);
       } else {
         throw new Error("Invalid type provided");
       }
@@ -71,13 +77,16 @@ const AllMeal = () => {
   };
 
   const recommendedRecipe = recipeData[0];
-  recipeData.map((recipe) => {
-    if (recipe.mealType[0] == "BREAKFAST") {
-      console.log(recipe, "---------------------------");
+  recipeData?.map((recipe) => {
+    if (
+      recipe.nutritionalQuality[0] == "LOW_PROTEIN" ||
+      recipe.nutritionalQuality[1] == "LOW_PROTEIN" ||
+      recipe.nutritionalQuality[2] == "LOW_PROTEIN"
+    ) {
     }
   });
   const renderFilterList = (filterName: string) => {
-    const filteredData = recipeData.filter((recipe) => {
+    const filteredData = recipeData?.filter((recipe) => {
       switch (filterName) {
         case "Breakfast":
           return (
@@ -98,9 +107,17 @@ const AllMeal = () => {
             recipe.mealType[2] == "DINNER"
           );
         case "Low Protein":
-          return recipe.nutritionalQuality[0] == "LOW_PROTEIN";
+          return (
+            recipe.nutritionalQuality[0] == "LOW_PROTEIN" ||
+            recipe.nutritionalQuality[1] == "LOW_PROTEIN" ||
+            recipe.nutritionalQuality[2] == "LOW_PROTEIN"
+          );
         case "High Protein":
-          return recipe.nutritionalQuality[1] == "HIGH_PROTEIN";
+          return (
+            recipe.nutritionalQuality[0] == "HIGH_PROTEIN" ||
+            recipe.nutritionalQuality[1] == "HIGH_PROTEIN" ||
+            recipe.nutritionalQuality[2] == "HIGH_PROTEIN"
+          );
         case "Easy to make":
           return recipe.difficultyLevel == "EASY";
         case "Medium to make":
@@ -170,6 +187,7 @@ const AllMeal = () => {
           <FoodCategory
             action="fetch"
             selectedCategoryName={useLocalSearch.label}
+            selectedCategoryType={useLocalSearch.type}
             categories={categories}
             onSelectCategory={handleCategorySelection}
           />

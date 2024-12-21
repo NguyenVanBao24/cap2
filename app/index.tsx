@@ -55,7 +55,22 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Text style={styles.subHeader}>Welcome to</Text>
-          <Text style={styles.header}>Nutri Cook</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            <View>
+              <Image
+                source={require("@/assets/images/tabsIconNav/iconNutrition.jpg")}
+                style={{ height: 30, width: 40 }}
+              />
+            </View>
+            <Text style={styles.header}>Nutri Cook</Text>
+          </View>
         </View>
 
         <View style={{ height: "80%", paddingBottom: 60 }}>

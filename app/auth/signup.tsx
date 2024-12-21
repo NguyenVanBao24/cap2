@@ -1,8 +1,10 @@
+// @ts-nocheck
+
 import React, { useState } from "react";
 import {
   View,
   TextInput,
-  Button,
+  Image,
   StyleSheet,
   Text,
   Dimensions,
@@ -18,10 +20,24 @@ import { Colors } from "@/constants/Colors";
 import axios from "axios";
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required("username is required."),
-  email: Yup.string().required("email is required."),
-  fullname: Yup.string().required("fullname is required."),
+  username: Yup.string()
+    .trim()
+    .required("Username is required.")
+    .min(6, "Password must be at least 6 characters long."),
+
+  email: Yup.string()
+    .trim()
+    .email("Invalid email format.")
+    .required("Email is required.")
+    .min(6, "Password must be at least 6 characters long."),
+
+  fullname: Yup.string()
+    .trim()
+    .required("Full name is required.")
+    .min(6, "Password must be at least 6 characters long."),
+
   password: Yup.string()
+    .trim()
     .min(6, "Password must be at least 6 characters long.")
     .required("Password is required."),
 });
@@ -44,10 +60,10 @@ const Signup = () => {
       const response = await signup(username, email, password, fullname);
 
       console.log(response, "signup");
-      if (response.message == "Create User successfully") {
+      if (response?.message == "Create User successfully") {
         router.replace("/auth/login");
       } else {
-        setErrorMessage(response?.message || "Invalid credentials");
+        Alert.alert("Login failed", response?.message || "Invalid Username or Password");
       }
     } catch (error) {
       console.log("Login error:", error);
@@ -59,6 +75,24 @@ const Signup = () => {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 10,
+          paddingBottom: 20,
+        }}
+      >
+        <View>
+          <Image
+            source={require("@/assets/images/tabsIconNav/iconNutrition.jpg")}
+            style={{ height: 50, width: 60 }}
+          />
+        </View>
+        <Text style={{ fontSize: 50, fontWeight: "700", color: Colors.primary }}>Nutri Cook</Text>
+      </View>
+
       <Text style={styles.title}>Signup</Text>
       <Formik
         initialValues={{ username: "", password: "", email: "", fullname: "" }}
@@ -68,13 +102,15 @@ const Signup = () => {
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
           <View style={styles.formContainer}>
             <CustomInput
-              title="Email"
-              placeholder="Email"
-              value={values.email}
-              onChangeText={handleChange("email")}
-              onBlur={() => handleBlur("email")}
+              title="Username"
+              placeholder="Username"
+              value={values.username}
+              onChangeText={handleChange("username")}
+              onBlur={() => handleBlur("username")}
             />
-            {errors.email && touched.email && <Text style={styles.error}>{errors.email}</Text>}
+            {errors.username && touched.username && (
+              <Text style={styles.error}>{errors.username}</Text>
+            )}
 
             <CustomInput
               title="Password"
@@ -82,6 +118,7 @@ const Signup = () => {
               value={values.password}
               onChangeText={handleChange("password")}
               onBlur={() => handleBlur("password")}
+              secureTextEntry={true}
             />
             {errors.password && touched.password && (
               <Text style={styles.error}>{errors.password}</Text>
@@ -99,15 +136,14 @@ const Signup = () => {
             )}
 
             <CustomInput
-              title="Username"
-              placeholder="Username"
-              value={values.username}
-              onChangeText={handleChange("username")}
-              onBlur={() => handleBlur("username")}
+              title="Email"
+              placeholder="Email"
+              value={values.email}
+              onChangeText={handleChange("email")}
+              onBlur={() => handleBlur("email")}
             />
-            {errors.username && touched.username && (
-              <Text style={styles.error}>{errors.username}</Text>
-            )}
+            {errors.email && touched.email && <Text style={styles.error}>{errors.email}</Text>}
+
             <View style={styles.alignButton}>
               <CustomButton title="SIGN UP" onPress={handleSubmit as any} />
             </View>
@@ -146,7 +182,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 34,
+    fontSize: 50,
     marginBottom: 20,
     fontWeight: "800",
   },

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useUserData } from "@/store/userStore"; // Đảm bảo bạn đã import store

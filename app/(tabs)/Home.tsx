@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -58,7 +59,7 @@ const Home = () => {
         setLoading(true);
         const recipesResponse = await getAllRecipesService();
         setRecipes(recipesResponse.data);
-        const ingredientsResponse = await getIngredientServicePage();
+        const ingredientsResponse = await getAllIngredientService();
         setIngredient(ingredientsResponse.data);
         const trendingResponse = await getFavoriteTrending();
         setTrendingRecipe(trendingResponse);

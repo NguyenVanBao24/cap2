@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { Colors } from "@/constants/Colors";
@@ -8,7 +10,6 @@ import { router } from "expo-router";
 import { useFavoriteStore } from "@/store/favorite";
 
 const Favorites = () => {
-  // Render function for FlatList
   const renderFavoriteCard = ({ item }: { item: any }) => {
     return <FavoriteCard item={item} />;
   };
@@ -27,6 +28,8 @@ const Favorites = () => {
         data={allUserFavorite}
         renderItem={renderFavoriteCard}
         keyExtractor={(item) => item.favoriteID}
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={{ paddingBottom: 20 }}
       />
     </SafeAreaView>
   );

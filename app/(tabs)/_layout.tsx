@@ -61,7 +61,7 @@ export default function TabLayout() {
           ),
           tabBarLabel: ({ focused }) => (
             <Text style={{ color: focused ? Colors.primary : Colors.gray, fontSize: 12 }}>
-              Diary
+              Nutrition Plan
             </Text>
           ),
         }}

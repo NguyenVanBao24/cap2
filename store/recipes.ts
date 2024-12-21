@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { getAllRecipesService } from "@/services/recipeService";
 import { create } from "zustand";
 import { getuserID } from "./tokenHelper";

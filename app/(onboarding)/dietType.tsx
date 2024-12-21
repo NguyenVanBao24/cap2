@@ -9,10 +9,10 @@ const GenderSelection = () => {
   const dietType = getDietTypeByUser();
   const formatText = (text: string): string => {
     return text
-      .toLowerCase()
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+      ?.toLowerCase()
+      ?.split("_")
+      ?.map((word) => word.charAt(0).toUpperCase() + word?.slice(1))
+      ?.join(" ");
   };
   const setUserData = useUserData((state) => state.setUserData);
 
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   description: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#6e6e6e",
     textAlign: "center",
     marginBottom: 30,

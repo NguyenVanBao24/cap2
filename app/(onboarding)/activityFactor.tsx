@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { formatText } from "@/constants/Css";
 import { getActivityByUser, getActivityFactor } from "@/store/tokenHelper";
 import { useUserData } from "@/store/userStore";
 import React, { useState } from "react";
@@ -7,14 +8,6 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 const GenderSelection = () => {
   const ActivityFactor = getActivityFactor();
   const activityFactor = getActivityByUser();
-
-  const formatText = (text: string): string => {
-    return text
-      .toLowerCase()
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
 
   const setUserData = useUserData((state) => state.setUserData);
 
@@ -74,7 +67,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   description: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#6e6e6e",
     textAlign: "center",
     marginBottom: 30,

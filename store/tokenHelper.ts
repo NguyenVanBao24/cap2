@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useAuthStore } from "./authStore";
 import { useChoseState } from "./choseStore";
 import { useUserData } from "./userStore";

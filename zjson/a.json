@@ -1,42 +1,74 @@
 {
-  "cookTime": 30,
-  "cookingInstructions": "1. Rong biển ngâm nước lạnh cho nở, rửa sạch, cắt khúc; nấm mỡ rửa sạch, ngâm dấm và muối loãng trong 10 phút. Vớt nấm ra rửa sạch rồi bổ dọc làm đôi. 2. Hòa tương miso vào nước lạnh, nấu sôi rồi cho rong vào, chờ sôi lại cho nấm vào. 3. Nêm gia vị cho vừa miệng, để canh sôi khoảng 3-5 phút là xong.",
-  "description": "Súp miso Nhật Bản, thanh mát, bổ dưỡng.",
+  "cookTime": 40,
+  "cookingInstructions": "1. Cà rốt và bắp cải cắt nhỏ. 2. Đun nóng một chút dầu trong nồi, cho tỏi vào phi thơm. 3. Cho các loại rau củ vào xào nhẹ, sau đó thêm nước dùng vào. 4. Đun sôi và hạ lửa, nấu khoảng 10-15 phút cho rau củ mềm. 5. Nêm nếm với muối và hạt tiêu, rồi thưởng thức khi còn nóng.",
+  "description": "Súp rau củ chay là một món ăn không chỉ ngon miệng mà còn rất tốt cho sức khỏe. Với sự kết hợp đa dạng các loại rau củ, súp rau củ chay cung cấp đầy đủ vitamin, khoáng chất và chất xơ cần thiết cho cơ thể.",
   "difficultyLevel": "EASY",
-  "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733409389/ayvm0nnkret3lmngsbwo.jpg",
+  "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1734629758/ybf7fbkhzkvkonhljeod.jpg",
   "ingredientList": [
     {
       "calories": 0,
-      "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733205983/ypdjdbxbmqvduvszwn4f.webp",
-      "ingredientId": "80405e85-7ba7-4a95-aab9-944703097656",
-      "ingredientName": "Nấm mỡ",
-      "quantity": 200,
-      "unit": "gram"
-    },
-    {
-      "calories": 2,
-      "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733409270/upo3tda0ihgr0np2vdmy.jpg",
-      "ingredientId": "81039d32-2bbb-4bd3-920d-5bc435cce9ef",
-      "ingredientName": "Tương miso",
-      "quantity": 100,
+      "imageURL": "https://cdn.nhathuoclongchau.com.vn/unsafe/800x0/https://cms-prod.s3-sgn09.fptcloud.com/tieu_den_1_c1f3d5fbe3.jpg",
+      "ingredientId": "d2527bf7-6ec6-4f1a-86ca-b956a7b0c0a2",
+      "ingredientName": "Tiêu đen (Black pepper)",
+      "quantity": 1,
       "unit": "gram"
     },
     {
       "calories": 0,
-      "imageURL": "https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:quality(100)/2023_10_19_638333500124994846_rong-bie-n-0.jpeg",
-      "ingredientId": "659182f2-12e1-45ee-af06-606a566637ee",
-      "ingredientName": "Rong biển",
-      "quantity": 100,
+      "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1733480863/hhq5daxnvtsmhkizsjfq.jpg",
+      "ingredientId": "b52cf7ea-c6d5-4684-991d-9e20b0d41805",
+      "ingredientName": "Nấm hương ",
+      "quantity": 32,
+      "unit": "gram"
+    },
+    {
+      "calories": 0,
+      "imageURL": "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2024/3/10/photo-1710079446443-17100794468811550490205.jpeg",
+      "ingredientId": "51b67cdc-05d4-4916-a3a1-3d4a28fb629f",
+      "ingredientName": "Cà rốt",
+      "quantity": 60,
+      "unit": "gram"
+    },
+    {
+      "calories": 0,
+      "imageURL": "https://baotayninh.vn/image/fckeditor/upload/2023/20230818/images/homemade-cabbage-ointment-14433444.jpeg",
+      "ingredientId": "5df4efb7-e022-4557-9c26-5696cb1eacc4",
+      "ingredientName": "Bắp cải",
+      "quantity": 60,
+      "unit": "gram"
+    },
+    {
+      "calories": 0,
+      "imageURL": "https://blog.onelife.vn/wp-content/uploads/2023/11/bf21d782-1.png",
+      "ingredientId": "c5bee60b-c651-4300-9d2d-44905a7ced5f",
+      "ingredientName": "Muối(salt)",
+      "quantity": 1,
+      "unit": "gram"
+    },
+    {
+      "calories": 0,
+      "imageURL": "http://res.cloudinary.com/dmwzde2eh/image/upload/v1734629672/zuieiwp3cgg1ij3a5pok.jpg",
+      "ingredientId": "272b2589-97fb-4f97-87f0-cba04603fc84",
+      "ingredientName": "Nước dùng rau củ",
+      "quantity": 200,
+      "unit": "ml"
+    },
+    {
+      "calories": 1,
+      "imageURL": "https://image.tienphong.vn/w890/Uploaded/2024/rkznae/2019_12_04/CACH_NGAM_RUOU_TOI_BKIM.jpg",
+      "ingredientId": "0ece7d02-4cf0-483a-a270-0b47f53bfdc0",
+      "ingredientName": "Tỏi (Garlic)",
+      "quantity": 1,
       "unit": "gram"
     }
   ],
-  "mealType": ["LUNCH", "BREAKFAST"],
-  "nutritionalQuality": ["LOW_CALORIE", "VEGAN", "VEGETARIAN"],
-  "prepTime": 5,
-  "recipeName": "Súp miso",
-  "recipe_ID": "4c9d9b13-1a2f-4a1a-abd3-530bd75547de",
-  "totalCalories": 101,
-  "totalCarbs": 10,
-  "totalFat": 10,
-  "totalProtein": 5
+  "mealType": ["BREAKFAST"],
+  "nutritionalQuality": ["LOW_PROTEIN", "VEGAN", "VEGETARIAN"],
+  "prepTime": 20,
+  "recipeName": "Súp rau củ chay",
+  "recipe_ID": "5e9e4a09-efcc-4049-ae90-fed0fab07744",
+  "totalCalories": 53,
+  "totalCarbs": 12,
+  "totalFat": 0,
+  "totalProtein": 1
 }

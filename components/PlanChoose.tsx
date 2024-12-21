@@ -61,7 +61,7 @@ const PlanChoose: React.FC<PlanChooseProps> = ({
           <View style={styles.NutritionValueComponent}>
             <Text style={styles.NutritionValueText}>{carbsPercentage}</Text>
             <Text style={styles.NutritionValuePercent}>%</Text>
-            <Text style={styles.NutritionValueTextType}>Crabs</Text>
+            <Text style={styles.NutritionValueTextType}>Carbs</Text>
           </View>
         </View>
         <View style={styles.NutritionImage}>

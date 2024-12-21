@@ -12,9 +12,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await logout();
-      router.replace("/");
-      console.log("Logged out successfully");
+      router.push("/(tabs)/Profile");
     } catch (error) {
       console.log("Logout failed:", error);
     }
@@ -66,7 +64,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerHome: {
-    fontSize: Css.fontTextLargest,
+    // fontSize: Css.fontTextLargest,
+    fontSize: 30,
     color: Colors.primary,
     fontWeight: "800",
     fontFamily: "Roboto",

@@ -1,7 +1,8 @@
 // components/CustomInput.tsx
 import { Colors } from "@/constants/Colors";
-import React from "react";
-import { View, TextInput, StyleSheet, Text, TextInputProps } from "react-native";
+import React, { useState } from "react";
+import { View, TextInput, StyleSheet, Text, TextInputProps, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 interface CustomInputProps extends TextInputProps {
   placeholder: string;
@@ -21,20 +22,34 @@ const CustomInput: React.FC<CustomInputProps> = ({
   error,
   title,
   secureTextEntry = false,
-  ...props // Nhận tất cả các props còn lại của TextInputProps
+  ...props
 }) => {
+  const [isSecure, setIsSecure] = useState(secureTextEntry);
+
+  const toggleSecureEntry = () => {
+    setIsSecure((prev) => !prev);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      <TextInput
-        style={[styles.input, error ? styles.inputError : null]}
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-        onBlur={() => onBlur && onBlur()} // Đảm bảo rằng onBlur không nhận đối số nào
-        secureTextEntry={secureTextEntry}
-        {...props} // Truyền các props còn lại vào TextInput
-      />
+      <View style={styles.inputWrapper}>
+        <TextInput
+          style={[styles.input, error ? styles.inputError : null]}
+          placeholder={placeholder}
+          value={value}
+          onChangeText={onChangeText}
+          onBlur={() => onBlur && onBlur()}
+          secureTextEntry={isSecure}
+          {...props}
+          autoCapitalize="none"
+        />
+        {secureTextEntry && (
+          <TouchableOpacity onPress={toggleSecureEntry} style={styles.icon}>
+            <Ionicons name={isSecure ? "eye-off" : "eye"} size={24} color="gray" />
+          </TouchableOpacity>
+        )}
+      </View>
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
@@ -50,13 +65,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
   },
-  input: {
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: "#C4C4C4",
     borderRadius: 12,
+    paddingRight: 10,
+    width: "100%",
+  },
+  input: {
+    flex: 1,
     padding: 12,
     fontSize: 17,
-    width: "100%",
   },
   inputError: {
     borderColor: "red",
@@ -65,6 +86,9 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 12,
     marginTop: 4,
+  },
+  icon: {
+    marginLeft: 8,
   },
 });
 

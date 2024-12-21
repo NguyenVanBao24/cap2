@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Ensure you're using expo or install react-native-vector-icons
@@ -6,7 +7,7 @@ import { useAuthStore } from "@/store/authStore";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "@/constants/Colors";
 import { useUserData } from "@/store/userStore";
-import { Css, screenWidth } from "@/constants/Css";
+import { Css, formatText, screenWidth } from "@/constants/Css";
 
 interface MenuItemProps {
   icon: string;
@@ -52,7 +53,7 @@ const ProfileScreen: React.FC = () => {
           <View style={styles.profileContainer}>
             <Image source={require("@/assets/images/man.png")} style={styles.profileImage} />
             <Text style={styles.name}>{fullname || "HI"}</Text>
-            <Text style={styles.role}>{dietType || "Set your goal?"}</Text>
+            <Text style={styles.role}>{formatText(dietType) || "Set your goal?"}</Text>
           </View>
 
           <View style={styles.menu}>

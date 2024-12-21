@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -17,6 +17,7 @@ interface FoodCardProps {
   imageURL: string;
   recipeID: string;
   nutritionId: string;
+  onRemove: (nutritionId: string, recipeID: string) => void;
 }
 
 const FoodCard: React.FC<FoodCardProps> = ({
@@ -29,16 +30,12 @@ const FoodCard: React.FC<FoodCardProps> = ({
   imageURL,
   recipeID,
   nutritionId,
+  onRemove,
 }) => {
   const handleRecipe = () => {
     router.push(`/search/ingredient/${recipeID}`);
   };
 
-  const handleRemoveRecipe = async (nutritionId: string) => {
-    try {
-      const response = await deleteTrackingByID(nutritionId);
-    } catch (error) {}
-  };
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -51,7 +48,7 @@ const FoodCard: React.FC<FoodCardProps> = ({
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuButton} onPress={() => handleRemoveRecipe(nutritionId)}>
+        <TouchableOpacity style={styles.menuButton} onPress={() => onRemove(nutritionId, recipeID)}>
           <FontAwesome name="remove" size={20} color="black" />
         </TouchableOpacity>
       </View>

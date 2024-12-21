@@ -18,6 +18,7 @@ export const Css = {
   marginItemSmall: 8,
 
   fontTextLargest: 26,
+
   fontTextLarge: 20,
   fontTextMedium: 18,
   fontTextLow: 16,
@@ -71,3 +72,11 @@ export const isFavorite = (data1: string, data2: string) => {
 };
 
 export const screenWidth = Dimensions.get("window").width;
+
+export const formatText = (text: string): string => {
+  return text
+    ?.toLowerCase()
+    ?.split("_")
+    ?.map((word) => word.charAt(0).toUpperCase() + word?.slice(1))
+    ?.join(" ");
+};

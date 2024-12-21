@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import axiosConfig from "@/axiosConfig";
 
 export const getAllRecipesService = async (): Promise<RecipeResponse> => {
@@ -27,10 +29,9 @@ export const getRecipesFilterService = async (
   try {
     const uppercaseRecipeID = recipe_ID.toUpperCase();
     const response = await axiosConfig.get<RecipeResponse>(
-      `/recipe/filter?mealType=${uppercaseRecipeID}&pageNo=${1}&pageSize=50`
+      `/recipe/filter?mealType=${uppercaseRecipeID}&pageNo=${pageNo}`
     );
-
-    return response.data;
+    return response;
   } catch (error) {
     console.log("Failed to getRecipesFilterService:", error);
   }
@@ -38,11 +39,14 @@ export const getRecipesFilterService = async (
 
 export const getRecipesByKcalService = async (
   minMacro: number,
-  maxMacro: number
+  maxMacro: number,
+  pageNo: number
 ): Promise<RecipeResponse> => {
   try {
+    console.log(minMacro, maxMacro);
     const response = await axiosConfig.get<RecipeResponse>(
-      `/recipe/filterByMacroNutrients?macroNutrient=Calories&minMacro=${minMacro}&maxMacro=${maxMacro}&pageNo=1&pageSize=50`
+      // `/recipe/filterByMacroNutrients?macroNutrient=Calories&minMacro=${minMacro}&maxMacro=${maxMacro}&pageNo=${pageNo}&pageSize=100`
+      `/recipe/filterByMacroNutrients?macroNutrient=Calories&minMacro=${minMacro}&maxMacro=${maxMacro}&pageNo=1&pageSize=100`
     );
 
     return response.data;
@@ -58,10 +62,10 @@ export const getRecipesByHard = async (
   try {
     console.log(difficultyLevel, pageNo, "pageNopageNopageNopageNopageNo");
     const response = await axiosConfig.get<RecipeResponse>(
-      `/recipe/filter?difficultyLevel=${difficultyLevel}&pageNo=${pageNo}&pageSize=50`
+      `/recipe/filter?difficultyLevel=${difficultyLevel}&pageNo=${pageNo}`
     );
 
-    return response.data;
+    return response;
   } catch (error) {
     console.log("Failed to getRecipesByHard:", error);
   }

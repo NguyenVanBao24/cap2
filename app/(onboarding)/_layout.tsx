@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Tabs } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Platform, View, TouchableOpacity, StyleSheet, Text } from "react-native";
@@ -11,13 +12,20 @@ import { useUserData } from "@/store/userStore";
 import { getuserID } from "@/store/tokenHelper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Css } from "@/constants/Css";
+import { router, useLocalSearchParams } from "expo-router";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const router = useRouter();
 
+  const isFull = useLocalSearchParams();
+
+  console.log(isFull, "isFullisFullisFullisFullisFullisFullisFullisFullisFullisFull");
   const [currentTab, setCurrentTab] = useState(0);
-  const arrRouter = ["name", "height", "activityFactor", "dietType", "nutritionPlan"];
+
+  let arrRouter = ["name", "height", "activityFactor", "dietType", "nutritionPlan"];
+
+  console.log(isFull.screen, arrRouter, "arrRouterarrRouterarrRouter");
   // const arrRouter = ["name", "height", "activityFactor", "dietType"];
   // Function to handle navigation
   const handleBackPress = async () => {
@@ -83,11 +91,9 @@ export default function TabLayout() {
       } catch (error) {
         console.log("Lỗi ở onbroading _layout: " + error);
       }
-      console.log(userID, "userID");
 
       const userInformationPlan = await getUserInformationPlan(userID);
       setuserInformationPlan(userInformationPlan.data);
-      console.log("first123");
       router.replace(`/(tabs)/Profile`);
     }
   };

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useRef, useCallback } from "react";
 import {
   Animated,
@@ -8,19 +9,22 @@ import {
   Text,
   FlatList,
   StatusBar,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import CircularProgressBar from "@/components/CircularProgressBar";
 import { Colors } from "@/constants/Colors";
 import DailyTracking from "../../components/DailyTracking";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { getuserID } from "@/store/tokenHelper";
 import { format } from "date-fns";
 import { getTrackingByUserIDDate } from "@/services/tracking";
 import { getNutritionCalculation } from "@/services/chose";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Loading from "@/components/Loading";
-const { height: screenHeight } = Dimensions.get("window");
-
+import { useUserData } from "@/store/userStore";
+const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 const SNAP_POINTS = [screenHeight * 0.4, screenHeight * 0.2, 0]; // 60%, 80%, 100%
 interface NutritionData {
   user_ID: string;
@@ -61,6 +65,7 @@ const HomeScreen = () => {
 
   const [selectedDate, setSelectedDate] = useState<string>(currentDate);
   const userID = getuserID();
+  const { nutritionPlan } = useUserData();
 
   useFocusEffect(
     useCallback(() => {
@@ -175,77 +180,107 @@ const HomeScreen = () => {
   if (loading) {
     return <Loading backgroundColor={Colors.primary_2} />;
   }
+  const handleNavigatePlanNutrition = () => {
+    router.push("/(onboarding)/name");
+  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar hidden={true} />
 
       <View style={styles.container}>
-        <View style={styles.Dashboardheader}>
-          <View style={styles.header}>
-            <View style={styles.containerTextHeader}>
-              <Text style={styles.textHeaderUp}>{nutritionData?.data?.totalCalories ?? 0}</Text>
-              <Text style={styles.textHeaderDown}>Eaten</Text>
+        {!nutritionPlan ? (
+          <TouchableOpacity style={styles.shieldScreen} onPress={handleNavigatePlanNutrition}>
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "center",
+                flex: 1,
+                zIndex: 99,
+                top: 50,
+              }}
+            >
+              <Image
+                source={require("@/assets/images/tabsIconNav/shield.png")}
+                style={{
+                  width: 70,
+                  height: 70,
+                  tintColor: "#800000",
+                }}
+              />
+              <Text style={{ paddingHorizontal: 1, color: "#800000", fontSize: 20 }}>
+                Set your Nutrition Plan
+              </Text>
             </View>
-            <CircularProgressBar
-              currentValue={nutritionData?.data?.totalCalories ?? 0}
-              totalValue={nutritionCalculation?.caloriesNeeded}
-              radius={50}
-              strokeWidth={8}
-              TextColorUp="#fff"
-              TextColorDown="#180161"
-              hideText={true}
-            />
-            <View style={styles.containerTextHeader}>
-              <Text style={styles.textHeaderUp}>0</Text>
-              <Text style={styles.textHeaderDown}>Burned</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.Dashboardheader}>
+            <View style={styles.header}>
+              <View style={styles.containerTextHeader}>
+                <Text style={styles.textHeaderUp}>{nutritionData?.data?.totalCalories ?? 0}</Text>
+                <Text style={styles.textHeaderDown}>Eaten</Text>
+              </View>
+              <CircularProgressBar
+                currentValue={nutritionData?.data?.totalCalories ?? 0}
+                totalValue={nutritionCalculation?.caloriesNeeded}
+                radius={50}
+                strokeWidth={8}
+                TextColorUp="#fff"
+                TextColorDown="#180161"
+                hideText={true}
+              />
+              <View style={styles.containerTextHeader}>
+                <Text style={styles.textHeaderUp}>
+                  {nutritionData?.data?.totalCalories + nutritionCalculation?.caloriesNeeded}
+                </Text>
+                <Text style={styles.textHeaderDown}>Total</Text>
+              </View>
+            </View>
+
+            <View style={styles.upbody}>{/* <FlatList data={}/> */}</View>
+
+            <View style={styles.body}>
+              <Text style={styles.headerDashboard}>Macronutrients</Text>
+              <View style={styles.underline}></View>
+              <View style={styles.dashboard}>
+                <CircularProgressBar
+                  currentValue={nutritionData?.data?.totalProtein}
+                  totalValue={nutritionCalculation?.proteinNeeded}
+                  TextSize={13}
+                  radius={30}
+                  strokeWidth={7}
+                  color="#FA7070"
+                  strokeColor="#FAD4D4"
+                  typeNutrion="Protein"
+                />
+                <CircularProgressBar
+                  currentValue={nutritionData?.data?.totalCarbs}
+                  TextSize={13}
+                  totalValue={nutritionCalculation?.carbsNeeded}
+                  radius={30}
+                  strokeWidth={7}
+                  color="#FABC3F"
+                  strokeColor="#EEDF7A"
+                  typeNutrion="Carbs"
+                />
+                <CircularProgressBar
+                  currentValue={nutritionData?.data?.totalFat}
+                  TextSize={13}
+                  totalValue={nutritionCalculation?.fatNeeded}
+                  radius={30}
+                  strokeWidth={7}
+                  color="#4793AF"
+                  strokeColor="#C4E4FF"
+                  typeNutrion="Fats"
+                />
+              </View>
             </View>
           </View>
-
-          <View style={styles.upbody}>{/* <FlatList data={}/> */}</View>
-
-          <View style={styles.body}>
-            <Text style={styles.headerDashboard}>Macronutrients</Text>
-            <View style={styles.underline}></View>
-            <View style={styles.dashboard}>
-              <CircularProgressBar
-                currentValue={nutritionData?.data?.totalProtein}
-                totalValue={nutritionCalculation?.proteinNeeded}
-                TextSize={13}
-                radius={30}
-                strokeWidth={7}
-                color="#FA7070"
-                strokeColor="#FAD4D4"
-                typeNutrion="Protein"
-              />
-              <CircularProgressBar
-                currentValue={nutritionData?.data?.totalCarbs}
-                TextSize={13}
-                totalValue={nutritionCalculation?.carbsNeeded}
-                radius={30}
-                strokeWidth={7}
-                color="#FABC3F"
-                strokeColor="#EEDF7A"
-                typeNutrion="Carbs"
-              />
-              <CircularProgressBar
-                currentValue={nutritionData?.data?.totalFat}
-                TextSize={13}
-                totalValue={nutritionCalculation?.fatNeeded}
-                radius={30}
-                strokeWidth={7}
-                color="#4793AF"
-                strokeColor="#C4E4FF"
-                typeNutrion="Fats"
-              />
-            </View>
-          </View>
-        </View>
-
+        )}
         <Animated.View
           {...panResponder.panHandlers}
           style={[styles.bodyContainer, { transform: [{ translateY }] }]}
         >
-          <View style={{ height: 10 }}></View>
+          <View style={{ height: 10, zIndex: 100 }}></View>
           <DailyTracking />
         </Animated.View>
       </View>
@@ -254,6 +289,16 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  shieldScreen: {
+    backgroundColor: "#ccc",
+    position: "absolute",
+    opacity: 0.6,
+    width: screenWidth,
+    height: screenHeight,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   container: { flex: 1, backgroundColor: Colors.primary_2 },
   containerMeal: {
     flex: 1,
@@ -267,13 +312,15 @@ const styles = StyleSheet.create({
     borderTopColor: "#fff",
   },
   header: {
-    marginTop: 10,
     flexDirection: "row",
     justifyContent: "space-around",
-    width: "100%",
     alignItems: "center",
+    backgroundColor: "#DFD3C3",
+    paddingVertical: 10,
+    marginHorizontal: 10,
+    borderRadius: 12,
   },
-  containerTextHeader: { flexDirection: "column", alignItems: "center", marginTop: 20 },
+  containerTextHeader: { flexDirection: "column", alignItems: "center", marginTop: 10 },
   textHeaderUp: { color: Colors.white, fontWeight: "600", fontSize: 15 },
   textHeaderDown: { color: "#180161", fontWeight: "600", fontSize: 15 },
 

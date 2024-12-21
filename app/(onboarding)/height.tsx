@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useUserData } from "@/store/userStore";
@@ -12,8 +13,8 @@ const NameScreen = () => {
   console.log(age, gender, height, weight, "0");
   const [ageValue, setAgeValue] = useState(age || 20);
   const [genderValue, setgenderValue] = useState<boolean>(gender || false);
-  const [heightValue, setHeightValue] = useState(height || 70);
-  const [weightValue, setWeightValue] = useState(weight || 180);
+  const [heightValue, setHeightValue] = useState(height || "");
+  const [weightValue, setWeightValue] = useState(weight || "");
 
   const NutritionPlan = [
     { nameMale: "Male", male: true },
@@ -22,10 +23,10 @@ const NameScreen = () => {
 
   useEffect(() => {
     setUserData({
-      age: parseInt(ageValue),
+      age: ageValue,
       gender: genderValue,
-      height: parseInt(heightValue),
-      weight: parseInt(weightValue),
+      height: heightValue,
+      weight: weightValue,
     });
   }, [ageValue, genderValue, heightValue, weightValue, setUserData]);
 

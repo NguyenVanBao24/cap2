@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import axiosConfig from "@/axiosConfig";
 
 export const loginService = async (username: string, password: string): Promise<LoginResponse> => {

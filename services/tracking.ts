@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import axiosConfig from "@/axiosConfig";
 
 export const getTrackingAll = async (): Promise<any> => {
@@ -61,6 +63,19 @@ export const deleteTrackingByID = async (
 ): Promise<NutritionTrackingResponse> => {
   try {
     const response = await axiosConfig.delete(`/daily-tracking/${nutritionId}`);
+    return response.data;
+  } catch (error) {
+    console.log("Failed to put tracking data:", error);
+  }
+};
+
+export const putTrackingByID = async (
+  nutritionId: string,
+  requestBody: {}
+): Promise<NutritionTrackingResponse> => {
+  try {
+    const response = await axiosConfig.put(`/daily-tracking/${nutritionId}`, requestBody);
+    console.log(response, "responseresponseresponse");
     return response.data;
   } catch (error) {
     console.log("Failed to put tracking data:", error);
